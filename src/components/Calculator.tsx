@@ -455,10 +455,12 @@ function LoondienstForm() {
         onChange={setParttime}
       />
 
-      <Subtotaal label={`Uw pensioengevend inkomen per jaar (maximaal ${euro(MAX_PENSIOENGEVEND)})`} value={pensioengevend} />
-      <Subtotaal label="Franchise 2026" value={FRANCHISE_2026} />
-      <Subtotaal label={`Uw pensioengrondslag (×${parttimeVal}%)`} value={grondslag} />
-      <Subtotaal label="Uw premie in 2026 (30,7% van de pensioengrondslag)" value={premie} />
+      <ResultBlock
+        pensioengevend={pensioengevend}
+        grondslag={grondslag}
+        premie={premie}
+        parttime={parttimeVal}
+      />
     </div>
   );
 }
