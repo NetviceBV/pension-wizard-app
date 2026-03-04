@@ -376,6 +376,7 @@ function LoondienstForm() {
   const bonusVal = parseNum(bonus);
   const waarnemingVal = parseNum(waarneming);
   const managementVal = parseNum(management);
+  const vakantiegeldVal = parseNum(vakantiegeld);
   const parttimeVal = parseNum(parttime) || 100;
 
   // All inputs are monthly → convert to yearly where needed
