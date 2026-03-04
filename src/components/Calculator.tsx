@@ -407,9 +407,11 @@ function LoondienstForm() {
         onChange={setBruto}
       />
 
-      <Subtotaal
-        label="Eindejaarsuitkering conform CAO (5%)"
+      <EuroInput
+        id="ld-eindejaars"
+        label="Uw eindejaarsuitkering conform CAO (5%)"
         value={eindejaars}
+        onChange={setEindejaars}
       />
 
       <EuroInput
