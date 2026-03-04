@@ -368,6 +368,7 @@ function LoondienstForm() {
   const [bonus, setBonus] = useState("");
   const [waarneming, setWaarneming] = useState("");
   const [management, setManagement] = useState("");
+  const [vakantiegeld, setVakantiegeld] = useState("");
   const [parttime, setParttime] = useState("100");
 
   const brutoVal = parseNum(bruto);
@@ -375,6 +376,7 @@ function LoondienstForm() {
   const bonusVal = parseNum(bonus);
   const waarnemingVal = parseNum(waarneming);
   const managementVal = parseNum(management);
+  const vakantiegeldVal = parseNum(vakantiegeld);
   const parttimeVal = parseNum(parttime) || 100;
 
   // All inputs are monthly → convert to yearly where needed
@@ -382,8 +384,7 @@ function LoondienstForm() {
   const subtotaal1 =
     brutoVal * 12 + eindejaarsVal + bonusVal * 12 + waarnemingVal * 12 + managementVal * 12;
 
-  const vakantiegeld = subtotaal1 * 0.08;
-  const subtotaal2 = subtotaal1 + vakantiegeld;
+  const subtotaal2 = subtotaal1 + vakantiegeldVal;
 
   // Herleid naar fulltime
   const fulltimeIncome = parttimeVal > 0 ? subtotaal2 / (parttimeVal / 100) : subtotaal2;
@@ -438,7 +439,12 @@ function LoondienstForm() {
 
       <Subtotaal label="Subtotaal (per jaar)" value={subtotaal1} />
 
-      <Subtotaal label="Vakantiegeld (8%)" value={vakantiegeld} />
+      <EuroInput
+        id="ld-vakantiegeld"
+        label="Uw vakantiegeld (8%)"
+        value={vakantiegeld}
+        onChange={setVakantiegeld}
+      />
 
       <Subtotaal label="Subtotaal inclusief vakantiegeld" value={subtotaal2} />
 
