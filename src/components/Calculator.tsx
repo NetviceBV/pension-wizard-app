@@ -384,7 +384,7 @@ function LoondienstForm() {
   const subtotaal1 =
     brutoVal * 12 + eindejaarsVal + bonusVal * 12 + waarnemingVal * 12 + managementVal * 12;
 
-  const subtotaal2 = subtotaal1 + vakantiegeldVal;
+  const subtotaal2 = subtotaal1 + vakantiegeldVal * 12;
 
   // Herleid naar fulltime
   const fulltimeIncome = parttimeVal > 0 ? subtotaal2 / (parttimeVal / 100) : subtotaal2;
