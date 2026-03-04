@@ -441,7 +441,7 @@ function LoondienstForm() {
 
       <EuroInput
         id="ld-vakantiegeld"
-        label="Uw vakantiegeld (8%)"
+        label="Uw vakantiegeld (8%) — per maand"
         value={vakantiegeld}
         onChange={setVakantiegeld}
       />
