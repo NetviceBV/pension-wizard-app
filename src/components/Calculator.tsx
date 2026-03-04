@@ -487,8 +487,6 @@ function DGAForm() {
   const fulltimeIncome = parttimeVal > 0 ? subtotaal2 / (parttimeVal / 100) : subtotaal2;
   const { pensioengevend, grondslag, premie } = calcResult(fulltimeIncome, parttimeVal);
 
-  const hasInput = brutoVal > 0;
-
   return (
     <div className="space-y-4">
       <InfoDGA />
