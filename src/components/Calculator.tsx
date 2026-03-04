@@ -555,8 +555,6 @@ function ZelfstandigForm() {
   const fulltimeIncome = parttimeVal > 0 ? winstVal / (parttimeVal / 100) : winstVal;
   const { pensioengevend, grondslag, premie } = calcResult(fulltimeIncome, parttimeVal);
 
-  const hasInput = winstVal > 0;
-
   return (
     <div className="space-y-4">
       <InfoZelfstandig />
