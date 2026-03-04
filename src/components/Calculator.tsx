@@ -487,8 +487,6 @@ function DGAForm() {
   const fulltimeIncome = parttimeVal > 0 ? subtotaal2 / (parttimeVal / 100) : subtotaal2;
   const { pensioengevend, grondslag, premie } = calcResult(fulltimeIncome, parttimeVal);
 
-  const hasInput = brutoVal > 0;
-
   return (
     <div className="space-y-4">
       <InfoDGA />
@@ -536,14 +534,12 @@ function DGAForm() {
         onChange={setParttime}
       />
 
-      {hasInput && (
-        <ResultBlock
-          pensioengevend={pensioengevend}
-          grondslag={grondslag}
-          premie={premie}
-          parttime={parttimeVal}
-        />
-      )}
+      <ResultBlock
+        pensioengevend={pensioengevend}
+        grondslag={grondslag}
+        premie={premie}
+        parttime={parttimeVal}
+      />
     </div>
   );
 }
@@ -558,8 +554,6 @@ function ZelfstandigForm() {
 
   const fulltimeIncome = parttimeVal > 0 ? winstVal / (parttimeVal / 100) : winstVal;
   const { pensioengevend, grondslag, premie } = calcResult(fulltimeIncome, parttimeVal);
-
-  const hasInput = winstVal > 0;
 
   return (
     <div className="space-y-4">
@@ -579,14 +573,12 @@ function ZelfstandigForm() {
         onChange={setParttime}
       />
 
-      {hasInput && (
-        <ResultBlock
-          pensioengevend={pensioengevend}
-          grondslag={grondslag}
-          premie={premie}
-          parttime={parttimeVal}
-        />
-      )}
+      <ResultBlock
+        pensioengevend={pensioengevend}
+        grondslag={grondslag}
+        premie={premie}
+        parttime={parttimeVal}
+      />
     </div>
   );
 }
