@@ -573,14 +573,12 @@ function ZelfstandigForm() {
         onChange={setParttime}
       />
 
-      {hasInput && (
-        <ResultBlock
-          pensioengevend={pensioengevend}
-          grondslag={grondslag}
-          premie={premie}
-          parttime={parttimeVal}
-        />
-      )}
+      <ResultBlock
+        pensioengevend={pensioengevend}
+        grondslag={grondslag}
+        premie={premie}
+        parttime={parttimeVal}
+      />
     </div>
   );
 }
