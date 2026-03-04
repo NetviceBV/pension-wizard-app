@@ -439,7 +439,12 @@ function LoondienstForm() {
 
       <Subtotaal label="Subtotaal (per jaar)" value={subtotaal1} />
 
-      <Subtotaal label="Vakantiegeld (8%)" value={vakantiegeld} />
+      <EuroInput
+        id="ld-vakantiegeld"
+        label="Uw vakantiegeld (8%)"
+        value={vakantiegeld}
+        onChange={setVakantiegeld}
+      />
 
       <Subtotaal label="Subtotaal inclusief vakantiegeld" value={subtotaal2} />
 
