@@ -273,11 +273,11 @@ function PercentInput({
   onChange: (v: string) => void;
 }) {
   return (
-    <div className="space-y-1.5">
-      <Label htmlFor={id} className="text-sm">
+    <div className="flex items-center gap-4">
+      <Label htmlFor={id} className="text-sm flex-1 min-w-0">
         {label}
       </Label>
-      <div className="relative">
+      <div className="relative w-2/5 shrink-0">
         <Input
           id={id}
           type="text"
