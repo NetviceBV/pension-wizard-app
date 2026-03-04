@@ -364,19 +364,18 @@ export default function Calculator() {
 /* ───── LOONDIENST FORM ───── */
 function LoondienstForm() {
   const [bruto, setBruto] = useState("");
+  const [eindejaars, setEindejaars] = useState("");
   const [bonus, setBonus] = useState("");
   const [waarneming, setWaarneming] = useState("");
   const [management, setManagement] = useState("");
   const [parttime, setParttime] = useState("100");
 
   const brutoVal = parseNum(bruto);
+  const eindejaarsVal = parseNum(eindejaars);
   const bonusVal = parseNum(bonus);
   const waarnemingVal = parseNum(waarneming);
   const managementVal = parseNum(management);
   const parttimeVal = parseNum(parttime) || 100;
-
-  // Eindejaarsuitkering = bruto maandinkomen × 12 × 5%
-  const eindejaars = brutoVal * 12 * 0.05;
 
   // All inputs are monthly → convert to yearly where needed
   // bruto is monthly, eindejaars is yearly, rest are monthly
