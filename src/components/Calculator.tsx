@@ -380,7 +380,7 @@ function LoondienstForm() {
   // All inputs are monthly → convert to yearly where needed
   // bruto is monthly, eindejaars is yearly, rest are monthly
   const subtotaal1 =
-    brutoVal * 12 + eindejaars + bonusVal * 12 + waarnemingVal * 12 + managementVal * 12;
+    brutoVal * 12 + eindejaarsVal + bonusVal * 12 + waarnemingVal * 12 + managementVal * 12;
 
   const vakantiegeld = subtotaal1 * 0.08;
   const subtotaal2 = subtotaal1 + vakantiegeld;
