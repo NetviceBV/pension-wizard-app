@@ -368,6 +368,7 @@ function LoondienstForm() {
   const [bonus, setBonus] = useState("");
   const [waarneming, setWaarneming] = useState("");
   const [management, setManagement] = useState("");
+  const [vakantiegeld, setVakantiegeld] = useState("");
   const [parttime, setParttime] = useState("100");
 
   const brutoVal = parseNum(bruto);
