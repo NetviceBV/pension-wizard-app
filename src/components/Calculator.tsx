@@ -262,6 +262,59 @@ function EuroInput({
   );
 }
 
+/* ───── Euro input with period selector ───── */
+
+function EuroInputWithPeriod({
+  id,
+  label,
+  value,
+  onChange,
+  period,
+  onPeriodChange,
+  placeholder,
+}: {
+  id: string;
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  period: string;
+  onPeriodChange: (v: string) => void;
+  placeholder?: string;
+}) {
+  return (
+    <div className="flex items-center gap-4">
+      <Label htmlFor={id} className="text-sm flex-1 min-w-0">
+        {label}
+      </Label>
+      <div className="flex w-2/5 shrink-0 gap-2">
+        <div className="relative flex-1">
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
+            €
+          </span>
+          <Input
+            id={id}
+            type="text"
+            inputMode="decimal"
+            className="pl-7"
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            placeholder={placeholder ?? "0"}
+          />
+        </div>
+        <Select value={period} onValueChange={onPeriodChange}>
+          <SelectTrigger className="w-[100px] text-xs">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="maand">Per maand</SelectItem>
+            <SelectItem value="jaar">Per jaar</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+    </div>
+  );
+}
+
 function PercentInput({
   id,
   label,
