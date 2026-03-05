@@ -449,7 +449,27 @@ function LoondienstForm() {
     managementVal * m(managementPeriod);
 
   const subtotaal2 = subtotaal1 + vakantiegeldVal * m(vakantiegeldPeriod);
-...
+
+  // Herleid naar fulltime
+  const fulltimeIncome = parttimeVal > 0 ? subtotaal2 / (parttimeVal / 100) : subtotaal2;
+
+  const { pensioengevend, grondslag, premie } = calcResult(fulltimeIncome, parttimeVal);
+
+  return (
+    <div className="space-y-4">
+      <InfoLoondienst />
+
+      <p className="text-xs text-muted-foreground italic">
+        Houd uw loonstrookje bij de hand
+      </p>
+
+      <EuroInput
+        id="ld-bruto"
+        label="Bruto maandinkomen"
+        value={bruto}
+        onChange={setBruto}
+      />
+
       <EuroInputWithPeriod
         id="ld-eindejaars"
         label="Uw eindejaarsuitkering conform CAO (5%)"
