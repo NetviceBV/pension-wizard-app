@@ -425,6 +425,12 @@ function LoondienstForm() {
   const [vakantiegeld, setVakantiegeld] = useState("");
   const [parttime, setParttime] = useState("100");
 
+  const [eindejaarsperiod, setEindejaarsperiod] = useState("maand");
+  const [bonusPeriod, setBonusPeriod] = useState("maand");
+  const [waarnemingPeriod, setWaarnemingPeriod] = useState("maand");
+  const [managementPeriod, setManagementPeriod] = useState("maand");
+  const [vakantiegeldPeriod, setVakantiegeldPeriod] = useState("maand");
+
   const brutoVal = parseNum(bruto);
   const eindejaarsVal = parseNum(eindejaars);
   const bonusVal = parseNum(bonus);
@@ -433,71 +439,63 @@ function LoondienstForm() {
   const vakantiegeldVal = parseNum(vakantiegeld);
   const parttimeVal = parseNum(parttime) || 100;
 
-  // All inputs are monthly → convert to yearly where needed
-  // bruto is monthly, eindejaars is yearly, rest are monthly
+  const m = (period: string) => (period === "maand" ? 12 : 1);
+
   const subtotaal1 =
-    brutoVal * 12 + eindejaarsVal + bonusVal * 12 + waarnemingVal * 12 + managementVal * 12;
+    brutoVal * 12 +
+    eindejaarsVal * m(eindejaarsperiod) +
+    bonusVal * m(bonusPeriod) +
+    waarnemingVal * m(waarnemingPeriod) +
+    managementVal * m(managementPeriod);
 
-  const subtotaal2 = subtotaal1 + vakantiegeldVal * 12;
-
-  // Herleid naar fulltime
-  const fulltimeIncome = parttimeVal > 0 ? subtotaal2 / (parttimeVal / 100) : subtotaal2;
-
-  const { pensioengevend, grondslag, premie } = calcResult(fulltimeIncome, parttimeVal);
-
-  const hasInput = brutoVal > 0;
-
-  return (
-    <div className="space-y-4">
-      <InfoLoondienst />
-
-      <p className="text-xs text-muted-foreground italic">
-        Houd uw loonstrookje bij de hand
-      </p>
-
-      <EuroInput
-        id="ld-bruto"
-        label="Bruto maandinkomen"
-        value={bruto}
-        onChange={setBruto}
-      />
-
-      <EuroInput
+  const subtotaal2 = subtotaal1 + vakantiegeldVal * m(vakantiegeldPeriod);
+...
+      <EuroInputWithPeriod
         id="ld-eindejaars"
         label="Uw eindejaarsuitkering conform CAO (5%)"
         value={eindejaars}
         onChange={setEindejaars}
+        period={eindejaarsperiod}
+        onPeriodChange={setEindejaarsperiod}
       />
 
-      <EuroInput
+      <EuroInputWithPeriod
         id="ld-bonus"
-        label="Vaste bonus (indien onderdeel loonafspraak) — per maand"
+        label="Vaste bonus (indien onderdeel loonafspraak)"
         value={bonus}
         onChange={setBonus}
+        period={bonusPeriod}
+        onPeriodChange={setBonusPeriod}
         placeholder="0"
       />
-      <EuroInput
+      <EuroInputWithPeriod
         id="ld-waarneming"
-        label="Vaste waarnemingstoeslag — per maand"
+        label="Vaste waarnemingstoeslag"
         value={waarneming}
         onChange={setWaarneming}
+        period={waarnemingPeriod}
+        onPeriodChange={setWaarnemingPeriod}
         placeholder="0"
       />
-      <EuroInput
+      <EuroInputWithPeriod
         id="ld-management"
-        label="Vaste management- of bereikbaarheidsvergoeding — per maand"
+        label="Vaste management- of bereikbaarheidsvergoeding"
         value={management}
         onChange={setManagement}
+        period={managementPeriod}
+        onPeriodChange={setManagementPeriod}
         placeholder="0"
       />
 
       <Subtotaal label="Subtotaal (per jaar)" value={subtotaal1} />
 
-      <EuroInput
+      <EuroInputWithPeriod
         id="ld-vakantiegeld"
-        label="Uw vakantiegeld (8%) — per maand"
+        label="Uw vakantiegeld (8%)"
         value={vakantiegeld}
         onChange={setVakantiegeld}
+        period={vakantiegeldPeriod}
+        onPeriodChange={setVakantiegeldPeriod}
       />
 
       <Subtotaal label="Subtotaal inclusief vakantiegeld" value={subtotaal2} />
