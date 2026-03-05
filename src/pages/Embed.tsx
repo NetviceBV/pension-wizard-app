@@ -2,7 +2,7 @@ import Calculator from "@/components/Calculator";
 
 const Embed = () => (
   <div className="p-4">
-    <Calculator />
+    <Calculator embedded />
   </div>
 );
 
