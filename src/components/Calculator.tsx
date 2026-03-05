@@ -546,6 +546,12 @@ function DGAForm() {
   const [vakantiegeld, setVakantiegeld] = useState("");
   const [parttime, setParttime] = useState("100");
 
+  const [brutoPeriod, setBrutoPeriod] = useState("jaar");
+  const [eindejaarsPeriod, setEindejaarsPeriod] = useState("jaar");
+  const [waarnemingPeriod, setWaarnemingPeriod] = useState("jaar");
+  const [managementPeriod, setManagementPeriod] = useState("jaar");
+  const [vakantiegeldPeriod, setVakantiegeldPeriod] = useState("jaar");
+
   const brutoVal = parseNum(bruto);
   const eindejaarsVal = parseNum(eindejaars);
   const waarnemingVal = parseNum(waarneming);
@@ -553,48 +559,57 @@ function DGAForm() {
   const vakantiegeldVal = parseNum(vakantiegeld);
   const parttimeVal = parseNum(parttime) || 100;
 
-  const subtotaal1 = brutoVal + eindejaarsVal + waarnemingVal + managementVal;
-  const subtotaal2 = subtotaal1 + vakantiegeldVal;
+  const m = (period: string) => (period === "maand" ? 12 : 1);
 
-  const fulltimeIncome = parttimeVal > 0 ? subtotaal2 / (parttimeVal / 100) : subtotaal2;
-  const { pensioengevend, grondslag, premie } = calcResult(fulltimeIncome, parttimeVal);
+  const subtotaal1 =
+    brutoVal * m(brutoPeriod) +
+    eindejaarsVal * m(eindejaarsPeriod) +
+    waarnemingVal * m(waarnemingPeriod) +
+    managementVal * m(managementPeriod);
+  const subtotaal2 = subtotaal1 + vakantiegeldVal * m(vakantiegeldPeriod);
 
-  return (
-    <div className="space-y-4">
-      <InfoDGA />
-
-      <EuroInput
+      <EuroInputWithPeriod
         id="dga-bruto"
-        label="Fiscaal vastgestelde bruto loon (per jaar)"
+        label="Fiscaal vastgestelde bruto loon"
         value={bruto}
         onChange={setBruto}
+        period={brutoPeriod}
+        onPeriodChange={setBrutoPeriod}
       />
-      <EuroInput
+      <EuroInputWithPeriod
         id="dga-eindejaars"
-        label="Structurele eindejaarsuitkering (per jaar)"
+        label="Structurele eindejaarsuitkering"
         value={eindejaars}
         onChange={setEindejaars}
+        period={eindejaarsPeriod}
+        onPeriodChange={setEindejaarsPeriod}
       />
-      <EuroInput
+      <EuroInputWithPeriod
         id="dga-waarneming"
-        label="Vaste waarnemingstoeslag (per jaar)"
+        label="Vaste waarnemingstoeslag"
         value={waarneming}
         onChange={setWaarneming}
+        period={waarnemingPeriod}
+        onPeriodChange={setWaarnemingPeriod}
       />
-      <EuroInput
+      <EuroInputWithPeriod
         id="dga-management"
-        label="Vaste management- of bereikbaarheidsvergoeding (per jaar)"
+        label="Vaste management- of bereikbaarheidsvergoeding"
         value={management}
         onChange={setManagement}
+        period={managementPeriod}
+        onPeriodChange={setManagementPeriod}
       />
 
-      <Subtotaal label="Subtotaal" value={subtotaal1} />
+      <Subtotaal label="Subtotaal (per jaar)" value={subtotaal1} />
 
-      <EuroInput
+      <EuroInputWithPeriod
         id="dga-vakantiegeld"
-        label="Vakantiegeld (indien onderdeel loonafspraak, per jaar)"
+        label="Vakantiegeld (indien onderdeel loonafspraak)"
         value={vakantiegeld}
         onChange={setVakantiegeld}
+        period={vakantiegeldPeriod}
+        onPeriodChange={setVakantiegeldPeriod}
       />
 
       <Subtotaal label="Totaal inclusief vakantiegeld" value={subtotaal2} />
