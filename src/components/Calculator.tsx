@@ -326,25 +326,35 @@ function PercentInput({
   value: string;
   onChange: (v: string) => void;
 }) {
+  const numVal = parseNum(value);
+  const isInvalid = value !== "" && (numVal <= 0 || numVal > 100);
+
   return (
-    <div className="flex items-center gap-4">
-      <Label htmlFor={id} className="text-sm flex-1 min-w-0">
-        {label}
-      </Label>
-      <div className="relative w-2/5 shrink-0">
-        <Input
-          id={id}
-          type="text"
-          inputMode="decimal"
-          className="pr-7"
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder="100"
-        />
-        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
-          %
-        </span>
+    <div className="space-y-1">
+      <div className="flex items-center gap-4">
+        <Label htmlFor={id} className="text-sm flex-1 min-w-0">
+          {label}
+        </Label>
+        <div className="relative w-2/5 shrink-0">
+          <Input
+            id={id}
+            type="text"
+            inputMode="decimal"
+            className={`pr-7 ${isInvalid ? "border-destructive focus-visible:ring-destructive" : ""}`}
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            placeholder="100"
+          />
+          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
+            %
+          </span>
+        </div>
       </div>
+      {isInvalid && (
+        <p className="text-xs text-destructive text-right">
+          Vul een percentage in tussen 1 en 100
+        </p>
+      )}
     </div>
   );
 }
