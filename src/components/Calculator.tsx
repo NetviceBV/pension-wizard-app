@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -261,6 +262,59 @@ function EuroInput({
   );
 }
 
+/* ───── Euro input with period selector ───── */
+
+function EuroInputWithPeriod({
+  id,
+  label,
+  value,
+  onChange,
+  period,
+  onPeriodChange,
+  placeholder,
+}: {
+  id: string;
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  period: string;
+  onPeriodChange: (v: string) => void;
+  placeholder?: string;
+}) {
+  return (
+    <div className="flex items-center gap-4">
+      <Label htmlFor={id} className="text-sm flex-1 min-w-0">
+        {label}
+      </Label>
+      <div className="flex w-2/5 shrink-0 gap-2">
+        <div className="relative flex-1">
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
+            €
+          </span>
+          <Input
+            id={id}
+            type="text"
+            inputMode="decimal"
+            className="pl-7"
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            placeholder={placeholder ?? "0"}
+          />
+        </div>
+        <Select value={period} onValueChange={onPeriodChange}>
+          <SelectTrigger className="w-[100px] text-xs">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="maand">Per maand</SelectItem>
+            <SelectItem value="jaar">Per jaar</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+    </div>
+  );
+}
+
 function PercentInput({
   id,
   label,
@@ -371,6 +425,12 @@ function LoondienstForm() {
   const [vakantiegeld, setVakantiegeld] = useState("");
   const [parttime, setParttime] = useState("100");
 
+  const [eindejaarsperiod, setEindejaarsperiod] = useState("maand");
+  const [bonusPeriod, setBonusPeriod] = useState("maand");
+  const [waarnemingPeriod, setWaarnemingPeriod] = useState("maand");
+  const [managementPeriod, setManagementPeriod] = useState("maand");
+  const [vakantiegeldPeriod, setVakantiegeldPeriod] = useState("maand");
+
   const brutoVal = parseNum(bruto);
   const eindejaarsVal = parseNum(eindejaars);
   const bonusVal = parseNum(bonus);
@@ -379,19 +439,21 @@ function LoondienstForm() {
   const vakantiegeldVal = parseNum(vakantiegeld);
   const parttimeVal = parseNum(parttime) || 100;
 
-  // All inputs are monthly → convert to yearly where needed
-  // bruto is monthly, eindejaars is yearly, rest are monthly
-  const subtotaal1 =
-    brutoVal * 12 + eindejaarsVal + bonusVal * 12 + waarnemingVal * 12 + managementVal * 12;
+  const m = (period: string) => (period === "maand" ? 12 : 1);
 
-  const subtotaal2 = subtotaal1 + vakantiegeldVal * 12;
+  const subtotaal1 =
+    brutoVal * 12 +
+    eindejaarsVal * m(eindejaarsperiod) +
+    bonusVal * m(bonusPeriod) +
+    waarnemingVal * m(waarnemingPeriod) +
+    managementVal * m(managementPeriod);
+
+  const subtotaal2 = subtotaal1 + vakantiegeldVal * m(vakantiegeldPeriod);
 
   // Herleid naar fulltime
   const fulltimeIncome = parttimeVal > 0 ? subtotaal2 / (parttimeVal / 100) : subtotaal2;
 
   const { pensioengevend, grondslag, premie } = calcResult(fulltimeIncome, parttimeVal);
-
-  const hasInput = brutoVal > 0;
 
   return (
     <div className="space-y-4">
@@ -408,42 +470,52 @@ function LoondienstForm() {
         onChange={setBruto}
       />
 
-      <EuroInput
+      <EuroInputWithPeriod
         id="ld-eindejaars"
         label="Uw eindejaarsuitkering conform CAO (5%)"
         value={eindejaars}
         onChange={setEindejaars}
+        period={eindejaarsperiod}
+        onPeriodChange={setEindejaarsperiod}
       />
 
-      <EuroInput
+      <EuroInputWithPeriod
         id="ld-bonus"
-        label="Vaste bonus (indien onderdeel loonafspraak) — per maand"
+        label="Vaste bonus (indien onderdeel loonafspraak)"
         value={bonus}
         onChange={setBonus}
+        period={bonusPeriod}
+        onPeriodChange={setBonusPeriod}
         placeholder="0"
       />
-      <EuroInput
+      <EuroInputWithPeriod
         id="ld-waarneming"
-        label="Vaste waarnemingstoeslag — per maand"
+        label="Vaste waarnemingstoeslag"
         value={waarneming}
         onChange={setWaarneming}
+        period={waarnemingPeriod}
+        onPeriodChange={setWaarnemingPeriod}
         placeholder="0"
       />
-      <EuroInput
+      <EuroInputWithPeriod
         id="ld-management"
-        label="Vaste management- of bereikbaarheidsvergoeding — per maand"
+        label="Vaste management- of bereikbaarheidsvergoeding"
         value={management}
         onChange={setManagement}
+        period={managementPeriod}
+        onPeriodChange={setManagementPeriod}
         placeholder="0"
       />
 
       <Subtotaal label="Subtotaal (per jaar)" value={subtotaal1} />
 
-      <EuroInput
+      <EuroInputWithPeriod
         id="ld-vakantiegeld"
-        label="Uw vakantiegeld (8%) — per maand"
+        label="Uw vakantiegeld (8%)"
         value={vakantiegeld}
         onChange={setVakantiegeld}
+        period={vakantiegeldPeriod}
+        onPeriodChange={setVakantiegeldPeriod}
       />
 
       <Subtotaal label="Subtotaal inclusief vakantiegeld" value={subtotaal2} />
