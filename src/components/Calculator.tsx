@@ -654,7 +654,7 @@ function ZelfstandigForm() {
   const [parttime, setParttime] = useState("100");
 
   const winstVal = parseNum(winst);
-  const parttimeVal = parseNum(parttime) || 100;
+  const parttimeVal = Math.min(Math.max(parseNum(parttime) || 100, 1), 100);
 
   const fulltimeIncome = parttimeVal > 0 ? winstVal / (parttimeVal / 100) : winstVal;
   const { pensioengevend, grondslag, premie } = calcResult(fulltimeIncome, parttimeVal);
