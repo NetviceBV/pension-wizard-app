@@ -568,6 +568,13 @@ function DGAForm() {
     managementVal * m(managementPeriod);
   const subtotaal2 = subtotaal1 + vakantiegeldVal * m(vakantiegeldPeriod);
 
+  const fulltimeIncome = parttimeVal > 0 ? subtotaal2 / (parttimeVal / 100) : subtotaal2;
+  const { pensioengevend, grondslag, premie } = calcResult(fulltimeIncome, parttimeVal);
+
+  return (
+    <div className="space-y-4">
+      <InfoDGA />
+
       <EuroInputWithPeriod
         id="dga-bruto"
         label="Fiscaal vastgestelde bruto loon"
