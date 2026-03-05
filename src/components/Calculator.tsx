@@ -382,45 +382,51 @@ function calcResult(fulltimeIncome: number, parttimePct: number) {
    MAIN CALCULATOR COMPONENT
    ═══════════════════════════════════════════ */
 
-export default function Calculator() {
+export default function Calculator({ embedded = false }: { embedded?: boolean }) {
   const [tab, setTab] = useState("loondienst");
+
+  const tabs = (
+    <Tabs value={tab} onValueChange={setTab}>
+      <TabsList className="mb-6 grid w-full grid-cols-3">
+        <TabsTrigger value="loondienst" className="text-xs sm:text-sm">
+          In loondienst
+        </TabsTrigger>
+        <TabsTrigger value="dga" className="text-xs sm:text-sm">
+          DGA
+        </TabsTrigger>
+        <TabsTrigger value="zelfstandig" className="text-xs sm:text-sm">
+          Zelfstandig
+        </TabsTrigger>
+      </TabsList>
+
+      <TabsContent value="loondienst">
+        <LoondienstForm />
+      </TabsContent>
+      <TabsContent value="dga">
+        <DGAForm />
+      </TabsContent>
+      <TabsContent value="zelfstandig">
+        <ZelfstandigForm />
+      </TabsContent>
+    </Tabs>
+  );
+
+  if (embedded) {
+    return <div className="mx-auto w-full max-w-2xl">{tabs}</div>;
+  }
 
   return (
     <Card className="mx-auto w-full max-w-2xl shadow-lg">
       <CardHeader className="pb-4">
         <CardTitle className="text-xl font-bold text-foreground">
-          Pensioengevend Salaris Calculator
+          Pensioengevend Inkomen Tool
         </CardTitle>
         <p className="text-sm text-muted-foreground">
           Bereken uw pensioengevend inkomen, pensioengrondslag en premie voor
           2026.
         </p>
       </CardHeader>
-      <CardContent>
-        <Tabs value={tab} onValueChange={setTab}>
-          <TabsList className="mb-6 grid w-full grid-cols-3">
-            <TabsTrigger value="loondienst" className="text-xs sm:text-sm">
-              In loondienst
-            </TabsTrigger>
-            <TabsTrigger value="dga" className="text-xs sm:text-sm">
-              DGA
-            </TabsTrigger>
-            <TabsTrigger value="zelfstandig" className="text-xs sm:text-sm">
-              Zelfstandig
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="loondienst">
-            <LoondienstForm />
-          </TabsContent>
-          <TabsContent value="dga">
-            <DGAForm />
-          </TabsContent>
-          <TabsContent value="zelfstandig">
-            <ZelfstandigForm />
-          </TabsContent>
-        </Tabs>
-      </CardContent>
+      <CardContent>{tabs}</CardContent>
     </Card>
   );
 }
