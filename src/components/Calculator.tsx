@@ -518,7 +518,7 @@ function LoondienstForm() {
         onPeriodChange={setVakantiegeldPeriod}
       />
 
-      <Subtotaal label="Subtotaal inclusief vakantiegeld" value={subtotaal2} />
+      <Subtotaal label="Totaal inclusief vakantiegeld" value={subtotaal2} />
 
       <PercentInput
         id="ld-parttime"
