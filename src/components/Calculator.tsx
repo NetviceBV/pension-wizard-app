@@ -419,7 +419,7 @@ export default function Calculator({ embedded = false }: { embedded?: boolean })
     <Card className="mx-auto w-full max-w-2xl shadow-lg">
       <CardHeader className="pb-4">
         <CardTitle className="text-xl font-bold text-foreground">
-          Pensioengevend Salaris Calculator
+          Pensioengevend Salaris Tool
         </CardTitle>
         <p className="text-sm text-muted-foreground">
           Bereken uw pensioengevend inkomen, pensioengrondslag en premie voor
