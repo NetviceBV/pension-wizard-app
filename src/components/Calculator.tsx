@@ -447,7 +447,7 @@ function LoondienstForm() {
   const waarnemingVal = parseNum(waarneming);
   const managementVal = parseNum(management);
   const vakantiegeldVal = parseNum(vakantiegeld);
-  const parttimeVal = parseNum(parttime) || 100;
+  const parttimeVal = Math.min(Math.max(parseNum(parttime) || 100, 1), 100);
 
   const m = (period: string) => (period === "maand" ? 12 : 1);
 
