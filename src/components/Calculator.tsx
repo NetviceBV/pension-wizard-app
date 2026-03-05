@@ -597,7 +597,7 @@ function DGAForm() {
         onChange={setVakantiegeld}
       />
 
-      <Subtotaal label="Subtotaal inclusief vakantiegeld" value={subtotaal2} />
+      <Subtotaal label="Totaal inclusief vakantiegeld" value={subtotaal2} />
 
       <PercentInput
         id="dga-parttime"
