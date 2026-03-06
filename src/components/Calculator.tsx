@@ -441,11 +441,11 @@ function LoondienstForm() {
   const [vakantiegeld, setVakantiegeld] = useState("");
   const [parttime, setParttime] = useState("100");
 
-  const [eindejaarsperiod, setEindejaarsperiod] = useState("maand");
-  const [bonusPeriod, setBonusPeriod] = useState("maand");
+  const [eindejaarsperiod, setEindejaarsperiod] = useState("jaar");
+  const [bonusPeriod, setBonusPeriod] = useState("jaar");
   const [waarnemingPeriod, setWaarnemingPeriod] = useState("maand");
   const [managementPeriod, setManagementPeriod] = useState("maand");
-  const [vakantiegeldPeriod, setVakantiegeldPeriod] = useState("maand");
+  const [vakantiegeldPeriod, setVakantiegeldPeriod] = useState("jaar");
 
   const brutoVal = parseNum(bruto);
   const eindejaarsVal = parseNum(eindejaars);
