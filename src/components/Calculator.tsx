@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -447,6 +447,49 @@ function LoondienstForm() {
   const [managementPeriod, setManagementPeriod] = useState("maand");
   const [vakantiegeldPeriod, setVakantiegeldPeriod] = useState("jaar");
 
+  const eindejaarsManual = useRef(false);
+  const vakantiegeldManual = useRef(false);
+
+  const autoVal = (yearAmount: number, period: string) => {
+    const val = period === "maand" ? yearAmount / 12 : yearAmount;
+    return val === 0 ? "" : val.toFixed(2).replace(".", ",");
+  };
+
+  const handleBrutoChange = (val: string) => {
+    setBruto(val);
+    const b = parseNum(val);
+    eindejaarsManual.current = false;
+    vakantiegeldManual.current = false;
+    setEindejaars(autoVal(b * 12 * 0.05, eindejaarsperiod));
+    setVakantiegeld(autoVal(b * 12 * 0.08, vakantiegeldPeriod));
+  };
+
+  const handleEindejaarsPeriodChange = (p: string) => {
+    setEindejaarsperiod(p);
+    if (!eindejaarsManual.current) {
+      const b = parseNum(bruto);
+      setEindejaars(autoVal(b * 12 * 0.05, p));
+    }
+  };
+
+  const handleVakantiegeldPeriodChange = (p: string) => {
+    setVakantiegeldPeriod(p);
+    if (!vakantiegeldManual.current) {
+      const b = parseNum(bruto);
+      setVakantiegeld(autoVal(b * 12 * 0.08, p));
+    }
+  };
+
+  const handleEindejaarsChange = (val: string) => {
+    eindejaarsManual.current = true;
+    setEindejaars(val);
+  };
+
+  const handleVakantiegeldChange = (val: string) => {
+    vakantiegeldManual.current = true;
+    setVakantiegeld(val);
+  };
+
   const brutoVal = parseNum(bruto);
   const eindejaarsVal = parseNum(eindejaars);
   const bonusVal = parseNum(bonus);
@@ -483,16 +526,16 @@ function LoondienstForm() {
         id="ld-bruto"
         label="Bruto maandinkomen"
         value={bruto}
-        onChange={setBruto}
+        onChange={handleBrutoChange}
       />
 
       <EuroInputWithPeriod
         id="ld-eindejaars"
         label="Uw eindejaarsuitkering conform CAO (5%)"
         value={eindejaars}
-        onChange={setEindejaars}
+        onChange={handleEindejaarsChange}
         period={eindejaarsperiod}
-        onPeriodChange={setEindejaarsperiod}
+        onPeriodChange={handleEindejaarsPeriodChange}
       />
 
       <EuroInputWithPeriod
@@ -529,9 +572,9 @@ function LoondienstForm() {
         id="ld-vakantiegeld"
         label="Uw vakantiegeld (8%)"
         value={vakantiegeld}
-        onChange={setVakantiegeld}
+        onChange={handleVakantiegeldChange}
         period={vakantiegeldPeriod}
-        onPeriodChange={setVakantiegeldPeriod}
+        onPeriodChange={handleVakantiegeldPeriodChange}
       />
 
       <Subtotaal label="Totaal inclusief vakantiegeld" value={subtotaal2} />
