@@ -174,7 +174,7 @@ function ResultBlock({
       </h3>
       <div className="grid gap-2 text-sm">
         <Row
-          label="Pensioengevend inkomen per jaar"
+          label="Pensioengevend inkomen per jaar (op fulltime basis)"
           value={euro(pensioengevend)}
           hint={pensioengevend >= MAX_PENSIOENGEVEND ? `(max. ${euro(MAX_PENSIOENGEVEND)})` : undefined}
         />
