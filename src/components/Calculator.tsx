@@ -239,11 +239,11 @@ function EuroInput({
   placeholder?: string;
 }) {
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-4">
       <Label htmlFor={id} className="text-sm flex-1 min-w-0">
         {label}
       </Label>
-      <div className="relative w-2/5 shrink-0">
+      <div className="relative w-full sm:w-2/5 sm:shrink-0">
         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
           €
         </span>
@@ -252,7 +252,7 @@ function EuroInput({
           type="text"
           inputMode="decimal"
           className="pl-7"
-          value={disabled ? value : value}
+          value={value}
           onChange={(e) => onChange(e.target.value)}
           disabled={disabled}
           placeholder={placeholder ?? "0"}
@@ -282,11 +282,11 @@ function EuroInputWithPeriod({
   placeholder?: string;
 }) {
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-4">
       <Label htmlFor={id} className="text-sm flex-1 min-w-0">
         {label}
       </Label>
-      <div className="flex w-2/5 shrink-0 gap-2">
+      <div className="flex w-full sm:w-2/5 sm:shrink-0 gap-2">
         <div className="relative flex-1">
           <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
             €
@@ -331,11 +331,11 @@ function PercentInput({
 
   return (
     <div className="space-y-1">
-      <div className="flex items-center gap-4">
+      <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-4">
         <Label htmlFor={id} className="text-sm flex-1 min-w-0">
           {label}
         </Label>
-        <div className="relative w-2/5 shrink-0">
+        <div className="relative w-full sm:w-2/5 sm:shrink-0">
           <Input
             id={id}
             type="text"
