@@ -899,12 +899,12 @@ function LoondienstForm() {
       <DownloadButton
         tabLabel="In loondienst"
         inputs={[
-          { label: "Bruto maandinkomen", value: euro(brutoVal) },
-          { label: "Eindejaarsuitkering", value: euro(eindejaarsVal * m(eindejaarsperiod)) },
-          { label: "Vaste bonus", value: euro(bonusVal * m(bonusPeriod)) },
-          { label: "Waarnemingstoeslag", value: euro(waarnemingVal * m(waarnemingPeriod)) },
-          { label: "Managementvergoeding", value: euro(managementVal * m(managementPeriod)) },
-          { label: "Vakantiegeld", value: euro(vakantiegeldVal * m(vakantiegeldPeriod)) },
+          { label: `${brutoPeriod === "maand" ? "Bruto maandinkomen" : "Bruto jaarinkomen"} (per ${brutoPeriod})`, value: euro(brutoVal) },
+          { label: `Eindejaarsuitkering (per ${eindejaarsperiod})`, value: euro(eindejaarsVal) },
+          { label: `Vaste bonus (per ${bonusPeriod})`, value: euro(bonusVal) },
+          { label: `Waarnemingstoeslag (per ${waarnemingPeriod})`, value: euro(waarnemingVal) },
+          { label: `Managementvergoeding (per ${managementPeriod})`, value: euro(managementVal) },
+          { label: `Vakantiegeld (per ${vakantiegeldPeriod})`, value: euro(vakantiegeldVal) },
           { label: "Parttimepercentage", value: `${parttimeVal}%` },
         ]}
         pensioengevend={pensioengevend}
