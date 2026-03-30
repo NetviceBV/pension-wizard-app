@@ -126,7 +126,7 @@ function DownloadButton({
     const suffixText = " kunt u via de tegel Pensioengevend inkomen en";
     doc.text(suffixText, boxX + 8 + prefixW + linkW, y);
     y += 6;
-    doc.text("parttimepercentage de onderstaande gegevens invullen.", boxX + 8, y);
+    doc.text("parttimepercentage de onderstaande dik gedrukte gegevens invullen.", boxX + 8, y);
 
     // Primary attributes (bold)
     y += 9;
