@@ -124,7 +124,7 @@ function DownloadButton({
     y += 8;
     const boxX = 20;
     const boxW = pageWidth - 40;
-    const boxH = 62;
+    const boxH = 72;
     doc.setFillColor(76, 180, 212);
     doc.roundedRect(boxX, y, boxW, boxH, 3, 3, "F");
 
@@ -134,7 +134,25 @@ function DownloadButton({
     doc.setTextColor(255, 255, 255);
     doc.text("Wijzigingen doorgeven", boxX + 8, y);
 
-    y += 10;
+    y += 8;
+    doc.setFontSize(9);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(255, 255, 255);
+    const prefixText = "Na inloggen op ";
+    doc.text(prefixText, boxX + 8, y);
+    const prefixW = doc.getTextWidth(prefixText);
+    const linkLabel = "mijn apothekerspensioen";
+    doc.textWithLink(linkLabel, boxX + 8 + prefixW, y, { url: "https://mijn.apothekerspensioen.nl/" });
+    const linkW = doc.getTextWidth(linkLabel);
+    doc.setDrawColor(255, 255, 255);
+    doc.setLineWidth(0.3);
+    doc.line(boxX + 8 + prefixW, y + 0.8, boxX + 8 + prefixW + linkW, y + 0.8);
+    const suffixText = " kunt u via de tegel Pensioengevend inkomen en";
+    doc.text(suffixText, boxX + 8 + prefixW + linkW, y);
+    y += 5;
+    doc.text("parttimepercentage de onderstaande gegevens invullen.", boxX + 8, y);
+
+    y += 9;
     doc.setFontSize(10);
     doc.setFont("helvetica", "normal");
     doc.setTextColor(255, 255, 255);
@@ -147,20 +165,6 @@ function DownloadButton({
     doc.text("•  Pensioengevend inkomen per jaar (op fulltime basis)", boxX + 8, y);
     doc.setFont("helvetica", "bold");
     doc.text(euro(pensioengevend), amountX, y, { align: "right" });
-
-    y += 10;
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(9);
-    doc.setTextColor(255, 255, 255);
-    doc.textWithLink("Klik hier om in te loggen op het apothekers platform.", boxX + 8, y, { url: "https://www.mijnpensioenoverzicht.nl/" });
-    const linkText = "Klik hier om in te loggen op het apothekers platform.";
-    const linkW = doc.getTextWidth(linkText);
-    doc.setDrawColor(255, 255, 255);
-    doc.setLineWidth(0.3);
-    doc.line(boxX + 8, y + 0.8, boxX + 8 + linkW, y + 0.8);
-
-    y += 5;
-    doc.text("Klik vervolgens op de tegel Pensioengevend inkomen en parttime percentage.", boxX + 8, y);
 
     // Footer
     const footerY = doc.internal.pageSize.getHeight() - 15;
