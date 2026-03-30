@@ -12,9 +12,130 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
-import { ChevronDown, Info, Calculator as CalcIcon, Search, HelpCircle, Send } from "lucide-react";
+import { ChevronDown, Info, Calculator as CalcIcon, Search, HelpCircle, Send, Download } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import jsPDF from "jspdf";
+
+/* ───── PDF Download Button ───── */
+function DownloadButton({
+  tabLabel,
+  inputs,
+  pensioengevend,
+  grondslag,
+  premie,
+  parttime,
+}: {
+  tabLabel: string;
+  inputs: { label: string; value: string }[];
+  pensioengevend: number;
+  grondslag: number;
+  premie: number;
+  parttime: number;
+}) {
+  const hasData = pensioengevend > 0 || grondslag > 0 || premie > 0;
+
+  const generatePDF = () => {
+    const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.getWidth();
+    let y = 20;
+
+    // Header
+    doc.setFillColor(30, 64, 175); // primary blue
+    doc.rect(0, 0, pageWidth, 40, "F");
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(18);
+    doc.setFont("helvetica", "bold");
+    doc.text("Pensioengevend Inkomen Tool", 20, 18);
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Resultaat — ${tabLabel}`, 20, 30);
+
+    y = 55;
+
+    // Input section
+    doc.setTextColor(30, 64, 175);
+    doc.setFontSize(13);
+    doc.setFont("helvetica", "bold");
+    doc.text("Ingevoerde gegevens", 20, y);
+    y += 8;
+
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(60, 60, 60);
+
+    const filledInputs = inputs.filter((i) => i.value && i.value !== "€ 0,00" && i.value !== "0");
+    filledInputs.forEach((input) => {
+      doc.setFont("helvetica", "normal");
+      doc.text(input.label, 20, y);
+      doc.setFont("helvetica", "bold");
+      doc.text(input.value, pageWidth - 20, y, { align: "right" });
+      y += 7;
+    });
+
+    y += 5;
+
+    // Separator
+    doc.setDrawColor(200, 200, 200);
+    doc.line(20, y, pageWidth - 20, y);
+    y += 10;
+
+    // Results section
+    doc.setTextColor(30, 64, 175);
+    doc.setFontSize(13);
+    doc.setFont("helvetica", "bold");
+    doc.text("Resultaat", 20, y);
+    y += 10;
+
+    doc.setFontSize(10);
+    const results = [
+      { label: "Pensioengevend inkomen per jaar (fulltime basis)", value: euro(pensioengevend) },
+      { label: "Franchise 2026", value: euro(FRANCHISE_2026) },
+      { label: `Pensioengrondslag (×${parttime}%)`, value: euro(grondslag) },
+    ];
+
+    results.forEach((r) => {
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(80, 80, 80);
+      doc.text(r.label, 20, y);
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor(40, 40, 40);
+      doc.text(r.value, pageWidth - 20, y, { align: "right" });
+      y += 7;
+    });
+
+    // Premie highlight
+    y += 3;
+    doc.setFillColor(239, 246, 255);
+    doc.roundedRect(18, y - 5, pageWidth - 36, 12, 2, 2, "F");
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(30, 64, 175);
+    doc.setFontSize(11);
+    doc.text("Uw premie in 2026 (30,7%)", 22, y + 2);
+    doc.text(euro(premie), pageWidth - 22, y + 2, { align: "right" });
+
+    // Footer
+    const footerY = doc.internal.pageSize.getHeight() - 15;
+    doc.setFontSize(8);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(150, 150, 150);
+    const today = new Date().toLocaleDateString("nl-NL", { day: "2-digit", month: "long", year: "numeric" });
+    doc.text(`Gegenereerd op ${today} — Dit is een indicatieve berekening`, 20, footerY);
+
+    doc.save(`PGI-Resultaat-${tabLabel.replace(/\s+/g, "-")}.pdf`);
+  };
+
+  return (
+    <Button
+      onClick={generatePDF}
+      disabled={!hasData}
+      className="w-full mt-4 bg-red-600 hover:bg-red-700 text-white font-semibold"
+    >
+      <Download className="h-4 w-4" />
+      Download hier uw resultaat
+    </Button>
+  );
+}
 
 /* ───── Contact Form ───── */
 function ContactForm() {
