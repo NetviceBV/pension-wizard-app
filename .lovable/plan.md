@@ -1,37 +1,27 @@
 
 
-## Redesign Resultaat Card to "Wijzigingen doorgeven"
+## Merge web card layout into PDF blue box
 
-### Current State (lines 454–481)
-The `ResultBlock` component shows a card with title "Resultaat" and four rows: Pensioengevend inkomen, Franchise 2026, Pensioengrondslag, and Uw premie (with a separator line above premie).
+### Goal
+Put all the content from the web card (image-26) into the blue box in the PDF (image-27), including the secondary attributes (Franchise, Pensioengrondslag, Uw premie) which are currently only in the "Resultaat" section above.
 
-### New Design
+### Changes — `src/components/Calculator.tsx`, lines 98–167
 
-**Title**: "Wijzigingen doorgeven" (replaces "Resultaat")
+**Remove** lines 98–123 (the entire "Resultaat" heading and its 4 rows).
 
-**Helper text**: Paragraph with clickable link — "Na inloggen op [mijn apothekerspensioen](https://mijn.apothekerspensioen.nl/) kunt u via de tegel Pensioengevend inkomen en parttimepercentage de onderstaande gegevens invullen."
+**Replace** lines 125–167 (blue box) with an expanded blue box containing all attributes:
 
-**Primary attributes** (bold, prominent):
-1. **Pensioengevend inkomen per jaar (op fulltime basis)** — bold label + value
-2. **Uw parttimepercentage** — bold label + value
+1. Keep blue rounded rect but increase `boxH` from 72 to ~110 to fit extra rows
+2. **Title**: "Wijzigingen doorgeven" — bold, white, size 13
+3. **Helper text**: white, normal, size 10 — with underlined link (same as current)
+4. **Primary attributes** (bold, white, with bullet):
+   - Pensioengevend inkomen per jaar (op fulltime basis) + value
+   - Uw parttimepercentage + value
+5. **Thin white separator line** inside the box
+6. **Secondary attributes** (normal weight, white, with bullet):
+   - Franchise 2026
+   - Pensioengrondslag (×parttime%)
+   - Uw premie in 2026 (30,7%)
 
-**Spacing/separator** after the two primary attributes
-
-**Secondary attributes** (same style as current Pensioengrondslag — normal weight, no extra spacing between them, no separator lines):
-- Franchise 2026
-- Pensioengrondslag (×parttime%)
-- Uw premie in 2026 (30,7%) — same style as Pensioengrondslag, no border-top
-
-### Changes — `src/components/Calculator.tsx`
-
-**Lines 454–481** — Replace the `ResultBlock` return JSX:
-- Change title from "Resultaat" to "Wijzigingen doorgeven"
-- Add paragraph with `<a>` link to mijn.apothekerspensioen.nl
-- Render Pensioengevend inkomen and Parttimepercentage as bold `Row` components
-- Add spacing (`mt-3 pt-3 border-t`) separator
-- Render Franchise, Pensioengrondslag, and Uw premie as normal (non-bold) `Row` components without extra dividers
-
-**Props**: Add `parttime` value display (already available as prop). The parttimepercentage row will show `{parttime}%` as value.
-
-Single file change, ~30 lines replaced.
+All text white on SPOA blue background. Single file, ~70 lines replaced with ~55 lines.
 
