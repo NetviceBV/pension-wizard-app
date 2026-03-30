@@ -1,19 +1,18 @@
 
 
-## Make "Wijzigingen doorgeven" match "Resultaat" styling with values
+## Update "Wijzigingen doorgeven" text paragraph in PDF
 
-### Changes — `src/components/Calculator.tsx` → `generatePDF()`
+### Changes — `src/components/Calculator.tsx`, lines 131–163
 
-**1. Match font size** — Change title font size from `12` to `13` (same as "Resultaat" on line 100)
+**Replace** the current link and instruction lines (lines 151–163) with a descriptive paragraph after the title:
 
-**2. Add values next to bullet items** — Use the same column layout as Resultaat:
-- "Uw parttimepercentage" → show `parttime%` value at `amountX`, right-aligned
-- "Pensioengevend inkomen per jaar (op fulltime basis)" → show `euro(pensioengevend)` at `amountX`, right-aligned
-- Same font styling: label in normal white, value in bold white
+1. After the title "Wijzigingen doorgeven" (line 135), add a text paragraph:
+   - "Na inloggen op " (normal) + "mijn apothekerspensioen" (clickable link to `https://mijn.apothekerspensioen.nl/`, underlined) + " kunt u via de tegel Pensioengevend inkomen en" (normal, wraps to next line) + "parttimepercentage de onderstaande gegevens invullen." (normal)
+2. Then show the two bullet items with values (parttimepercentage + pensioengevend inkomen) as they are now
+3. **Remove** lines 151–163 (the old link + "Klik vervolgens..." text)
+4. **Adjust `boxH`** to accommodate the new paragraph layout
 
-**3. Adjust box height** — Increase `boxH` slightly to accommodate the values comfortably
+The paragraph will be rendered at font size 9, white, using `doc.text()` for normal parts and `doc.textWithLink()` for the clickable "mijn apothekerspensioen" portion, all on the same or consecutive lines.
 
-**4. Match line spacing** — Use `y += 7` between bullet lines (same as Resultaat rows)
-
-Single file change: `src/components/Calculator.tsx`, lines 123–157
+Single file change: `src/components/Calculator.tsx`
 
