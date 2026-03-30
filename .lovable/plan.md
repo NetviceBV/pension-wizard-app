@@ -1,24 +1,21 @@
 
 
-## Align Amounts and Units in PDF + Move Result Amounts Under Input Amounts
+## Add "Wijzigingen doorgeven" Paragraph to PDF
 
-### What you want
-The PDF currently right-aligns values (amount + unit as one string) to the page edge. You want:
-1. **Amounts and units in separate columns** — amounts right-aligned at a fixed X position, units left-aligned after that (so all "per maand" / "per jaar" text starts at the same X)
-2. **Result amounts aligned under the input amounts** — same X position for the amount column in both sections
+### Overview
+Add a new highlighted section after the results in the PDF with the title "Wijzigingen doorgeven", listing two attributes and a clickable link.
 
 ### Changes — `src/components/Calculator.tsx` → `generatePDF()`
 
-**1. Define a fixed amount column X position** (e.g. `const amountX = 145;` and `const unitX = 148;`)
+After the results loop (line ~121), before the footer:
 
-**2. Split input values into amount + unit** before rendering:
-- Parse each `input.value` to separate the euro amount from the unit (e.g. `"€ 1.234,00 per maand"` → amount `"€ 1.234,00"` + unit `"per maand"`)
-- Render amount right-aligned at `amountX`, unit normal-aligned at `unitX`
-- For values without a unit (like `"85%"`), just render at `amountX` right-aligned
+1. **Draw highlighted block** — full-width rounded rectangle with SPOA blue background (`rgb(76, 180, 212)`)
+2. **Title** — "Wijzigingen doorgeven" in white bold
+3. **Two bullet lines** in white:
+   - "Uw parttimepercentage"
+   - "Pensioengevend inkomen per jaar (op fulltime basis)"
+4. **Spacing + clickable link** — `doc.textWithLink()` in white/underlined: "Klik hier om in te loggen op het apothekers platform." on one line, then "Klik vervolgens op de tegel Pensioengevend inkomen en parttime percentage." as regular text below
+5. The link URL will point to the apothekers platform (will use a placeholder URL that can be updated)
 
-**3. Apply the same amountX to results section:**
-- Results values (`euro(pensioengevend)`, etc.) right-aligned at `amountX` instead of `pageWidth - 20`
-- Premie highlight amount also at `amountX`
-
-This creates two clean columns: labels on the left, amounts aligned in the middle-right, units after.
+Single file change: `src/components/Calculator.tsx`
 
