@@ -126,8 +126,10 @@ function DownloadButton({
     doc.setFontSize(8);
     doc.setFont("helvetica", "normal");
     doc.setTextColor(150, 150, 150);
-    const today = new Date().toLocaleDateString("nl-NL", { day: "2-digit", month: "long", year: "numeric" });
-    doc.text(`Gegenereerd op ${today} — Dit is een indicatieve berekening`, 20, footerY);
+    const now = new Date();
+    const today = now.toLocaleDateString("nl-NL", { day: "2-digit", month: "long", year: "numeric" });
+    const time = now.toLocaleTimeString("nl-NL", { hour: "2-digit", minute: "2-digit" });
+    doc.text(`Gegenereerd op ${today} om ${time} — Dit is een indicatieve berekening`, 20, footerY);
 
     doc.save(`PGI-Resultaat-${tabLabel.replace(/\s+/g, "-")}.pdf`);
   };
