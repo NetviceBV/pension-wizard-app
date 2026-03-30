@@ -1,13 +1,37 @@
 
 
-## Two changes in PDF — `src/components/Calculator.tsx`
+## Redesign Resultaat Card to "Wijzigingen doorgeven"
 
-### 1. Make bullet labels bold (lines 166, 172)
-- Line 166: Change `doc.setFont("helvetica", "normal")` before "Uw parttimepercentage" to `"bold"`
-- Line 171: Change `doc.setFont("helvetica", "normal")` before "Pensioengevend inkomen..." to `"bold"`
+### Current State (lines 454–481)
+The `ResultBlock` component shows a card with title "Resultaat" and four rows: Pensioengevend inkomen, Franchise 2026, Pensioengrondslag, and Uw premie (with a separator line above premie).
 
-### 2. Remove separator line above Resultaat (lines 100–103)
-Delete lines 100–103 (the separator `doc.line(...)` and spacing) and reduce `y += 5` on line 98 to just `y += 10` to maintain reasonable spacing.
+### New Design
 
-Single file, ~6 lines changed.
+**Title**: "Wijzigingen doorgeven" (replaces "Resultaat")
+
+**Helper text**: Paragraph with clickable link — "Na inloggen op [mijn apothekerspensioen](https://mijn.apothekerspensioen.nl/) kunt u via de tegel Pensioengevend inkomen en parttimepercentage de onderstaande gegevens invullen."
+
+**Primary attributes** (bold, prominent):
+1. **Pensioengevend inkomen per jaar (op fulltime basis)** — bold label + value
+2. **Uw parttimepercentage** — bold label + value
+
+**Spacing/separator** after the two primary attributes
+
+**Secondary attributes** (same style as current Pensioengrondslag — normal weight, no extra spacing between them, no separator lines):
+- Franchise 2026
+- Pensioengrondslag (×parttime%)
+- Uw premie in 2026 (30,7%) — same style as Pensioengrondslag, no border-top
+
+### Changes — `src/components/Calculator.tsx`
+
+**Lines 454–481** — Replace the `ResultBlock` return JSX:
+- Change title from "Resultaat" to "Wijzigingen doorgeven"
+- Add paragraph with `<a>` link to mijn.apothekerspensioen.nl
+- Render Pensioengevend inkomen and Parttimepercentage as bold `Row` components
+- Add spacing (`mt-3 pt-3 border-t`) separator
+- Render Franchise, Pensioengrondslag, and Uw premie as normal (non-bold) `Row` components without extra dividers
+
+**Props**: Add `parttime` value display (already available as prop). The parttimepercentage row will show `{parttime}%` as value.
+
+Single file change, ~30 lines replaced.
 
