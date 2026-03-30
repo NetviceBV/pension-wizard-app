@@ -16,6 +16,7 @@ import { ChevronDown, Info, Calculator as CalcIcon, Search, HelpCircle, Send, Do
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import jsPDF from "jspdf";
+import spoaLogo from "@/assets/spoa.png";
 
 /* ───── PDF Download Button ───── */
 function DownloadButton({
@@ -41,20 +42,26 @@ function DownloadButton({
     let y = 20;
 
     // Header
-    doc.setFillColor(30, 64, 175); // primary blue
+    doc.setFillColor(76, 180, 212);
     doc.rect(0, 0, pageWidth, 40, "F");
+
+    // Add SPOA logo in header
+    try {
+      doc.addImage(spoaLogo, "PNG", 15, 6, 50, 14);
+    } catch (_) { /* logo load failed, continue without */ }
+
     doc.setTextColor(255, 255, 255);
     doc.setFontSize(18);
     doc.setFont("helvetica", "bold");
-    doc.text("Pensioengevend Inkomen Tool", 20, 18);
+    doc.text("Pensioengevend Inkomen Tool", 70, 18);
     doc.setFontSize(12);
     doc.setFont("helvetica", "normal");
-    doc.text(`Resultaat — ${tabLabel}`, 20, 30);
+    doc.text(`Resultaat — ${tabLabel}`, 70, 30);
 
     y = 55;
 
     // Input section
-    doc.setTextColor(30, 64, 175);
+    doc.setTextColor(76, 180, 212);
     doc.setFontSize(13);
     doc.setFont("helvetica", "bold");
     doc.text("Ingevoerde gegevens", 20, y);
@@ -81,7 +88,7 @@ function DownloadButton({
     y += 10;
 
     // Results section
-    doc.setTextColor(30, 64, 175);
+    doc.setTextColor(76, 180, 212);
     doc.setFontSize(13);
     doc.setFont("helvetica", "bold");
     doc.text("Resultaat", 20, y);
@@ -106,10 +113,10 @@ function DownloadButton({
 
     // Premie highlight
     y += 3;
-    doc.setFillColor(239, 246, 255);
+    doc.setFillColor(220, 244, 251);
     doc.roundedRect(18, y - 5, pageWidth - 36, 12, 2, 2, "F");
     doc.setFont("helvetica", "bold");
-    doc.setTextColor(30, 64, 175);
+    doc.setTextColor(76, 180, 212);
     doc.setFontSize(11);
     doc.text("Uw premie in 2026 (30,7%)", 22, y + 2);
     doc.text(euro(premie), pageWidth - 22, y + 2, { align: "right" });
@@ -119,8 +126,10 @@ function DownloadButton({
     doc.setFontSize(8);
     doc.setFont("helvetica", "normal");
     doc.setTextColor(150, 150, 150);
-    const today = new Date().toLocaleDateString("nl-NL", { day: "2-digit", month: "long", year: "numeric" });
-    doc.text(`Gegenereerd op ${today} — Dit is een indicatieve berekening`, 20, footerY);
+    const now = new Date();
+    const today = now.toLocaleDateString("nl-NL", { day: "2-digit", month: "long", year: "numeric" });
+    const time = now.toLocaleTimeString("nl-NL", { hour: "2-digit", minute: "2-digit" });
+    doc.text(`Gegenereerd op ${today} om ${time} — Dit is een indicatieve berekening`, 20, footerY);
 
     doc.save(`PGI-Resultaat-${tabLabel.replace(/\s+/g, "-")}.pdf`);
   };
