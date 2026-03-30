@@ -47,7 +47,9 @@ function DownloadButton({
 
     // Add SPOA logo in header - right corner
     try {
-      doc.addImage(spoaLogo, "PNG", pageWidth - 65, 6, 50, 14);
+      const logoW = 50;
+      const logoH = logoW * (110 / 783); // preserve aspect ratio
+      doc.addImage(spoaLogo, "PNG", pageWidth - logoW - 15, 6, logoW, logoH);
     } catch (_) { /* logo load failed, continue without */ }
 
     doc.setTextColor(76, 180, 212);
