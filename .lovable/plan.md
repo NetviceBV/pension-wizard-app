@@ -1,24 +1,18 @@
 
 
-## Move FAQ Inside Calculator Card & Update Icon Text
+## Make the Q&A Section More Visually Prominent
 
-### Overview
-Move the entire FAQ section (search + accordion) from below the calculator into the Calculator card, placed after the result block. Replace the `HelpCircle` icon in the header with a text-based "Q&A" button/link.
+### Changes — `src/components/Calculator.tsx`
 
-### Changes
+**1. Q&A section wrapper** (line ~438): Add a colored background, rounded corners, and padding to make it stand out from the rest of the card:
+- Change `className` from `"mt-8 pt-8 border-t"` to `"mt-8 p-6 rounded-lg bg-muted/50 border"`
 
-**1. `src/components/Calculator.tsx`**
-- Move the FAQ data array (`faqItems`), search state, and accordion rendering **into** the Calculator component, placed inside `CardContent` after the tabs
-- Add the FAQ section with search input + accordion after the tab content, inside the card
-- Replace the `HelpCircle` icon button in the header with a small text button saying **"Q&A"** (styled as muted text, hover to primary) that scrolls down to the FAQ within the card
-- Remove `HelpCircle` import, add `Search` icon import and accordion imports
+**2. Heading** (line ~439): Make it larger with an icon:
+- Add a `HelpCircle` icon next to the heading text
+- Increase size: `text-xl font-bold`
 
-**2. `src/pages/Index.tsx`**
-- Remove the entire FAQ section (the `#faq` div, search state, faqItems array, accordion imports, Search import)
-- Simplify to just rendering `<Calculator />`
+**3. Q&A header button** (line ~490): Make the "Q&A" link more button-like:
+- Add a subtle background pill style: `px-2.5 py-1 rounded-md bg-primary/10 text-primary hover:bg-primary/20 font-semibold text-sm transition-colors`
 
-### Technical detail
-- The FAQ anchor (`id="faq"`) moves inside the card
-- The "Q&A" header button uses the same smooth-scroll behavior
-- FAQ section gets a top border/margin separator from the tab content
+These changes give the FAQ a distinct visual zone (tinted background + border + rounded box) and make the navigation button more noticeable as a clickable element.
 
