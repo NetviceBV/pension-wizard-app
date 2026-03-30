@@ -61,7 +61,7 @@ function DownloadButton({
     y = 55;
 
     // Input section
-    doc.setTextColor(30, 64, 175);
+    doc.setTextColor(76, 180, 212);
     doc.setFontSize(13);
     doc.setFont("helvetica", "bold");
     doc.text("Ingevoerde gegevens", 20, y);
