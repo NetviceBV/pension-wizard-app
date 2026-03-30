@@ -95,11 +95,6 @@ function DownloadButton({
       y += 7;
     });
 
-    y += 5;
-
-    // Separator
-    doc.setDrawColor(200, 200, 200);
-    doc.line(20, y, pageWidth - 20, y);
     y += 10;
 
     // Results section
@@ -161,14 +156,14 @@ function DownloadButton({
 
     y += 9;
     doc.setFontSize(10);
-    doc.setFont("helvetica", "normal");
+    doc.setFont("helvetica", "bold");
     doc.setTextColor(255, 255, 255);
     doc.text("•  Uw parttimepercentage", boxX + 8, y);
     doc.setFont("helvetica", "bold");
     doc.text(`${parttime}%`, amountX, y, { align: "right" });
 
     y += 7;
-    doc.setFont("helvetica", "normal");
+    doc.setFont("helvetica", "bold");
     doc.text("•  Pensioengevend inkomen per jaar (op fulltime basis)", boxX + 8, y);
     doc.setFont("helvetica", "bold");
     doc.text(euro(pensioengevend), amountX, y, { align: "right" });
