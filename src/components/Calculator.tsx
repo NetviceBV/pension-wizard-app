@@ -120,6 +120,42 @@ function DownloadButton({
       y += 7;
     });
 
+    // Wijzigingen doorgeven section
+    y += 8;
+    const boxX = 20;
+    const boxW = pageWidth - 40;
+    const boxH = 52;
+    doc.setFillColor(76, 180, 212);
+    doc.roundedRect(boxX, y, boxW, boxH, 3, 3, "F");
+
+    y += 10;
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(12);
+    doc.setTextColor(255, 255, 255);
+    doc.text("Wijzigingen doorgeven", boxX + 8, y);
+
+    y += 8;
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    doc.text("•  Uw parttimepercentage", boxX + 8, y);
+    y += 6;
+    doc.text("•  Pensioengevend inkomen per jaar (op fulltime basis)", boxX + 8, y);
+
+    y += 10;
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(9);
+    doc.setTextColor(255, 255, 255);
+    doc.textWithLink("Klik hier om in te loggen op het apothekers platform.", boxX + 8, y, { url: "https://www.mijnpensioenoverzicht.nl/" });
+    // Draw underline for the link
+    const linkText = "Klik hier om in te loggen op het apothekers platform.";
+    const linkW = doc.getTextWidth(linkText);
+    doc.setDrawColor(255, 255, 255);
+    doc.setLineWidth(0.3);
+    doc.line(boxX + 8, y + 0.8, boxX + 8 + linkW, y + 0.8);
+
+    y += 5;
+    doc.text("Klik vervolgens op de tegel Pensioengevend inkomen en parttime percentage.", boxX + 8, y);
+
     // Footer
     const footerY = doc.internal.pageSize.getHeight() - 15;
     doc.setFontSize(8);
