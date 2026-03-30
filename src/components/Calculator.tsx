@@ -745,10 +745,23 @@ function LoondienstForm() {
   const handleBrutoChange = (val: string) => {
     setBruto(val);
     const b = parseNum(val);
+    const brutoYear = b * m(brutoPeriod);
     eindejaarsManual.current = false;
     vakantiegeldManual.current = false;
-    setEindejaars(autoVal(b * 12 * 0.05, eindejaarsperiod));
-    setVakantiegeld(autoVal(b * 12 * 0.08, vakantiegeldPeriod));
+    setEindejaars(autoVal(brutoYear * 0.05, eindejaarsperiod));
+    setVakantiegeld(autoVal(brutoYear * 0.08, vakantiegeldPeriod));
+  };
+
+  const handleBrutoPeriodChange = (p: string) => {
+    setBrutoPeriod(p);
+    const b = parseNum(bruto);
+    const brutoYear = b * (p === "maand" ? 12 : 1);
+    if (!eindejaarsManual.current) {
+      setEindejaars(autoVal(brutoYear * 0.05, eindejaarsperiod));
+    }
+    if (!vakantiegeldManual.current) {
+      setVakantiegeld(autoVal(brutoYear * 0.08, vakantiegeldPeriod));
+    }
   };
 
   const handleEindejaarsPeriodChange = (p: string) => {
