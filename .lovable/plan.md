@@ -1,20 +1,24 @@
 
 
-## Move FAQ Link Inside Calculator Card Header
+## Move FAQ Inside Calculator Card & Update Icon Text
 
-### What changes
-**File:** `src/components/Calculator.tsx`
+### Overview
+Move the entire FAQ section (search + accordion) from below the calculator into the Calculator card, placed after the result block. Replace the `HelpCircle` icon in the header with a text-based "Q&A" button/link.
 
-1. Add a `HelpCircle` icon (from `lucide-react`) as a small button in the `CardHeader`, positioned to the right of the title using flex layout
-2. The icon scrolls smoothly to the `#faq` section when clicked
-3. Add a tooltip or `title` attribute: "Veelgestelde vragen"
+### Changes
 
-**File:** `src/pages/Index.tsx`
+**1. `src/components/Calculator.tsx`**
+- Move the FAQ data array (`faqItems`), search state, and accordion rendering **into** the Calculator component, placed inside `CardContent` after the tabs
+- Add the FAQ section with search input + accordion after the tab content, inside the card
+- Replace the `HelpCircle` icon button in the header with a small text button saying **"Q&A"** (styled as muted text, hover to primary) that scrolls down to the FAQ within the card
+- Remove `HelpCircle` import, add `Search` icon import and accordion imports
 
-4. Remove the standalone "Veelgestelde vragen ↓" link from the top of the page (the `<div className="w-full max-w-2xl mb-4 flex justify-end">` block)
+**2. `src/pages/Index.tsx`**
+- Remove the entire FAQ section (the `#faq` div, search state, faqItems array, accordion imports, Search import)
+- Simplify to just rendering `<Calculator />`
 
 ### Technical detail
-- CardHeader layout: wrap title area and icon in a flex row with `justify-between items-start`
-- Icon: `<HelpCircle className="h-5 w-5 text-muted-foreground hover:text-primary cursor-pointer shrink-0" />` wrapped in an `<a>` or `<button>` with `onClick` smooth-scroll to `#faq`
-- Works well on mobile since it's a small icon that doesn't take extra vertical space
+- The FAQ anchor (`id="faq"`) moves inside the card
+- The "Q&A" header button uses the same smooth-scroll behavior
+- FAQ section gets a top border/margin separator from the tab content
 
