@@ -115,7 +115,7 @@ function DownloadButton({
       doc.text(r.label, 20, y);
       doc.setFont("helvetica", "bold");
       doc.setTextColor(40, 40, 40);
-      doc.text(r.value, pageWidth - 20, y, { align: "right" });
+      doc.text(r.value, amountX, y, { align: "right" });
       y += 7;
     });
 
