@@ -163,7 +163,7 @@ function DownloadButton({
     doc.text(`${parttime}%`, amountX, y, { align: "right" });
 
     y += 7;
-    doc.setFont("helvetica", "normal");
+    doc.setFont("helvetica", "bold");
     doc.text("•  Pensioengevend inkomen per jaar (op fulltime basis)", boxX + 8, y);
     doc.setFont("helvetica", "bold");
     doc.text(euro(pensioengevend), amountX, y, { align: "right" });
