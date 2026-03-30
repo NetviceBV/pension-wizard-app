@@ -1,48 +1,30 @@
 
 
-## Contact Form in Last FAQ Item + Mandrill Email via Supabase Edge Function
+## Add PDF Download Button Below Result
 
 ### Overview
-Replace the last FAQ answer ("Mijn vraag staat niet in de q en a, wat kan ik doen?") with a small contact form. On submit, send the data via a Supabase Edge Function that calls the Mandrill API.
-
-### Prerequisites
-- Enable **Lovable Cloud** (Supabase) on this project to support Edge Functions and secrets
-- Store the Mandrill API key as a runtime secret (`MANDRILL_API_KEY_PRK`)
+Add a red "Download hier uw resultaat" button below each `ResultBlock`. Clicking it generates a PDF in the browser using **jsPDF** that mirrors the card's look and feel — showing the tab name, input values, and calculated results.
 
 ### Changes
 
-**1. `src/components/Calculator.tsx`** — Contact form in last FAQ item
+**1. Install `jspdf`** — lightweight client-side PDF generation library
 
-- Import `Textarea`, `Button`, `toast` and add a `ContactForm` component
-- Replace the last `faqItems` entry's static answer with the `<ContactForm />` component
-- Form fields: Email (optional, validated), Telefoonnummer (optional), Vraag (optional textarea)
-- Submit button disabled until at least one field has a value
-- On submit: call `supabase.functions.invoke('send-contact-email')` with the form data
-- Show success/error toast
+**2. `src/components/Calculator.tsx`**
 
-**2. `src/integrations/supabase/client.ts`** — Supabase client setup
+- Create a `DownloadButton` component that receives the current tab label, all computed values (pensioengevend, grondslag, premie, parttime), and the input field labels/values for that tab
+- Style: full-width red button (`bg-red-600 hover:bg-red-700 text-white w-full`) placed directly after `ResultBlock` in each form (LoondienstForm, DGAForm, ZelfstandigForm)
+- On click: generate a PDF using jsPDF with:
+  - Header: "Pensioengevend Inkomen Tool — Resultaat"
+  - Subtitle: tab name (e.g. "In loondienst")
+  - Section listing all filled-in fields with their values
+  - Result section matching the ResultBlock layout (pensioengevend inkomen, franchise, pensioengrondslag, premie)
+  - Styled with the app's primary blue color for headings, clean table-like rows
+  - Footer with generation date
+- Each form passes its specific field data to the download function
 
-- Create the Supabase client file (standard Lovable pattern) so the Calculator can invoke Edge Functions
-
-**3. `supabase/functions/send-contact-email/index.ts`** — Edge Function
-
-Based on the Mandrill pattern from the other project, simplified:
-- No auth required (`verify_jwt = false`) — this is a public contact form
-- Input validation with Zod: email (optional but valid if provided), phone (optional), question (optional), at least one required
-- Read `MANDRILL_API_KEY_PRK` from env
-- Build simple HTML email listing all filled fields
-- Send via `https://mandrillapp.com/api/1.0/messages/send.json`
-- To: `henk-jan@prikkl.nl`, From: `klantenservice@prikkl.nl`
-- Subaccount: `PRK`
-- Subject: "Nieuwe vraag via PGI Tool"
-
-**4. `supabase/config.toml`** — Register the Edge Function with `verify_jwt = false`
-
-### Technical details
-
-- The `faqItems` array's last entry will have its `a` property changed from a string to a React node (the contact form component)
-- The `AccordionContent` already accepts `ReactNode` children, so this works seamlessly
-- Email validation: basic regex or `type="email"` + pattern check before submit
-- Rate limiting: basic client-side disable-on-submit to prevent spam; server-side rate limiting can be added later
-- The Mandrill API key will be stored as a Supabase secret via the secrets tool
+### Technical detail
+- jsPDF is ~280KB and runs entirely client-side — no server needed
+- The PDF uses `euro()` formatter for consistent number formatting
+- Each form component constructs an array of `{ label, value }` entries for its inputs and passes them along with the result values to the PDF generator
+- The button is disabled when no input has been entered (all values are 0)
 
