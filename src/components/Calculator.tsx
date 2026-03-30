@@ -41,24 +41,22 @@ function DownloadButton({
     const pageWidth = doc.internal.pageSize.getWidth();
     let y = 20;
 
-    // Header (white background)
-    doc.setFillColor(255, 255, 255);
+    // Header
+    doc.setFillColor(76, 180, 212);
     doc.rect(0, 0, pageWidth, 40, "F");
 
-    // Add SPOA logo in header - right corner
+    // Add SPOA logo in header
     try {
-      const logoW = 50;
-      const logoH = logoW * (110 / 783); // preserve aspect ratio
-      doc.addImage(spoaLogo, "PNG", pageWidth - logoW - 15, 6, logoW, logoH);
+      doc.addImage(spoaLogo, "PNG", 15, 6, 50, 14);
     } catch (_) { /* logo load failed, continue without */ }
 
-    doc.setTextColor(76, 180, 212);
+    doc.setTextColor(255, 255, 255);
     doc.setFontSize(18);
     doc.setFont("helvetica", "bold");
-    doc.text("Pensioengevend Inkomen Tool", 15, 18);
+    doc.text("Pensioengevend Inkomen Tool", 70, 18);
     doc.setFontSize(12);
     doc.setFont("helvetica", "normal");
-    doc.text(`Resultaat — ${tabLabel}`, 15, 30);
+    doc.text(`Resultaat — ${tabLabel}`, 70, 30);
 
     y = 55;
 
@@ -408,13 +406,6 @@ function ResultBlock({
         <CalcIcon className="h-5 w-5 text-primary" />
         Resultaat
       </h3>
-      <div className="rounded-md bg-primary/10 p-3 border border-primary/20">
-        <h4 className="font-bold text-sm mb-2 text-foreground">Wat u moet invullen</h4>
-        <div className="grid gap-1 text-sm">
-          <Row label="Parttimepercentage" value={`${parttime}%`} />
-          <Row label="Pensioengevend inkomen per jaar (fulltime basis)" value={euro(pensioengevend)} />
-        </div>
-      </div>
       <div className="grid gap-2 text-sm">
         <Row
           label="Pensioengevend inkomen per jaar (op fulltime basis)"
@@ -426,11 +417,13 @@ function ResultBlock({
           label={`Pensioengrondslag (×${parttime}%)`}
           value={euro(grondslag)}
         />
-        <Row
-          label="Uw premie in 2026 (30,7%)"
-          value={euro(premie)}
-          bold
-        />
+        <div className="border-t pt-2">
+          <Row
+            label="Uw premie in 2026 (30,7%)"
+            value={euro(premie)}
+            bold
+          />
+        </div>
       </div>
     </div>
   );
@@ -891,7 +884,7 @@ function LoondienstForm() {
       <DownloadButton
         tabLabel="In loondienst"
         inputs={[
-          { label: "Bruto maandinkomen", value: euro(brutoVal) },
+          { label: "Bruto maandinkomen", value: euro(brutoVal * 12) },
           { label: "Eindejaarsuitkering", value: euro(eindejaarsVal * m(eindejaarsperiod)) },
           { label: "Vaste bonus", value: euro(bonusVal * m(bonusPeriod)) },
           { label: "Waarnemingstoeslag", value: euro(waarnemingVal * m(waarnemingPeriod)) },
