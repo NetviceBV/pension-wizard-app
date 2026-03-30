@@ -1015,6 +1015,21 @@ function DGAForm() {
         premie={premie}
         parttime={parttimeVal}
       />
+      <DownloadButton
+        tabLabel="DGA"
+        inputs={[
+          { label: "Bruto loon", value: euro(brutoVal * m(brutoPeriod)) },
+          { label: "Eindejaarsuitkering", value: euro(eindejaarsVal * m(eindejaarsPeriod)) },
+          { label: "Waarnemingstoeslag", value: euro(waarnemingVal * m(waarnemingPeriod)) },
+          { label: "Managementvergoeding", value: euro(managementVal * m(managementPeriod)) },
+          { label: "Vakantiegeld", value: euro(vakantiegeldVal * m(vakantiegeldPeriod)) },
+          { label: "Parttimepercentage", value: `${parttimeVal}%` },
+        ]}
+        pensioengevend={pensioengevend}
+        grondslag={grondslag}
+        premie={premie}
+        parttime={parttimeVal}
+      />
     </div>
   );
 }
