@@ -1,12 +1,20 @@
 
 
-## Fix font size of paragraph text in "Wijzigingen doorgeven"
+## Improve "Resultaat — In loondienst" subtitle styling
 
-### Change — `src/components/Calculator.tsx`, line 138
+### Problem
+The subtitle "Resultaat — In loondienst" sits as plain small text under the title, looking disconnected and "lost" on the page.
 
-Change `doc.setFontSize(9)` to `doc.setFontSize(10)` so the paragraph text ("Na inloggen op mijn apothekerspensioen...") matches all other text in the PDF.
+### Solution
+Make it a subtle pill/badge-style element — a rounded rectangle with the SPOA blue background and white text, positioned just below the title. This gives it visual weight and ties it to the header area, similar to a tag or category label.
 
-Also adjust the line spacing on line 152 from `y += 5` to `y += 6` to accommodate the slightly larger text.
+### Changes — `src/components/Calculator.tsx`, lines 54–57
 
-Single file, two-line change.
+Replace the plain text subtitle with:
+1. Draw a rounded rectangle (SPOA blue `rgb(76, 180, 212)`) behind the text
+2. Render "Resultaat — {tabLabel}" in white, bold, font size 10 inside the pill
+3. Position it at y=28, with ~4px padding around the text
+4. Use `doc.roundedRect()` for the pill shape, measure text width with `doc.getTextWidth()` to size it dynamically
+
+Single file, ~8 lines replacing 2 lines.
 
