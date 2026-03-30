@@ -256,7 +256,7 @@ function ContactForm() {
           />
         </div>
         <div>
-          <Label htmlFor="contact-question" className="text-sm">Uw vraag</Label>
+          <Label htmlFor="contact-question" className="text-sm mb-1.5 block">Uw vraag</Label>
           <Textarea
             id="contact-question"
             placeholder="Stel hier uw vraag..."
