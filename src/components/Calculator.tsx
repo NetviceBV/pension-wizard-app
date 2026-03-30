@@ -233,7 +233,7 @@ function ContactForm() {
       </p>
       <div className="space-y-2">
         <div>
-          <Label htmlFor="contact-email" className="text-sm">E-mailadres</Label>
+          <Label htmlFor="contact-email" className="text-sm mb-1.5 block">E-mailadres</Label>
           <Input
             id="contact-email"
             type="email"
@@ -246,7 +246,7 @@ function ContactForm() {
           )}
         </div>
         <div>
-          <Label htmlFor="contact-phone" className="text-sm">Telefoonnummer</Label>
+          <Label htmlFor="contact-phone" className="text-sm mb-1.5 block">Telefoonnummer</Label>
           <Input
             id="contact-phone"
             type="tel"
@@ -256,7 +256,7 @@ function ContactForm() {
           />
         </div>
         <div>
-          <Label htmlFor="contact-question" className="text-sm">Uw vraag</Label>
+          <Label htmlFor="contact-question" className="text-sm mb-1.5 block">Uw vraag</Label>
           <Textarea
             id="contact-question"
             placeholder="Stel hier uw vraag..."
