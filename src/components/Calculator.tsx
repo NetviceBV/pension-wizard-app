@@ -183,7 +183,10 @@ function DownloadButton({
     <Button
       onClick={generatePDF}
       disabled={!hasData}
-      className="w-full mt-4 bg-red-600 hover:bg-red-700 text-white font-semibold"
+      className="w-full mt-4 text-white font-semibold"
+      style={{ backgroundColor: "rgb(76, 180, 212)" }}
+      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgb(60, 160, 192)")}
+      onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "rgb(76, 180, 212)")}
     >
       <Download className="h-4 w-4" />
       Download hier uw resultaat
