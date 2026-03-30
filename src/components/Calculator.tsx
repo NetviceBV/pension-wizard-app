@@ -872,6 +872,22 @@ function LoondienstForm() {
         premie={premie}
         parttime={parttimeVal}
       />
+      <DownloadButton
+        tabLabel="In loondienst"
+        inputs={[
+          { label: "Bruto maandinkomen", value: euro(brutoVal * 12) },
+          { label: "Eindejaarsuitkering", value: euro(eindejaarsVal * m(eindejaarsperiod)) },
+          { label: "Vaste bonus", value: euro(bonusVal * m(bonusPeriod)) },
+          { label: "Waarnemingstoeslag", value: euro(waarnemingVal * m(waarnemingPeriod)) },
+          { label: "Managementvergoeding", value: euro(managementVal * m(managementPeriod)) },
+          { label: "Vakantiegeld", value: euro(vakantiegeldVal * m(vakantiegeldPeriod)) },
+          { label: "Parttimepercentage", value: `${parttimeVal}%` },
+        ]}
+        pensioengevend={pensioengevend}
+        grondslag={grondslag}
+        premie={premie}
+        parttime={parttimeVal}
+      />
     </div>
   );
 }
