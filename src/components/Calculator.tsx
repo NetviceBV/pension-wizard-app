@@ -135,7 +135,7 @@ function DownloadButton({
     doc.text("Wijzigingen doorgeven", boxX + 8, y);
 
     y += 8;
-    doc.setFontSize(9);
+    doc.setFontSize(10);
     doc.setFont("helvetica", "normal");
     doc.setTextColor(255, 255, 255);
     const prefixText = "Na inloggen op ";
