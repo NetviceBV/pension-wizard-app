@@ -1016,11 +1016,11 @@ function DGAForm() {
       <DownloadButton
         tabLabel="DGA"
         inputs={[
-          { label: `Bruto loon (per ${brutoPeriod})`, value: euro(brutoVal) },
-          { label: `Eindejaarsuitkering (per ${eindejaarsPeriod})`, value: euro(eindejaarsVal) },
-          { label: `Waarnemingstoeslag (per ${waarnemingPeriod})`, value: euro(waarnemingVal) },
-          { label: `Managementvergoeding (per ${managementPeriod})`, value: euro(managementVal) },
-          { label: `Vakantiegeld (per ${vakantiegeldPeriod})`, value: euro(vakantiegeldVal) },
+          { label: "Bruto loon", value: `${euro(brutoVal)} per ${brutoPeriod}` },
+          { label: "Eindejaarsuitkering", value: `${euro(eindejaarsVal)} per ${eindejaarsPeriod}` },
+          { label: "Waarnemingstoeslag", value: `${euro(waarnemingVal)} per ${waarnemingPeriod}` },
+          { label: "Managementvergoeding", value: `${euro(managementVal)} per ${managementPeriod}` },
+          { label: "Vakantiegeld", value: `${euro(vakantiegeldVal)} per ${vakantiegeldPeriod}` },
           { label: "Parttimepercentage", value: `${parttimeVal}%` },
         ]}
         pensioengevend={pensioengevend}
