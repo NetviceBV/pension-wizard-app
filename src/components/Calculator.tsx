@@ -62,7 +62,7 @@ function DownloadButton({
     doc.setTextColor(255, 255, 255);
     doc.text(badgeText, 25, badgeY + 5.5);
 
-    y = 55;
+    y = 45;
 
     // Input section
     doc.setTextColor(76, 180, 212);
