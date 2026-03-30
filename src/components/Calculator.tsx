@@ -10,7 +10,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
-import { ChevronDown, Info, Calculator as CalcIcon, Search } from "lucide-react";
+import { ChevronDown, Info, Calculator as CalcIcon, Search, HelpCircle } from "lucide-react";
 
 const faqItems = [
   { q: "Waarom vul ik een voltijdssalaris in, terwijl ik parttime werk?", a: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris." },
@@ -435,8 +435,11 @@ export default function Calculator({ embedded = false }: { embedded?: boolean })
   );
 
   const faqSection = (
-    <div id="faq" className="mt-8 pt-8 border-t">
-      <h3 className="text-lg font-semibold mb-4">Veelgestelde vragen</h3>
+    <div id="faq" className="mt-8 p-6 rounded-lg bg-muted/50 border">
+      <h3 className="text-xl font-bold flex items-center gap-2 mb-4">
+        <HelpCircle className="h-5 w-5" />
+        Veelgestelde vragen
+      </h3>
       <div className="relative mb-4">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
@@ -487,7 +490,7 @@ export default function Calculator({ embedded = false }: { embedded?: boolean })
             type="button"
             title="Veelgestelde vragen"
             onClick={() => document.getElementById("faq")?.scrollIntoView({ behavior: "smooth" })}
-            className="shrink-0 mt-1 text-sm font-medium text-muted-foreground hover:text-primary transition-colors cursor-pointer"
+            className="shrink-0 mt-1 px-2.5 py-1 rounded-md bg-primary/10 text-primary hover:bg-primary/20 font-semibold text-sm transition-colors cursor-pointer"
           >
             Q&A
           </button>
