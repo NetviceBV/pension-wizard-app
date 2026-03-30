@@ -803,7 +803,7 @@ function LoondienstForm() {
   const m = (period: string) => (period === "maand" ? 12 : 1);
 
   const subtotaal1 =
-    brutoVal * 12 +
+    brutoVal * m(brutoPeriod) +
     eindejaarsVal * m(eindejaarsperiod) +
     bonusVal * m(bonusPeriod) +
     waarnemingVal * m(waarnemingPeriod) +
