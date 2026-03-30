@@ -873,6 +873,17 @@ function LoondienstForm() {
         parttime={parttimeVal}
       />
       <DownloadButton
+        tabLabel="Zelfstandig"
+        inputs={[
+          { label: "Winst uit onderneming", value: euro(winstVal) },
+          { label: "Parttimepercentage", value: `${parttimeVal}%` },
+        ]}
+        pensioengevend={pensioengevend}
+        grondslag={grondslag}
+        premie={premie}
+        parttime={parttimeVal}
+      />
+      <DownloadButton
         tabLabel="DGA"
         inputs={[
           { label: "Bruto loon", value: euro(brutoVal * m(brutoPeriod)) },
