@@ -97,36 +97,10 @@ function DownloadButton({
 
     y += 10;
 
-    // Results section
-    doc.setTextColor(76, 180, 212);
-    doc.setFontSize(13);
-    doc.setFont("helvetica", "bold");
-    doc.text("Resultaat", 20, y);
-    y += 10;
-
-    doc.setFontSize(10);
-    const results = [
-      { label: "Pensioengevend inkomen per jaar (fulltime basis)", value: euro(pensioengevend) },
-      { label: "Franchise 2026", value: euro(FRANCHISE_2026) },
-      { label: `Pensioengrondslag (×${parttime}%)`, value: euro(grondslag) },
-      { label: "Uw premie in 2026 (30,7%)", value: euro(premie) },
-    ];
-
-    results.forEach((r) => {
-      doc.setFont("helvetica", "normal");
-      doc.setTextColor(80, 80, 80);
-      doc.text(r.label, 20, y);
-      doc.setFont("helvetica", "bold");
-      doc.setTextColor(40, 40, 40);
-      doc.text(r.value, amountX, y, { align: "right" });
-      y += 7;
-    });
-
-    // Wijzigingen doorgeven section
-    y += 8;
+    // Wijzigingen doorgeven section (blue box with all results)
     const boxX = 20;
     const boxW = pageWidth - 40;
-    const boxH = 72;
+    const boxH = 110;
     doc.setFillColor(76, 180, 212);
     doc.roundedRect(boxX, y, boxW, boxH, 3, 3, "F");
 
@@ -152,8 +126,9 @@ function DownloadButton({
     const suffixText = " kunt u via de tegel Pensioengevend inkomen en";
     doc.text(suffixText, boxX + 8 + prefixW + linkW, y);
     y += 6;
-    doc.text("parttimepercentage de onderstaande gegevens invullen.", boxX + 8, y);
+    doc.text("parttimepercentage de onderstaande dik gedrukte gegevens invullen.", boxX + 8, y);
 
+    // Primary attributes (bold)
     y += 9;
     doc.setFontSize(10);
     doc.setFont("helvetica", "bold");
@@ -162,9 +137,28 @@ function DownloadButton({
     doc.text(euro(pensioengevend), amountX, y, { align: "right" });
 
     y += 7;
-    doc.setFont("helvetica", "bold");
     doc.text("•  Uw parttimepercentage", boxX + 8, y);
     doc.text(`${parttime}%`, amountX, y, { align: "right" });
+
+    // Separator line
+    y += 5;
+    doc.setDrawColor(255, 255, 255);
+    doc.setLineWidth(0.3);
+    doc.line(boxX + 8, y, boxX + boxW - 8, y);
+
+    // Secondary attributes (normal)
+    y += 6;
+    doc.setFont("helvetica", "normal");
+    doc.text("•  Franchise 2026", boxX + 8, y);
+    doc.text(euro(FRANCHISE_2026), amountX, y, { align: "right" });
+
+    y += 7;
+    doc.text(`•  Pensioengrondslag (×${parttime}%)`, boxX + 8, y);
+    doc.text(euro(grondslag), amountX, y, { align: "right" });
+
+    y += 7;
+    doc.text("•  Uw premie in 2026 (30,7%)", boxX + 8, y);
+    doc.text(euro(premie), amountX, y, { align: "right" });
 
     // Footer
     const footerY = doc.internal.pageSize.getHeight() - 15;
@@ -465,7 +459,7 @@ function ResultBlock({
         >
           mijn apothekerspensioen
         </a>{" "}
-        kunt u via de tegel Pensioengevend inkomen en parttimepercentage de onderstaande gegevens invullen.
+        kunt u via de tegel Pensioengevend inkomen en parttimepercentage de onderstaande dik gedrukte gegevens invullen.
       </p>
       <div className="grid gap-2 text-sm">
         <Row
