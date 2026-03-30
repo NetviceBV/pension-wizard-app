@@ -1,30 +1,24 @@
 
 
-## Add PDF Download Button Below Result
+## Align Amounts and Units in PDF + Move Result Amounts Under Input Amounts
 
-### Overview
-Add a red "Download hier uw resultaat" button below each `ResultBlock`. Clicking it generates a PDF in the browser using **jsPDF** that mirrors the card's look and feel — showing the tab name, input values, and calculated results.
+### What you want
+The PDF currently right-aligns values (amount + unit as one string) to the page edge. You want:
+1. **Amounts and units in separate columns** — amounts right-aligned at a fixed X position, units left-aligned after that (so all "per maand" / "per jaar" text starts at the same X)
+2. **Result amounts aligned under the input amounts** — same X position for the amount column in both sections
 
-### Changes
+### Changes — `src/components/Calculator.tsx` → `generatePDF()`
 
-**1. Install `jspdf`** — lightweight client-side PDF generation library
+**1. Define a fixed amount column X position** (e.g. `const amountX = 145;` and `const unitX = 148;`)
 
-**2. `src/components/Calculator.tsx`**
+**2. Split input values into amount + unit** before rendering:
+- Parse each `input.value` to separate the euro amount from the unit (e.g. `"€ 1.234,00 per maand"` → amount `"€ 1.234,00"` + unit `"per maand"`)
+- Render amount right-aligned at `amountX`, unit normal-aligned at `unitX`
+- For values without a unit (like `"85%"`), just render at `amountX` right-aligned
 
-- Create a `DownloadButton` component that receives the current tab label, all computed values (pensioengevend, grondslag, premie, parttime), and the input field labels/values for that tab
-- Style: full-width red button (`bg-red-600 hover:bg-red-700 text-white w-full`) placed directly after `ResultBlock` in each form (LoondienstForm, DGAForm, ZelfstandigForm)
-- On click: generate a PDF using jsPDF with:
-  - Header: "Pensioengevend Inkomen Tool — Resultaat"
-  - Subtitle: tab name (e.g. "In loondienst")
-  - Section listing all filled-in fields with their values
-  - Result section matching the ResultBlock layout (pensioengevend inkomen, franchise, pensioengrondslag, premie)
-  - Styled with the app's primary blue color for headings, clean table-like rows
-  - Footer with generation date
-- Each form passes its specific field data to the download function
+**3. Apply the same amountX to results section:**
+- Results values (`euro(pensioengevend)`, etc.) right-aligned at `amountX` instead of `pageWidth - 20`
+- Premie highlight amount also at `amountX`
 
-### Technical detail
-- jsPDF is ~280KB and runs entirely client-side — no server needed
-- The PDF uses `euro()` formatter for consistent number formatting
-- Each form component constructs an array of `{ label, value }` entries for its inputs and passes them along with the result values to the PDF generator
-- The button is disabled when no input has been entered (all values are 0)
+This creates two clean columns: labels on the left, amounts aligned in the middle-right, units after.
 
