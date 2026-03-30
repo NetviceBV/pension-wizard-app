@@ -777,7 +777,8 @@ function LoondienstForm() {
     setVakantiegeldPeriod(p);
     if (!vakantiegeldManual.current) {
       const b = parseNum(bruto);
-      setVakantiegeld(autoVal(b * 12 * 0.08, p));
+      const brutoYear = b * m(brutoPeriod);
+      setVakantiegeld(autoVal(brutoYear * 0.08, p));
     }
   };
 
