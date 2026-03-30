@@ -51,9 +51,16 @@ function DownloadButton({
     doc.setFontSize(18);
     doc.setFont("helvetica", "bold");
     doc.text("Pensioengevend Inkomen Tool", 20, 18);
-    doc.setFontSize(12);
-    doc.setFont("helvetica", "normal");
-    doc.text(`Resultaat — ${tabLabel}`, 20, 30);
+    const badgeText = `Resultaat — ${tabLabel}`;
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "bold");
+    const badgeWidth = doc.getTextWidth(badgeText) + 10;
+    const badgeH = 8;
+    const badgeY = 24;
+    doc.setFillColor(76, 180, 212);
+    doc.roundedRect(20, badgeY, badgeWidth, badgeH, 3, 3, "F");
+    doc.setTextColor(255, 255, 255);
+    doc.text(badgeText, 25, badgeY + 5.5);
 
     y = 55;
 
