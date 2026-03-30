@@ -246,7 +246,7 @@ function ContactForm() {
           )}
         </div>
         <div>
-          <Label htmlFor="contact-phone" className="text-sm">Telefoonnummer</Label>
+          <Label htmlFor="contact-phone" className="text-sm mb-1.5 block">Telefoonnummer</Label>
           <Input
             id="contact-phone"
             type="tel"
