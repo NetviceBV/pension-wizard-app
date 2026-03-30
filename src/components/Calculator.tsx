@@ -95,11 +95,6 @@ function DownloadButton({
       y += 7;
     });
 
-    y += 5;
-
-    // Separator
-    doc.setDrawColor(200, 200, 200);
-    doc.line(20, y, pageWidth - 20, y);
     y += 10;
 
     // Results section
