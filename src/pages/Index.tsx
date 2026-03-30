@@ -30,18 +30,6 @@ const Index = () => {
 
   return (
     <div className="flex min-h-screen flex-col items-center bg-background p-4">
-      <div className="w-full max-w-2xl mb-4 flex justify-end">
-        <a
-          href="#faq"
-          onClick={(e) => {
-            e.preventDefault();
-            document.getElementById("faq")?.scrollIntoView({ behavior: "smooth" });
-          }}
-          className="text-sm text-primary hover:underline"
-        >
-          Veelgestelde vragen ↓
-        </a>
-      </div>
 
       <Calculator />
 
