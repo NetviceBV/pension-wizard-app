@@ -824,11 +824,13 @@ function LoondienstForm() {
         Houd uw loonstrookje bij de hand
       </p>
 
-      <EuroInput
+      <EuroInputWithPeriod
         id="ld-bruto"
-        label="Bruto maandinkomen"
+        label={brutoPeriod === "maand" ? "Bruto maandinkomen" : "Bruto jaarinkomen"}
         value={bruto}
         onChange={handleBrutoChange}
+        period={brutoPeriod}
+        onPeriodChange={handleBrutoPeriodChange}
       />
 
       <EuroInputWithPeriod
