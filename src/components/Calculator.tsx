@@ -158,15 +158,13 @@ function DownloadButton({
     doc.setFontSize(10);
     doc.setFont("helvetica", "bold");
     doc.setTextColor(255, 255, 255);
-    doc.text("•  Uw parttimepercentage", boxX + 8, y);
-    doc.setFont("helvetica", "bold");
-    doc.text(`${parttime}%`, amountX, y, { align: "right" });
+    doc.text("•  Pensioengevend inkomen per jaar (op fulltime basis)", boxX + 8, y);
+    doc.text(euro(pensioengevend), amountX, y, { align: "right" });
 
     y += 7;
     doc.setFont("helvetica", "bold");
-    doc.text("•  Pensioengevend inkomen per jaar (op fulltime basis)", boxX + 8, y);
-    doc.setFont("helvetica", "bold");
-    doc.text(euro(pensioengevend), amountX, y, { align: "right" });
+    doc.text("•  Uw parttimepercentage", boxX + 8, y);
+    doc.text(`${parttime}%`, amountX, y, { align: "right" });
 
     // Footer
     const footerY = doc.internal.pageSize.getHeight() - 15;
