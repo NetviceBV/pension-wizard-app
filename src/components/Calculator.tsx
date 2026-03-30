@@ -9,7 +9,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { ChevronDown, Info, Calculator as CalcIcon } from "lucide-react";
+import { ChevronDown, Info, Calculator as CalcIcon, HelpCircle } from "lucide-react";
 
 const MAX_PENSIOENGEVEND = 113738;
 const FRANCHISE_2026 = 19172;
@@ -418,13 +418,25 @@ export default function Calculator({ embedded = false }: { embedded?: boolean })
   return (
     <Card className="mx-auto w-full max-w-2xl shadow-lg">
       <CardHeader className="pb-4">
-        <CardTitle className="text-xl font-bold text-foreground">
-          Pensioengevend Inkomen Tool
-        </CardTitle>
-        <p className="text-sm text-muted-foreground">
-          Bereken uw pensioengevend inkomen, pensioengrondslag en premie voor
-          2026.
-        </p>
+        <div className="flex items-start justify-between gap-2">
+          <div>
+            <CardTitle className="text-xl font-bold text-foreground">
+              Pensioengevend Inkomen Tool
+            </CardTitle>
+            <p className="text-sm text-muted-foreground mt-1.5">
+              Bereken uw pensioengevend inkomen, pensioengrondslag en premie voor
+              2026.
+            </p>
+          </div>
+          <button
+            type="button"
+            title="Veelgestelde vragen"
+            onClick={() => document.getElementById("faq")?.scrollIntoView({ behavior: "smooth" })}
+            className="shrink-0 mt-1"
+          >
+            <HelpCircle className="h-5 w-5 text-muted-foreground hover:text-primary transition-colors cursor-pointer" />
+          </button>
+        </div>
       </CardHeader>
       <CardContent>{tabs}</CardContent>
     </Card>
