@@ -68,12 +68,23 @@ function DownloadButton({
     doc.setFont("helvetica", "normal");
     doc.setTextColor(60, 60, 60);
 
+    const amountX = 145;
+    const unitX = 148;
+
     const filledInputs = inputs.filter((i) => i.value && i.value !== "€ 0,00" && i.value !== "0");
     filledInputs.forEach((input) => {
       doc.setFont("helvetica", "normal");
       doc.text(input.label, 20, y);
       doc.setFont("helvetica", "bold");
-      doc.text(input.value, pageWidth - 20, y, { align: "right" });
+      // Split amount and unit (e.g. "€ 1.234,00 per maand" → amount + unit)
+      const perMatch = input.value.match(/^(.+?)\s+(per\s+.+)$/);
+      if (perMatch) {
+        doc.text(perMatch[1], amountX, y, { align: "right" });
+        doc.setFont("helvetica", "normal");
+        doc.text(perMatch[2], unitX, y);
+      } else {
+        doc.text(input.value, amountX, y, { align: "right" });
+      }
       y += 7;
     });
 
