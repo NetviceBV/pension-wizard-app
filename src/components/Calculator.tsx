@@ -16,6 +16,7 @@ import { ChevronDown, Info, Calculator as CalcIcon, Search, HelpCircle, Send, Do
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import jsPDF from "jspdf";
+import spoaLogo from "@/assets/spoa.png";
 
 /* ───── PDF Download Button ───── */
 function DownloadButton({
