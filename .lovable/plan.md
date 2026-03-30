@@ -1,18 +1,48 @@
 
 
-## Make the Q&A Section More Visually Prominent
+## Contact Form in Last FAQ Item + Mandrill Email via Supabase Edge Function
 
-### Changes — `src/components/Calculator.tsx`
+### Overview
+Replace the last FAQ answer ("Mijn vraag staat niet in de q en a, wat kan ik doen?") with a small contact form. On submit, send the data via a Supabase Edge Function that calls the Mandrill API.
 
-**1. Q&A section wrapper** (line ~438): Add a colored background, rounded corners, and padding to make it stand out from the rest of the card:
-- Change `className` from `"mt-8 pt-8 border-t"` to `"mt-8 p-6 rounded-lg bg-muted/50 border"`
+### Prerequisites
+- Enable **Lovable Cloud** (Supabase) on this project to support Edge Functions and secrets
+- Store the Mandrill API key as a runtime secret (`MANDRILL_API_KEY_PRK`)
 
-**2. Heading** (line ~439): Make it larger with an icon:
-- Add a `HelpCircle` icon next to the heading text
-- Increase size: `text-xl font-bold`
+### Changes
 
-**3. Q&A header button** (line ~490): Make the "Q&A" link more button-like:
-- Add a subtle background pill style: `px-2.5 py-1 rounded-md bg-primary/10 text-primary hover:bg-primary/20 font-semibold text-sm transition-colors`
+**1. `src/components/Calculator.tsx`** — Contact form in last FAQ item
 
-These changes give the FAQ a distinct visual zone (tinted background + border + rounded box) and make the navigation button more noticeable as a clickable element.
+- Import `Textarea`, `Button`, `toast` and add a `ContactForm` component
+- Replace the last `faqItems` entry's static answer with the `<ContactForm />` component
+- Form fields: Email (optional, validated), Telefoonnummer (optional), Vraag (optional textarea)
+- Submit button disabled until at least one field has a value
+- On submit: call `supabase.functions.invoke('send-contact-email')` with the form data
+- Show success/error toast
+
+**2. `src/integrations/supabase/client.ts`** — Supabase client setup
+
+- Create the Supabase client file (standard Lovable pattern) so the Calculator can invoke Edge Functions
+
+**3. `supabase/functions/send-contact-email/index.ts`** — Edge Function
+
+Based on the Mandrill pattern from the other project, simplified:
+- No auth required (`verify_jwt = false`) — this is a public contact form
+- Input validation with Zod: email (optional but valid if provided), phone (optional), question (optional), at least one required
+- Read `MANDRILL_API_KEY_PRK` from env
+- Build simple HTML email listing all filled fields
+- Send via `https://mandrillapp.com/api/1.0/messages/send.json`
+- To: `henk-jan@prikkl.nl`, From: `klantenservice@prikkl.nl`
+- Subaccount: `PRK`
+- Subject: "Nieuwe vraag via PGI Tool"
+
+**4. `supabase/config.toml`** — Register the Edge Function with `verify_jwt = false`
+
+### Technical details
+
+- The `faqItems` array's last entry will have its `a` property changed from a string to a React node (the contact form component)
+- The `AccordionContent` already accepts `ReactNode` children, so this works seamlessly
+- Email validation: basic regex or `type="email"` + pattern check before submit
+- Rate limiting: basic client-side disable-on-submit to prevent spam; server-side rate limiting can be added later
+- The Mandrill API key will be stored as a Supabase secret via the secrets tool
 
