@@ -12,9 +12,189 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
-import { ChevronDown, Info, Calculator as CalcIcon, Search, HelpCircle, Send } from "lucide-react";
+import { ChevronDown, Info, Calculator as CalcIcon, Search, HelpCircle, Send, Download } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import jsPDF from "jspdf";
+import spoaLogo from "@/assets/spoa.png";
+
+/* ───── PDF Download Button ───── */
+function DownloadButton({
+  tabLabel,
+  inputs,
+  pensioengevend,
+  grondslag,
+  premie,
+  parttime,
+}: {
+  tabLabel: string;
+  inputs: { label: string; value: string }[];
+  pensioengevend: number;
+  grondslag: number;
+  premie: number;
+  parttime: number;
+}) {
+  const hasData = pensioengevend > 0 || grondslag > 0 || premie > 0;
+
+  const generatePDF = () => {
+    const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.getWidth();
+    let y = 20;
+
+    // Header (white background)
+    // Add SPOA logo top-right
+    try {
+      doc.addImage(spoaLogo, "PNG", pageWidth - 80, 8, 71, 10);
+    } catch (_) { /* logo load failed, continue without */ }
+
+    doc.setTextColor(76, 180, 212);
+    doc.setFontSize(18);
+    doc.setFont("helvetica", "bold");
+    doc.text("Pensioengevend Inkomen Tool", 20, 18);
+    const badgeText = `Resultaat — ${tabLabel}`;
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "bold");
+    const badgeWidth = doc.getTextWidth(badgeText) + 10;
+    const badgeH = 8;
+    const badgeY = 24;
+    doc.setFillColor(76, 180, 212);
+    doc.roundedRect(20, badgeY, badgeWidth, badgeH, 3, 3, "F");
+    doc.setTextColor(255, 255, 255);
+    doc.text(badgeText, 25, badgeY + 5.5);
+
+    y = 45;
+
+    // Input section
+    doc.setTextColor(76, 180, 212);
+    doc.setFontSize(13);
+    doc.setFont("helvetica", "bold");
+    doc.text("Ingevoerde gegevens", 20, y);
+    y += 8;
+
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(60, 60, 60);
+
+    const amountX = 145;
+    const unitX = 148;
+
+    const filledInputs = inputs.filter((i) => i.value && i.value !== "€ 0,00" && i.value !== "0");
+    filledInputs.forEach((input) => {
+      doc.setFont("helvetica", "normal");
+      doc.text(input.label, 20, y);
+      doc.setFont("helvetica", "bold");
+      // Split amount and unit (e.g. "€ 1.234,00 per maand" → amount + unit)
+      const perMatch = input.value.match(/^(.+?)\s+(per\s+.+)$/);
+      if (perMatch) {
+        doc.text(perMatch[1], amountX, y, { align: "right" });
+        doc.setFont("helvetica", "normal");
+        doc.text(perMatch[2], unitX, y);
+      } else {
+        doc.text(input.value, amountX, y, { align: "right" });
+      }
+      y += 7;
+    });
+
+    y += 10;
+
+    // Results section
+    doc.setTextColor(76, 180, 212);
+    doc.setFontSize(13);
+    doc.setFont("helvetica", "bold");
+    doc.text("Resultaat", 20, y);
+    y += 10;
+
+    doc.setFontSize(10);
+    const results = [
+      { label: "Pensioengevend inkomen per jaar (fulltime basis)", value: euro(pensioengevend) },
+      { label: "Franchise 2026", value: euro(FRANCHISE_2026) },
+      { label: `Pensioengrondslag (×${parttime}%)`, value: euro(grondslag) },
+      { label: "Uw premie in 2026 (30,7%)", value: euro(premie) },
+    ];
+
+    results.forEach((r) => {
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(80, 80, 80);
+      doc.text(r.label, 20, y);
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor(40, 40, 40);
+      doc.text(r.value, amountX, y, { align: "right" });
+      y += 7;
+    });
+
+    // Wijzigingen doorgeven section
+    y += 8;
+    const boxX = 20;
+    const boxW = pageWidth - 40;
+    const boxH = 72;
+    doc.setFillColor(76, 180, 212);
+    doc.roundedRect(boxX, y, boxW, boxH, 3, 3, "F");
+
+    y += 10;
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(13);
+    doc.setTextColor(255, 255, 255);
+    doc.text("Wijzigingen doorgeven", boxX + 8, y);
+
+    y += 8;
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(255, 255, 255);
+    const prefixText = "Na inloggen op ";
+    doc.text(prefixText, boxX + 8, y);
+    const prefixW = doc.getTextWidth(prefixText);
+    const linkLabel = "mijn apothekerspensioen";
+    doc.textWithLink(linkLabel, boxX + 8 + prefixW, y, { url: "https://mijn.apothekerspensioen.nl/" });
+    const linkW = doc.getTextWidth(linkLabel);
+    doc.setDrawColor(255, 255, 255);
+    doc.setLineWidth(0.3);
+    doc.line(boxX + 8 + prefixW, y + 0.8, boxX + 8 + prefixW + linkW, y + 0.8);
+    const suffixText = " kunt u via de tegel Pensioengevend inkomen en";
+    doc.text(suffixText, boxX + 8 + prefixW + linkW, y);
+    y += 6;
+    doc.text("parttimepercentage de onderstaande gegevens invullen.", boxX + 8, y);
+
+    y += 9;
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(255, 255, 255);
+    doc.text("•  Uw parttimepercentage", boxX + 8, y);
+    doc.setFont("helvetica", "bold");
+    doc.text(`${parttime}%`, amountX, y, { align: "right" });
+
+    y += 7;
+    doc.setFont("helvetica", "bold");
+    doc.text("•  Pensioengevend inkomen per jaar (op fulltime basis)", boxX + 8, y);
+    doc.setFont("helvetica", "bold");
+    doc.text(euro(pensioengevend), amountX, y, { align: "right" });
+
+    // Footer
+    const footerY = doc.internal.pageSize.getHeight() - 15;
+    doc.setFontSize(8);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(150, 150, 150);
+    const now = new Date();
+    const today = now.toLocaleDateString("nl-NL", { day: "2-digit", month: "long", year: "numeric" });
+    const time = now.toLocaleTimeString("nl-NL", { hour: "2-digit", minute: "2-digit" });
+    doc.text(`Gegenereerd op ${today} om ${time} — Dit is een indicatieve berekening`, 20, footerY);
+
+    doc.save(`PGI-Resultaat-${tabLabel.replace(/\s+/g, "-")}.pdf`);
+  };
+
+  return (
+    <Button
+      onClick={generatePDF}
+      disabled={!hasData}
+      className="w-full mt-4 text-white font-semibold"
+      style={{ backgroundColor: "rgb(76, 180, 212)" }}
+      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgb(60, 160, 192)")}
+      onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "rgb(76, 180, 212)")}
+    >
+      <Download className="h-4 w-4" />
+      Download hier uw resultaat
+    </Button>
+  );
+}
 
 /* ───── Contact Form ───── */
 function ContactForm() {
@@ -53,7 +233,7 @@ function ContactForm() {
       </p>
       <div className="space-y-2">
         <div>
-          <Label htmlFor="contact-email" className="text-sm">E-mailadres</Label>
+          <Label htmlFor="contact-email" className="text-sm mb-1.5 block">E-mailadres</Label>
           <Input
             id="contact-email"
             type="email"
@@ -66,7 +246,7 @@ function ContactForm() {
           )}
         </div>
         <div>
-          <Label htmlFor="contact-phone" className="text-sm">Telefoonnummer</Label>
+          <Label htmlFor="contact-phone" className="text-sm mb-1.5 block">Telefoonnummer</Label>
           <Input
             id="contact-phone"
             type="tel"
@@ -76,7 +256,7 @@ function ContactForm() {
           />
         </div>
         <div>
-          <Label htmlFor="contact-question" className="text-sm">Uw vraag</Label>
+          <Label htmlFor="contact-question" className="text-sm mb-1.5 block">Uw vraag</Label>
           <Textarea
             id="contact-question"
             placeholder="Stel hier uw vraag..."
@@ -89,7 +269,8 @@ function ContactForm() {
       <Button
         onClick={handleSubmit}
         disabled={!hasAny || !!emailInvalid || sending}
-        className="w-full sm:w-auto"
+        className="w-full sm:w-auto text-white hover:opacity-90"
+        style={{ backgroundColor: 'rgb(76, 180, 212)' }}
       >
         <Send className="h-4 w-4" />
         {sending ? "Verzenden..." : "Verstuur"}
@@ -112,7 +293,7 @@ const faqItems: { q: string; a: string | React.ReactNode }[] = [
   { q: "Wat doe ik als ik wijzigingen uit het verleden wil doorgeven?", a: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa." },
   { q: "Waarom moet ik als deelnemer zelf wijzigingen in mijn PGI of PT% doorgeven?", a: "Nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae." },
   { q: "Wat doe ik als in mijn werkgever heb gemachtigd voor het doorgeven van het PGI en PT%?", a: "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." },
-  { q: "Mijn vraag staat niet in de q en a, wat kan ik doen?", a: <ContactForm /> },
+  { q: "Mijn vraag staat niet in de Q&A, wat kan ik doen?", a: <ContactForm /> },
 ];
 
 const MAX_PENSIOENGEVEND = 113738;
@@ -599,6 +780,7 @@ function LoondienstForm() {
   const [management, setManagement] = useState("");
   const [vakantiegeld, setVakantiegeld] = useState("");
   const [parttime, setParttime] = useState("100");
+  const [brutoPeriod, setBrutoPeriod] = useState("maand");
 
   const [eindejaarsperiod, setEindejaarsperiod] = useState("jaar");
   const [bonusPeriod, setBonusPeriod] = useState("jaar");
@@ -617,17 +799,31 @@ function LoondienstForm() {
   const handleBrutoChange = (val: string) => {
     setBruto(val);
     const b = parseNum(val);
+    const brutoYear = b * m(brutoPeriod);
     eindejaarsManual.current = false;
     vakantiegeldManual.current = false;
-    setEindejaars(autoVal(b * 12 * 0.05, eindejaarsperiod));
-    setVakantiegeld(autoVal(b * 12 * 0.08, vakantiegeldPeriod));
+    setEindejaars(autoVal(brutoYear * 0.05, eindejaarsperiod));
+    setVakantiegeld(autoVal(brutoYear * 0.08, vakantiegeldPeriod));
+  };
+
+  const handleBrutoPeriodChange = (p: string) => {
+    setBrutoPeriod(p);
+    const b = parseNum(bruto);
+    const brutoYear = b * (p === "maand" ? 12 : 1);
+    if (!eindejaarsManual.current) {
+      setEindejaars(autoVal(brutoYear * 0.05, eindejaarsperiod));
+    }
+    if (!vakantiegeldManual.current) {
+      setVakantiegeld(autoVal(brutoYear * 0.08, vakantiegeldPeriod));
+    }
   };
 
   const handleEindejaarsPeriodChange = (p: string) => {
     setEindejaarsperiod(p);
     if (!eindejaarsManual.current) {
       const b = parseNum(bruto);
-      setEindejaars(autoVal(b * 12 * 0.05, p));
+      const brutoYear = b * m(brutoPeriod);
+      setEindejaars(autoVal(brutoYear * 0.05, p));
     }
   };
 
@@ -635,7 +831,8 @@ function LoondienstForm() {
     setVakantiegeldPeriod(p);
     if (!vakantiegeldManual.current) {
       const b = parseNum(bruto);
-      setVakantiegeld(autoVal(b * 12 * 0.08, p));
+      const brutoYear = b * m(brutoPeriod);
+      setVakantiegeld(autoVal(brutoYear * 0.08, p));
     }
   };
 
@@ -660,7 +857,7 @@ function LoondienstForm() {
   const m = (period: string) => (period === "maand" ? 12 : 1);
 
   const subtotaal1 =
-    brutoVal * 12 +
+    brutoVal * m(brutoPeriod) +
     eindejaarsVal * m(eindejaarsperiod) +
     bonusVal * m(bonusPeriod) +
     waarnemingVal * m(waarnemingPeriod) +
@@ -681,11 +878,13 @@ function LoondienstForm() {
         Houd uw loonstrookje bij de hand
       </p>
 
-      <EuroInput
+      <EuroInputWithPeriod
         id="ld-bruto"
-        label="Bruto maandinkomen"
+        label={brutoPeriod === "maand" ? "Bruto maandinkomen" : "Bruto jaarinkomen"}
         value={bruto}
         onChange={handleBrutoChange}
+        period={brutoPeriod}
+        onPeriodChange={handleBrutoPeriodChange}
       />
 
       <EuroInputWithPeriod
@@ -746,6 +945,22 @@ function LoondienstForm() {
       />
 
       <ResultBlock
+        pensioengevend={pensioengevend}
+        grondslag={grondslag}
+        premie={premie}
+        parttime={parttimeVal}
+      />
+      <DownloadButton
+        tabLabel="In loondienst"
+        inputs={[
+          { label: brutoPeriod === "maand" ? "Bruto maandinkomen" : "Bruto jaarinkomen", value: `${euro(brutoVal)} per ${brutoPeriod}` },
+          { label: "Eindejaarsuitkering", value: `${euro(eindejaarsVal)} per ${eindejaarsperiod}` },
+          { label: "Vaste bonus", value: `${euro(bonusVal)} per ${bonusPeriod}` },
+          { label: "Waarnemingstoeslag", value: `${euro(waarnemingVal)} per ${waarnemingPeriod}` },
+          { label: "Managementvergoeding", value: `${euro(managementVal)} per ${managementPeriod}` },
+          { label: "Vakantiegeld", value: `${euro(vakantiegeldVal)} per ${vakantiegeldPeriod}` },
+          { label: "Parttimepercentage", value: `${parttimeVal}%` },
+        ]}
         pensioengevend={pensioengevend}
         grondslag={grondslag}
         premie={premie}
@@ -852,6 +1067,21 @@ function DGAForm() {
         premie={premie}
         parttime={parttimeVal}
       />
+      <DownloadButton
+        tabLabel="DGA"
+        inputs={[
+          { label: "Bruto loon", value: `${euro(brutoVal)} per ${brutoPeriod}` },
+          { label: "Eindejaarsuitkering", value: `${euro(eindejaarsVal)} per ${eindejaarsPeriod}` },
+          { label: "Waarnemingstoeslag", value: `${euro(waarnemingVal)} per ${waarnemingPeriod}` },
+          { label: "Managementvergoeding", value: `${euro(managementVal)} per ${managementPeriod}` },
+          { label: "Vakantiegeld", value: `${euro(vakantiegeldVal)} per ${vakantiegeldPeriod}` },
+          { label: "Parttimepercentage", value: `${parttimeVal}%` },
+        ]}
+        pensioengevend={pensioengevend}
+        grondslag={grondslag}
+        premie={premie}
+        parttime={parttimeVal}
+      />
     </div>
   );
 }
@@ -886,6 +1116,17 @@ function ZelfstandigForm() {
       />
 
       <ResultBlock
+        pensioengevend={pensioengevend}
+        grondslag={grondslag}
+        premie={premie}
+        parttime={parttimeVal}
+      />
+      <DownloadButton
+        tabLabel="Zelfstandig"
+        inputs={[
+          { label: "Winst uit onderneming", value: euro(winstVal) },
+          { label: "Parttimepercentage", value: `${parttimeVal}%` },
+        ]}
         pensioengevend={pensioengevend}
         grondslag={grondslag}
         premie={premie}
