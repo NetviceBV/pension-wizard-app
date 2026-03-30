@@ -1069,6 +1069,17 @@ function ZelfstandigForm() {
         premie={premie}
         parttime={parttimeVal}
       />
+      <DownloadButton
+        tabLabel="Zelfstandig"
+        inputs={[
+          { label: "Winst uit onderneming", value: euro(winstVal) },
+          { label: "Parttimepercentage", value: `${parttimeVal}%` },
+        ]}
+        pensioengevend={pensioengevend}
+        grondslag={grondslag}
+        premie={premie}
+        parttime={parttimeVal}
+      />
     </div>
   );
 }
