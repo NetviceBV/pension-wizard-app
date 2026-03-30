@@ -41,22 +41,19 @@ function DownloadButton({
     const pageWidth = doc.internal.pageSize.getWidth();
     let y = 20;
 
-    // Header
-    doc.setFillColor(76, 180, 212);
-    doc.rect(0, 0, pageWidth, 40, "F");
-
-    // Add SPOA logo in header
+    // Header (white background)
+    // Add SPOA logo top-right
     try {
-      doc.addImage(spoaLogo, "PNG", 15, 6, 50, 14);
+      doc.addImage(spoaLogo, "PNG", pageWidth - 65, 6, 50, 14);
     } catch (_) { /* logo load failed, continue without */ }
 
-    doc.setTextColor(255, 255, 255);
+    doc.setTextColor(76, 180, 212);
     doc.setFontSize(18);
     doc.setFont("helvetica", "bold");
-    doc.text("Pensioengevend Inkomen Tool", 70, 18);
+    doc.text("Pensioengevend Inkomen Tool", 20, 18);
     doc.setFontSize(12);
     doc.setFont("helvetica", "normal");
-    doc.text(`Resultaat — ${tabLabel}`, 70, 30);
+    doc.text(`Resultaat — ${tabLabel}`, 20, 30);
 
     y = 55;
 
