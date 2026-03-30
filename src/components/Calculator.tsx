@@ -116,7 +116,7 @@ function DownloadButton({
     doc.setFillColor(239, 246, 255);
     doc.roundedRect(18, y - 5, pageWidth - 36, 12, 2, 2, "F");
     doc.setFont("helvetica", "bold");
-    doc.setTextColor(30, 64, 175);
+    doc.setTextColor(76, 180, 212);
     doc.setFontSize(11);
     doc.text("Uw premie in 2026 (30,7%)", 22, y + 2);
     doc.text(euro(premie), pageWidth - 22, y + 2, { align: "right" });
