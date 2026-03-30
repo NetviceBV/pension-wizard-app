@@ -158,15 +158,13 @@ function DownloadButton({
     doc.setFontSize(10);
     doc.setFont("helvetica", "bold");
     doc.setTextColor(255, 255, 255);
-    doc.text("•  Uw parttimepercentage", boxX + 8, y);
-    doc.setFont("helvetica", "bold");
-    doc.text(`${parttime}%`, amountX, y, { align: "right" });
+    doc.text("•  Pensioengevend inkomen per jaar (op fulltime basis)", boxX + 8, y);
+    doc.text(euro(pensioengevend), amountX, y, { align: "right" });
 
     y += 7;
     doc.setFont("helvetica", "bold");
-    doc.text("•  Pensioengevend inkomen per jaar (op fulltime basis)", boxX + 8, y);
-    doc.setFont("helvetica", "bold");
-    doc.text(euro(pensioengevend), amountX, y, { align: "right" });
+    doc.text("•  Uw parttimepercentage", boxX + 8, y);
+    doc.text(`${parttime}%`, amountX, y, { align: "right" });
 
     // Footer
     const footerY = doc.internal.pageSize.getHeight() - 15;
@@ -455,25 +453,37 @@ function ResultBlock({
     <div className="mt-6 space-y-3 rounded-lg border-2 border-primary/20 bg-primary/5 p-5">
       <h3 className="flex items-center gap-2 text-base font-semibold text-foreground">
         <CalcIcon className="h-5 w-5 text-primary" />
-        Resultaat
+        Wijzigingen doorgeven
       </h3>
+      <p className="text-sm text-muted-foreground">
+        Na inloggen op{" "}
+        <a
+          href="https://mijn.apothekerspensioen.nl/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-primary underline hover:text-primary/80"
+        >
+          mijn apothekerspensioen
+        </a>{" "}
+        kunt u via de tegel Pensioengevend inkomen en parttimepercentage de onderstaande gegevens invullen.
+      </p>
       <div className="grid gap-2 text-sm">
         <Row
           label="Pensioengevend inkomen per jaar (op fulltime basis)"
           value={euro(pensioengevend)}
           hint={pensioengevend >= MAX_PENSIOENGEVEND ? `(max. ${euro(MAX_PENSIOENGEVEND)})` : undefined}
+          bold
         />
-        <Row label="Franchise 2026" value={euro(FRANCHISE_2026)} />
-        <Row
-          label={`Pensioengrondslag (×${parttime}%)`}
-          value={euro(grondslag)}
-        />
-        <div className="border-t pt-2">
-          <Row
-            label="Uw premie in 2026 (30,7%)"
-            value={euro(premie)}
-            bold
-          />
+        <Row label="Uw parttimepercentage" value={`${parttime}%`} bold />
+        <div className="mt-3 pt-3 border-t">
+          <div className="grid gap-2">
+            <Row label="Franchise 2026" value={euro(FRANCHISE_2026)} />
+            <Row
+              label={`Pensioengrondslag (×${parttime}%)`}
+              value={euro(grondslag)}
+            />
+            <Row label="Uw premie in 2026 (30,7%)" value={euro(premie)} />
+          </div>
         </div>
       </div>
     </div>
