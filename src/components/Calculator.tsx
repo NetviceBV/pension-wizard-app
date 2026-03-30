@@ -233,7 +233,7 @@ function ContactForm() {
       </p>
       <div className="space-y-2">
         <div>
-          <Label htmlFor="contact-email" className="text-sm">E-mailadres</Label>
+          <Label htmlFor="contact-email" className="text-sm mb-1.5 block">E-mailadres</Label>
           <Input
             id="contact-email"
             type="email"
