@@ -44,7 +44,7 @@ function DownloadButton({
     // Header (white background)
     // Add SPOA logo top-right
     try {
-      doc.addImage(spoaLogo, "PNG", pageWidth - 65, 6, 50, 14);
+      doc.addImage(spoaLogo, "PNG", pageWidth - 80, 8, 71, 10);
     } catch (_) { /* logo load failed, continue without */ }
 
     doc.setTextColor(76, 180, 212);
