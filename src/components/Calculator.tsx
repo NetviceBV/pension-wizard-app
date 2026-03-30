@@ -292,7 +292,7 @@ const faqItems: { q: string; a: string | React.ReactNode }[] = [
   { q: "Wat doe ik als ik wijzigingen uit het verleden wil doorgeven?", a: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa." },
   { q: "Waarom moet ik als deelnemer zelf wijzigingen in mijn PGI of PT% doorgeven?", a: "Nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae." },
   { q: "Wat doe ik als in mijn werkgever heb gemachtigd voor het doorgeven van het PGI en PT%?", a: "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." },
-  { q: "Mijn vraag staat niet in de q en a, wat kan ik doen?", a: <ContactForm /> },
+  { q: "Mijn vraag staat niet in de Q&A, wat kan ik doen?", a: <ContactForm /> },
 ];
 
 const MAX_PENSIOENGEVEND = 113738;
