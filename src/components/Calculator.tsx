@@ -459,7 +459,7 @@ function ResultBlock({
         >
           mijn apothekerspensioen
         </a>{" "}
-        kunt u via de tegel Pensioengevend inkomen en parttimepercentage de onderstaande gegevens invullen.
+        kunt u via de tegel Pensioengevend inkomen en parttimepercentage de onderstaande dik gedrukte gegevens invullen.
       </p>
       <div className="grid gap-2 text-sm">
         <Row
