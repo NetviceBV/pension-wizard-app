@@ -4,12 +4,116 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { ChevronDown, Info, Calculator as CalcIcon } from "lucide-react";
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
+import { ChevronDown, Info, Calculator as CalcIcon, Search, HelpCircle, Send } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+
+/* ───── Contact Form ───── */
+function ContactForm() {
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [question, setQuestion] = useState("");
+  const [sending, setSending] = useState(false);
+
+  const hasAny = email.trim() || phone.trim() || question.trim();
+  const emailInvalid = email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+
+  const handleSubmit = async () => {
+    if (!hasAny || emailInvalid) return;
+    setSending(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('send-contact-email', {
+        body: { email: email.trim(), phone: phone.trim(), question: question.trim() },
+      });
+      if (error) throw error;
+      toast.success("Uw vraag is verzonden!");
+      setEmail("");
+      setPhone("");
+      setQuestion("");
+    } catch (err: any) {
+      console.error(err);
+      toast.error("Er ging iets mis bij het verzenden. Probeer het later opnieuw.");
+    } finally {
+      setSending(false);
+    }
+  };
+
+  return (
+    <div className="space-y-3 pt-2">
+      <p className="text-sm text-muted-foreground">
+        Vul onderstaand formulier in en wij nemen zo snel mogelijk contact met u op.
+      </p>
+      <div className="space-y-2">
+        <div>
+          <Label htmlFor="contact-email" className="text-sm">E-mailadres</Label>
+          <Input
+            id="contact-email"
+            type="email"
+            placeholder="uw@email.nl"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          {emailInvalid && (
+            <p className="text-xs text-destructive mt-1">Vul een geldig e-mailadres in</p>
+          )}
+        </div>
+        <div>
+          <Label htmlFor="contact-phone" className="text-sm">Telefoonnummer</Label>
+          <Input
+            id="contact-phone"
+            type="tel"
+            placeholder="06-12345678"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+          />
+        </div>
+        <div>
+          <Label htmlFor="contact-question" className="text-sm">Uw vraag</Label>
+          <Textarea
+            id="contact-question"
+            placeholder="Stel hier uw vraag..."
+            value={question}
+            onChange={(e) => setQuestion(e.target.value)}
+            rows={3}
+          />
+        </div>
+      </div>
+      <Button
+        onClick={handleSubmit}
+        disabled={!hasAny || !!emailInvalid || sending}
+        className="w-full sm:w-auto"
+      >
+        <Send className="h-4 w-4" />
+        {sending ? "Verzenden..." : "Verstuur"}
+      </Button>
+    </div>
+  );
+}
+
+const faqItems: { q: string; a: string | React.ReactNode }[] = [
+  { q: "Waarom vul ik een voltijdssalaris in, terwijl ik parttime werk?", a: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris." },
+  { q: "Hoe houdt SPOA rekening met mijn parttimepercentage als ik een fulltime inkomen moet invullen?", a: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident." },
+  { q: "Hoe houdt SPOA rekening met tussentijds starten of stoppen?", a: "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur." },
+  { q: "Wat vul ik in bij onbetaald verlof?", a: "Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt." },
+  { q: "Wat vul ik in bij gedeeltelijk betaald verlof?", a: "Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt." },
+  { q: "Wat als ik zowel loondienst als dga of zelfstandig ben?", a: "Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat." },
+  { q: "Wat vul ik in als ik zowel dga als zelfstandig ben?", a: "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores." },
+  { q: "Wat vul ik in als ik arbeidsongeschikt ben?", a: "Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus." },
+  { q: "Wat doe ik als ik gedeeltelijk arbeidsongeschikt ben?", a: "Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae." },
+  { q: "Waarom moet ik een jaarsalaris op basis van een volledig jaar opgeven als ik tussentijds ben gestart of gestopt?", a: "Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat." },
+  { q: "Wat doe ik als ik wijzigingen uit het verleden wil doorgeven?", a: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa." },
+  { q: "Waarom moet ik als deelnemer zelf wijzigingen in mijn PGI of PT% doorgeven?", a: "Nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae." },
+  { q: "Wat doe ik als in mijn werkgever heb gemachtigd voor het doorgeven van het PGI en PT%?", a: "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." },
+  { q: "Mijn vraag staat niet in de q en a, wat kan ik doen?", a: <ContactForm /> },
+];
 
 const MAX_PENSIOENGEVEND = 113738;
 const FRANCHISE_2026 = 19172;
@@ -384,6 +488,11 @@ function calcResult(fulltimeIncome: number, parttimePct: number) {
 
 export default function Calculator({ embedded = false }: { embedded?: boolean }) {
   const [tab, setTab] = useState("loondienst");
+  const [faqSearch, setFaqSearch] = useState("");
+
+  const filteredFaq = faqItems.filter((item) =>
+    item.q.toLowerCase().includes(faqSearch.toLowerCase())
+  );
 
   const tabs = (
     <Tabs value={tab} onValueChange={setTab}>
@@ -411,22 +520,72 @@ export default function Calculator({ embedded = false }: { embedded?: boolean })
     </Tabs>
   );
 
+  const faqSection = (
+    <div id="faq" className="mt-8 p-6 rounded-lg bg-muted/50 border">
+      <h3 className="text-xl font-bold flex items-center gap-2 mb-4">
+        <HelpCircle className="h-5 w-5" />
+        Veelgestelde vragen
+      </h3>
+      <div className="relative mb-4">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <Input
+          placeholder="Zoek een vraag..."
+          value={faqSearch}
+          onChange={(e) => setFaqSearch(e.target.value)}
+          className="pl-9"
+        />
+      </div>
+      {filteredFaq.length === 0 ? (
+        <p className="text-muted-foreground text-sm">Geen resultaten gevonden.</p>
+      ) : (
+        <Accordion type="single" collapsible className="w-full">
+          {filteredFaq.map((item, i) => (
+            <AccordionItem key={i} value={`faq-${i}`}>
+              <AccordionTrigger className="text-left">{item.q}</AccordionTrigger>
+              <AccordionContent>{item.a}</AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      )}
+    </div>
+  );
+
   if (embedded) {
-    return <div className="mx-auto w-full max-w-2xl">{tabs}</div>;
+    return (
+      <div className="mx-auto w-full max-w-2xl">
+        {tabs}
+        {faqSection}
+      </div>
+    );
   }
 
   return (
     <Card className="mx-auto w-full max-w-2xl shadow-lg">
       <CardHeader className="pb-4">
-        <CardTitle className="text-xl font-bold text-foreground">
-          Pensioengevend Inkomen Tool
-        </CardTitle>
-        <p className="text-sm text-muted-foreground">
-          Bereken uw pensioengevend inkomen, pensioengrondslag en premie voor
-          2026.
-        </p>
+        <div className="flex items-start justify-between gap-2">
+          <div>
+            <CardTitle className="text-xl font-bold text-foreground">
+              Pensioengevend Inkomen Tool
+            </CardTitle>
+            <p className="text-sm text-muted-foreground mt-1.5">
+              Bereken uw pensioengevend inkomen, pensioengrondslag en premie voor
+              2026.
+            </p>
+          </div>
+          <button
+            type="button"
+            title="Veelgestelde vragen"
+            onClick={() => document.getElementById("faq")?.scrollIntoView({ behavior: "smooth" })}
+            className="shrink-0 mt-1 px-2.5 py-1 rounded-md bg-primary/10 text-primary hover:bg-primary/20 font-semibold text-sm transition-colors cursor-pointer"
+          >
+            Q&A
+          </button>
+        </div>
       </CardHeader>
-      <CardContent>{tabs}</CardContent>
+      <CardContent>
+        {tabs}
+        {faqSection}
+      </CardContent>
     </Card>
   );
 }
