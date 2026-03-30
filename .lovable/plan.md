@@ -1,24 +1,44 @@
 
 
-## Fix Mobile Layout for Form Fields
+## Add FAQ Section with Search, Accordion, and Navigation Links
 
-The current layout uses a horizontal `flex` row with `w-2/5` for inputs, which is too narrow on mobile — especially for fields with a period selector. Values get clipped and are unreadable.
+### Overview
+Add a Q&A section below the calculator with a search/filter input, smooth-scroll navigation from the top, and all 14 questions in an Accordion. Answers use lorem ipsum placeholder text.
 
-### Solution
+### Changes
 
-Switch to a **stacked layout on mobile** (label on top, input below) and keep the horizontal layout on desktop.
+**`src/pages/Index.tsx`**
 
-### Changes — `src/components/Calculator.tsx`
+1. **Top navigation**: Add a "Veelgestelde vragen" link that smooth-scrolls to `#faq`
 
-1. **`EuroInput`**: Change wrapper from `flex items-center gap-4` to stacked on mobile, horizontal on `sm:` and up. Change input container from `w-2/5` to full width on mobile.
+2. **FAQ section** (below `<Calculator />`):
+   - Heading: "Veelgestelde vragen"
+   - **Search input**: A text field (using existing `Input` component) with a search icon, placeholder "Zoek een vraag...". Filters the visible accordion items in real-time by matching the query against question text (case-insensitive)
+   - **Accordion**: `type="single" collapsible`, showing only questions that match the search query. If search is empty, all questions are shown
+   - "Geen resultaten" message when no questions match
+   - Same max-width as calculator for visual consistency
 
-2. **`EuroInputWithPeriod`**: Same stacking approach. The input + period selector row stays horizontal but gets full width on mobile.
+3. **Questions** (no numbering, from uploaded DOCX):
+   - Waarom vul ik een voltijdssalaris in, terwijl ik parttime werk?
+   - Hoe houdt SPOA rekening met mijn parttimepercentage als ik een fulltime inkomen moet invullen?
+   - Hoe houdt SPOA rekening met tussentijds starten of stoppen?
+   - Wat vul ik in bij onbetaald verlof?
+   - Wat vul ik in bij gedeeltelijk betaald verlof?
+   - Wat als ik zowel loondienst als dga of zelfstandig ben?
+   - Wat vul ik in als ik zowel dga als zelfstandig ben?
+   - Wat vul ik in als ik arbeidsongeschikt ben?
+   - Wat doe ik als ik gedeeltelijk arbeidsongeschikt ben?
+   - Waarom moet ik een jaarsalaris op basis van een volledig jaar opgeven als ik tussentijds ben gestart of gestopt?
+   - Wat doe ik als ik wijzigingen uit het verleden wil doorgeven?
+   - Waarom moet ik als deelnemer zelf wijzigingen in mijn PGI of PT% doorgeven?
+   - Wat doe ik als in mijn werkgever heb gemachtigd voor het doorgeven van het PGI en PT%?
+   - Mijn vraag staat niet in de q en a, wat kan ik doen?
 
-3. **`PercentInput`**: Same pattern — stack on mobile, inline on desktop.
+4. All answers: lorem ipsum placeholder text
 
-4. **Subtotal row**: Check if the yellow subtotal bar needs adjustment (likely fine as-is).
-
-Specifically, for each input component:
-- Wrapper: `flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-4`
-- Input container: remove `w-2/5 shrink-0`, add `w-full sm:w-2/5 sm:shrink-0`
+### Technical details
+- Search state via `useState<string>("")`
+- Filter: `questions.filter(q => q.question.toLowerCase().includes(search.toLowerCase()))`
+- Uses existing `Input`, `Accordion`, `AccordionItem`, `AccordionTrigger`, `AccordionContent` components
+- `Search` icon from lucide-react
 
