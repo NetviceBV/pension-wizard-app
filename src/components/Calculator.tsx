@@ -726,6 +726,7 @@ function LoondienstForm() {
   const [management, setManagement] = useState("");
   const [vakantiegeld, setVakantiegeld] = useState("");
   const [parttime, setParttime] = useState("100");
+  const [brutoPeriod, setBrutoPeriod] = useState("maand");
 
   const [eindejaarsperiod, setEindejaarsperiod] = useState("jaar");
   const [bonusPeriod, setBonusPeriod] = useState("jaar");
@@ -744,17 +745,31 @@ function LoondienstForm() {
   const handleBrutoChange = (val: string) => {
     setBruto(val);
     const b = parseNum(val);
+    const brutoYear = b * m(brutoPeriod);
     eindejaarsManual.current = false;
     vakantiegeldManual.current = false;
-    setEindejaars(autoVal(b * 12 * 0.05, eindejaarsperiod));
-    setVakantiegeld(autoVal(b * 12 * 0.08, vakantiegeldPeriod));
+    setEindejaars(autoVal(brutoYear * 0.05, eindejaarsperiod));
+    setVakantiegeld(autoVal(brutoYear * 0.08, vakantiegeldPeriod));
+  };
+
+  const handleBrutoPeriodChange = (p: string) => {
+    setBrutoPeriod(p);
+    const b = parseNum(bruto);
+    const brutoYear = b * (p === "maand" ? 12 : 1);
+    if (!eindejaarsManual.current) {
+      setEindejaars(autoVal(brutoYear * 0.05, eindejaarsperiod));
+    }
+    if (!vakantiegeldManual.current) {
+      setVakantiegeld(autoVal(brutoYear * 0.08, vakantiegeldPeriod));
+    }
   };
 
   const handleEindejaarsPeriodChange = (p: string) => {
     setEindejaarsperiod(p);
     if (!eindejaarsManual.current) {
       const b = parseNum(bruto);
-      setEindejaars(autoVal(b * 12 * 0.05, p));
+      const brutoYear = b * m(brutoPeriod);
+      setEindejaars(autoVal(brutoYear * 0.05, p));
     }
   };
 
@@ -762,7 +777,8 @@ function LoondienstForm() {
     setVakantiegeldPeriod(p);
     if (!vakantiegeldManual.current) {
       const b = parseNum(bruto);
-      setVakantiegeld(autoVal(b * 12 * 0.08, p));
+      const brutoYear = b * m(brutoPeriod);
+      setVakantiegeld(autoVal(brutoYear * 0.08, p));
     }
   };
 
@@ -787,7 +803,7 @@ function LoondienstForm() {
   const m = (period: string) => (period === "maand" ? 12 : 1);
 
   const subtotaal1 =
-    brutoVal * 12 +
+    brutoVal * m(brutoPeriod) +
     eindejaarsVal * m(eindejaarsperiod) +
     bonusVal * m(bonusPeriod) +
     waarnemingVal * m(waarnemingPeriod) +
@@ -808,11 +824,13 @@ function LoondienstForm() {
         Houd uw loonstrookje bij de hand
       </p>
 
-      <EuroInput
+      <EuroInputWithPeriod
         id="ld-bruto"
-        label="Bruto maandinkomen"
+        label={brutoPeriod === "maand" ? "Bruto maandinkomen" : "Bruto jaarinkomen"}
         value={bruto}
         onChange={handleBrutoChange}
+        period={brutoPeriod}
+        onPeriodChange={handleBrutoPeriodChange}
       />
 
       <EuroInputWithPeriod
@@ -881,12 +899,12 @@ function LoondienstForm() {
       <DownloadButton
         tabLabel="In loondienst"
         inputs={[
-          { label: "Bruto maandinkomen", value: euro(brutoVal) },
-          { label: "Eindejaarsuitkering", value: euro(eindejaarsVal * m(eindejaarsperiod)) },
-          { label: "Vaste bonus", value: euro(bonusVal * m(bonusPeriod)) },
-          { label: "Waarnemingstoeslag", value: euro(waarnemingVal * m(waarnemingPeriod)) },
-          { label: "Managementvergoeding", value: euro(managementVal * m(managementPeriod)) },
-          { label: "Vakantiegeld", value: euro(vakantiegeldVal * m(vakantiegeldPeriod)) },
+          { label: `${brutoPeriod === "maand" ? "Bruto maandinkomen" : "Bruto jaarinkomen"} (per ${brutoPeriod})`, value: euro(brutoVal) },
+          { label: `Eindejaarsuitkering (per ${eindejaarsperiod})`, value: euro(eindejaarsVal) },
+          { label: `Vaste bonus (per ${bonusPeriod})`, value: euro(bonusVal) },
+          { label: `Waarnemingstoeslag (per ${waarnemingPeriod})`, value: euro(waarnemingVal) },
+          { label: `Managementvergoeding (per ${managementPeriod})`, value: euro(managementVal) },
+          { label: `Vakantiegeld (per ${vakantiegeldPeriod})`, value: euro(vakantiegeldVal) },
           { label: "Parttimepercentage", value: `${parttimeVal}%` },
         ]}
         pensioengevend={pensioengevend}
@@ -998,11 +1016,11 @@ function DGAForm() {
       <DownloadButton
         tabLabel="DGA"
         inputs={[
-          { label: "Bruto loon", value: euro(brutoVal * m(brutoPeriod)) },
-          { label: "Eindejaarsuitkering", value: euro(eindejaarsVal * m(eindejaarsPeriod)) },
-          { label: "Waarnemingstoeslag", value: euro(waarnemingVal * m(waarnemingPeriod)) },
-          { label: "Managementvergoeding", value: euro(managementVal * m(managementPeriod)) },
-          { label: "Vakantiegeld", value: euro(vakantiegeldVal * m(vakantiegeldPeriod)) },
+          { label: `Bruto loon (per ${brutoPeriod})`, value: euro(brutoVal) },
+          { label: `Eindejaarsuitkering (per ${eindejaarsPeriod})`, value: euro(eindejaarsVal) },
+          { label: `Waarnemingstoeslag (per ${waarnemingPeriod})`, value: euro(waarnemingVal) },
+          { label: `Managementvergoeding (per ${managementPeriod})`, value: euro(managementVal) },
+          { label: `Vakantiegeld (per ${vakantiegeldPeriod})`, value: euro(vakantiegeldVal) },
           { label: "Parttimepercentage", value: `${parttimeVal}%` },
         ]}
         pensioengevend={pensioengevend}
