@@ -726,6 +726,7 @@ function LoondienstForm() {
   const [management, setManagement] = useState("");
   const [vakantiegeld, setVakantiegeld] = useState("");
   const [parttime, setParttime] = useState("100");
+  const [brutoPeriod, setBrutoPeriod] = useState("maand");
 
   const [eindejaarsperiod, setEindejaarsperiod] = useState("jaar");
   const [bonusPeriod, setBonusPeriod] = useState("jaar");
