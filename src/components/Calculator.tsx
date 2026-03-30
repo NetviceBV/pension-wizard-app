@@ -269,7 +269,8 @@ function ContactForm() {
       <Button
         onClick={handleSubmit}
         disabled={!hasAny || !!emailInvalid || sending}
-        className="w-full sm:w-auto"
+        className="w-full sm:w-auto text-white hover:opacity-90"
+        style={{ backgroundColor: 'rgb(76, 180, 212)' }}
       >
         <Send className="h-4 w-4" />
         {sending ? "Verzenden..." : "Verstuur"}
