@@ -891,7 +891,7 @@ function LoondienstForm() {
       <DownloadButton
         tabLabel="In loondienst"
         inputs={[
-          { label: "Bruto maandinkomen", value: euro(brutoVal * 12) },
+          { label: "Bruto maandinkomen", value: euro(brutoVal) },
           { label: "Eindejaarsuitkering", value: euro(eindejaarsVal * m(eindejaarsperiod)) },
           { label: "Vaste bonus", value: euro(bonusVal * m(bonusPeriod)) },
           { label: "Waarnemingstoeslag", value: euro(waarnemingVal * m(waarnemingPeriod)) },
