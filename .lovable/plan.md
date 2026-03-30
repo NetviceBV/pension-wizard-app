@@ -1,10 +1,13 @@
 
 
-## Reduce spacing between Resultaat pill and Ingevoerde gegevens
+## Two changes in PDF — `src/components/Calculator.tsx`
 
-### Change — `src/components/Calculator.tsx`, line 65
+### 1. Make bullet labels bold (lines 166, 172)
+- Line 166: Change `doc.setFont("helvetica", "normal")` before "Uw parttimepercentage" to `"bold"`
+- Line 171: Change `doc.setFont("helvetica", "normal")` before "Pensioengevend inkomen..." to `"bold"`
 
-Change `y = 55` to `y = 45` to reduce the gap between the badge (bottom at ~y=32) and the "Ingevoerde gegevens" heading.
+### 2. Remove separator line above Resultaat (lines 100–103)
+Delete lines 100–103 (the separator `doc.line(...)` and spacing) and reduce `y += 5` on line 98 to just `y += 10` to maintain reasonable spacing.
 
-Single line change.
+Single file, ~6 lines changed.
 
