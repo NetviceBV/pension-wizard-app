@@ -16,7 +16,89 @@ import { ChevronDown, Info, Calculator as CalcIcon, Search, HelpCircle, Send } f
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
-const faqItems = [
+/* ───── Contact Form ───── */
+function ContactForm() {
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [question, setQuestion] = useState("");
+  const [sending, setSending] = useState(false);
+
+  const hasAny = email.trim() || phone.trim() || question.trim();
+  const emailInvalid = email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+
+  const handleSubmit = async () => {
+    if (!hasAny || emailInvalid) return;
+    setSending(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('send-contact-email', {
+        body: { email: email.trim(), phone: phone.trim(), question: question.trim() },
+      });
+      if (error) throw error;
+      toast.success("Uw vraag is verzonden!");
+      setEmail("");
+      setPhone("");
+      setQuestion("");
+    } catch (err: any) {
+      console.error(err);
+      toast.error("Er ging iets mis bij het verzenden. Probeer het later opnieuw.");
+    } finally {
+      setSending(false);
+    }
+  };
+
+  return (
+    <div className="space-y-3 pt-2">
+      <p className="text-sm text-muted-foreground">
+        Vul onderstaand formulier in en wij nemen zo snel mogelijk contact met u op.
+      </p>
+      <div className="space-y-2">
+        <div>
+          <Label htmlFor="contact-email" className="text-sm">E-mailadres</Label>
+          <Input
+            id="contact-email"
+            type="email"
+            placeholder="uw@email.nl"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          {emailInvalid && (
+            <p className="text-xs text-destructive mt-1">Vul een geldig e-mailadres in</p>
+          )}
+        </div>
+        <div>
+          <Label htmlFor="contact-phone" className="text-sm">Telefoonnummer</Label>
+          <Input
+            id="contact-phone"
+            type="tel"
+            placeholder="06-12345678"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+          />
+        </div>
+        <div>
+          <Label htmlFor="contact-question" className="text-sm">Uw vraag</Label>
+          <Textarea
+            id="contact-question"
+            placeholder="Stel hier uw vraag..."
+            value={question}
+            onChange={(e) => setQuestion(e.target.value)}
+            rows={3}
+          />
+        </div>
+      </div>
+      <Button
+        onClick={handleSubmit}
+        disabled={!hasAny || !!emailInvalid || sending}
+        className="w-full sm:w-auto"
+      >
+        <Send className="h-4 w-4" />
+        {sending ? "Verzenden..." : "Verstuur"}
+      </Button>
+    </div>
+  );
+}
+
+const faqItems: { q: string; a: string | React.ReactNode }[] = [
   { q: "Waarom vul ik een voltijdssalaris in, terwijl ik parttime werk?", a: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris." },
   { q: "Hoe houdt SPOA rekening met mijn parttimepercentage als ik een fulltime inkomen moet invullen?", a: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident." },
   { q: "Hoe houdt SPOA rekening met tussentijds starten of stoppen?", a: "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur." },
@@ -30,7 +112,7 @@ const faqItems = [
   { q: "Wat doe ik als ik wijzigingen uit het verleden wil doorgeven?", a: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa." },
   { q: "Waarom moet ik als deelnemer zelf wijzigingen in mijn PGI of PT% doorgeven?", a: "Nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae." },
   { q: "Wat doe ik als in mijn werkgever heb gemachtigd voor het doorgeven van het PGI en PT%?", a: "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." },
-  { q: "Mijn vraag staat niet in de q en a, wat kan ik doen?", a: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisi vel consectetur interdum, nisl nunc egestas nisi." },
+  { q: "Mijn vraag staat niet in de q en a, wat kan ik doen?", a: <ContactForm /> },
 ];
 
 const MAX_PENSIOENGEVEND = 113738;
