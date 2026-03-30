@@ -768,7 +768,8 @@ function LoondienstForm() {
     setEindejaarsperiod(p);
     if (!eindejaarsManual.current) {
       const b = parseNum(bruto);
-      setEindejaars(autoVal(b * 12 * 0.05, p));
+      const brutoYear = b * m(brutoPeriod);
+      setEindejaars(autoVal(brutoYear * 0.05, p));
     }
   };
 
