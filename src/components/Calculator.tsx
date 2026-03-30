@@ -156,7 +156,7 @@ function DownloadButton({
 
     y += 9;
     doc.setFontSize(10);
-    doc.setFont("helvetica", "normal");
+    doc.setFont("helvetica", "bold");
     doc.setTextColor(255, 255, 255);
     doc.text("•  Uw parttimepercentage", boxX + 8, y);
     doc.setFont("helvetica", "bold");
