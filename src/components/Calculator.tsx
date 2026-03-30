@@ -119,14 +119,12 @@ function DownloadButton({
       y += 7;
     });
 
-    // Premie highlight
+    // Premie row (no highlight)
     y += 3;
-    doc.setFillColor(220, 244, 251);
-    doc.roundedRect(18, y - 5, pageWidth - 36, 12, 2, 2, "F");
     doc.setFont("helvetica", "bold");
-    doc.setTextColor(76, 180, 212);
-    doc.setFontSize(11);
-    doc.text("Uw premie in 2026 (30,7%)", 22, y + 2);
+    doc.setTextColor(40, 40, 40);
+    doc.setFontSize(10);
+    doc.text("Uw premie in 2026 (30,7%)", 20, y + 2);
     doc.text(euro(premie), amountX, y + 2, { align: "right" });
 
     // Footer
