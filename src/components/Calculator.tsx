@@ -107,6 +107,7 @@ function DownloadButton({
       { label: "Pensioengevend inkomen per jaar (fulltime basis)", value: euro(pensioengevend) },
       { label: "Franchise 2026", value: euro(FRANCHISE_2026) },
       { label: `Pensioengrondslag (×${parttime}%)`, value: euro(grondslag) },
+      { label: "Uw premie in 2026 (30,7%)", value: euro(premie) },
     ];
 
     results.forEach((r) => {
@@ -118,14 +119,6 @@ function DownloadButton({
       doc.text(r.value, amountX, y, { align: "right" });
       y += 7;
     });
-
-    // Premie row (no highlight)
-    y += 3;
-    doc.setFont("helvetica", "bold");
-    doc.setTextColor(40, 40, 40);
-    doc.setFontSize(10);
-    doc.text("Uw premie in 2026 (30,7%)", 20, y + 2);
-    doc.text(euro(premie), amountX, y + 2, { align: "right" });
 
     // Footer
     const footerY = doc.internal.pageSize.getHeight() - 15;
