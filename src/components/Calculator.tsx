@@ -408,6 +408,13 @@ function ResultBlock({
         <CalcIcon className="h-5 w-5 text-primary" />
         Resultaat
       </h3>
+      <div className="rounded-md bg-primary/10 p-3 border border-primary/20">
+        <h4 className="font-bold text-sm mb-2 text-foreground">Wat u moet invullen</h4>
+        <div className="grid gap-1 text-sm">
+          <Row label="Parttimepercentage" value={`${parttime}%`} />
+          <Row label="Pensioengevend inkomen per jaar (fulltime basis)" value={euro(pensioengevend)} />
+        </div>
+      </div>
       <div className="grid gap-2 text-sm">
         <Row
           label="Pensioengevend inkomen per jaar (op fulltime basis)"
@@ -419,13 +426,11 @@ function ResultBlock({
           label={`Pensioengrondslag (×${parttime}%)`}
           value={euro(grondslag)}
         />
-        <div className="border-t pt-2">
-          <Row
-            label="Uw premie in 2026 (30,7%)"
-            value={euro(premie)}
-            bold
-          />
-        </div>
+        <Row
+          label="Uw premie in 2026 (30,7%)"
+          value={euro(premie)}
+          bold
+        />
       </div>
     </div>
   );
