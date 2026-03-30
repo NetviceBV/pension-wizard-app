@@ -68,12 +68,23 @@ function DownloadButton({
     doc.setFont("helvetica", "normal");
     doc.setTextColor(60, 60, 60);
 
+    const amountX = 145;
+    const unitX = 148;
+
     const filledInputs = inputs.filter((i) => i.value && i.value !== "€ 0,00" && i.value !== "0");
     filledInputs.forEach((input) => {
       doc.setFont("helvetica", "normal");
       doc.text(input.label, 20, y);
       doc.setFont("helvetica", "bold");
-      doc.text(input.value, pageWidth - 20, y, { align: "right" });
+      // Split amount and unit (e.g. "€ 1.234,00 per maand" → amount + unit)
+      const perMatch = input.value.match(/^(.+?)\s+(per\s+.+)$/);
+      if (perMatch) {
+        doc.text(perMatch[1], amountX, y, { align: "right" });
+        doc.setFont("helvetica", "normal");
+        doc.text(perMatch[2], unitX, y);
+      } else {
+        doc.text(input.value, amountX, y, { align: "right" });
+      }
       y += 7;
     });
 
@@ -104,7 +115,7 @@ function DownloadButton({
       doc.text(r.label, 20, y);
       doc.setFont("helvetica", "bold");
       doc.setTextColor(40, 40, 40);
-      doc.text(r.value, pageWidth - 20, y, { align: "right" });
+      doc.text(r.value, amountX, y, { align: "right" });
       y += 7;
     });
 
@@ -116,7 +127,7 @@ function DownloadButton({
     doc.setTextColor(76, 180, 212);
     doc.setFontSize(11);
     doc.text("Uw premie in 2026 (30,7%)", 22, y + 2);
-    doc.text(euro(premie), pageWidth - 22, y + 2, { align: "right" });
+    doc.text(euro(premie), amountX, y + 2, { align: "right" });
 
     // Footer
     const footerY = doc.internal.pageSize.getHeight() - 15;
