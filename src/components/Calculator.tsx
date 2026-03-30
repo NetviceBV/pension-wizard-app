@@ -113,7 +113,7 @@ function DownloadButton({
 
     // Premie highlight
     y += 3;
-    doc.setFillColor(239, 246, 255);
+    doc.setFillColor(220, 244, 251);
     doc.roundedRect(18, y - 5, pageWidth - 36, 12, 2, 2, "F");
     doc.setFont("helvetica", "bold");
     doc.setTextColor(76, 180, 212);
