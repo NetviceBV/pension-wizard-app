@@ -677,9 +677,9 @@ export default function Calculator({ embedded = false }: { embedded?: boolean })
   const [tab, setTab] = useState("loondienst");
   const [faqSearch, setFaqSearch] = useState("");
 
-  const filteredFaq = faqItems.filter((item) =>
-    item.q.toLowerCase().includes(faqSearch.toLowerCase())
-  );
+  const filteredFaq = faqItems
+    .filter((item) => item.categories.includes("algemeen") || item.categories.includes(tab as FaqCategory))
+    .filter((item) => item.q.toLowerCase().includes(faqSearch.toLowerCase()));
 
   const tabs = (
     <Tabs value={tab} onValueChange={setTab}>
