@@ -1,27 +1,53 @@
 
 
-## Merge web card layout into PDF blue box
+## Categorie-specifieke Q&A voor Loondienst, DGA en Zelfstandig
 
-### Goal
-Put all the content from the web card (image-26) into the blue box in the PDF (image-27), including the secondary attributes (Franchise, Pensioengrondslag, Uw premie) which are currently only in the "Resultaat" section above.
+### Huidige situatie
+Er is één globale `faqItems`-lijst met 14 vragen die voor alle tabs wordt getoond. De FAQ-sectie filtert alleen op zoektekst, niet op categorie.
 
-### Changes — `src/components/Calculator.tsx`, lines 98–167
+### Voorgestelde verdeling
 
-**Remove** lines 98–123 (the entire "Resultaat" heading and its 4 rows).
+De huidige vragen worden verdeeld over drie categorieën, plus een "algemeen" set die bij alle tabs zichtbaar is. Logische verdeling:
 
-**Replace** lines 125–167 (blue box) with an expanded blue box containing all attributes:
+**Algemeen (alle tabs)**
+- Waarom vul ik een voltijdssalaris in, terwijl ik parttime werk?
+- Hoe houdt SPOA rekening met mijn parttimepercentage als ik een fulltime inkomen moet invullen?
+- Hoe houdt SPOA rekening met tussentijds starten of stoppen?
+- Waarom moet ik een jaarsalaris op basis van een volledig jaar opgeven als ik tussentijds ben gestart of gestopt?
+- Wat vul ik in bij arbeidsongeschiktheid? (beide vragen)
+- Wat doe ik als ik wijzigingen uit het verleden wil doorgeven?
+- Waarom moet ik als deelnemer zelf wijzigingen in mijn PGI of PT% doorgeven?
+- Mijn vraag staat niet in de Q&A, wat kan ik doen? (contactformulier)
 
-1. Keep blue rounded rect but increase `boxH` from 72 to ~110 to fit extra rows
-2. **Title**: "Wijzigingen doorgeven" — bold, white, size 13
-3. **Helper text**: white, normal, size 10 — with underlined link (same as current)
-4. **Primary attributes** (bold, white, with bullet):
-   - Pensioengevend inkomen per jaar (op fulltime basis) + value
-   - Uw parttimepercentage + value
-5. **Thin white separator line** inside the box
-6. **Secondary attributes** (normal weight, white, with bullet):
-   - Franchise 2026
-   - Pensioengrondslag (×parttime%)
-   - Uw premie in 2026 (30,7%)
+**Loondienst-specifiek**
+- Wat vul ik in bij onbetaald verlof?
+- Wat vul ik in bij gedeeltelijk betaald verlof?
+- Wat doe ik als in mijn werkgever heb gemachtigd voor het doorgeven van het PGI en PT%?
 
-All text white on SPOA blue background. Single file, ~70 lines replaced with ~55 lines.
+**DGA-specifiek**
+- Wat als ik zowel loondienst als dga of zelfstandig ben?
+- Wat vul ik in als ik zowel dga als zelfstandig ben?
+
+**Zelfstandig-specifiek**
+- Wat als ik zowel loondienst als dga of zelfstandig ben?
+- Wat vul ik in als ik zowel dga als zelfstandig ben?
+
+### Technische aanpak — `src/components/Calculator.tsx`
+
+1. **Datastructuur**: Voeg een `categories` veld toe aan elk FAQ-item:
+   ```ts
+   type FaqCategory = "algemeen" | "loondienst" | "dga" | "zelfstandig";
+   const faqItems: { q: string; a: string | React.ReactNode; categories: FaqCategory[] }[]
+   ```
+
+2. **Filtering**: Pas `filteredFaq` aan om zowel op zoektekst als op de actieve tab te filteren. Items met categorie `"algemeen"` worden altijd getoond:
+   ```ts
+   const filteredFaq = faqItems
+     .filter(item => item.categories.includes("algemeen") || item.categories.includes(tab as FaqCategory))
+     .filter(item => item.q.toLowerCase().includes(faqSearch.toLowerCase()));
+   ```
+
+3. **Geen UI-wijzigingen verder** — de FAQ-sectie blijft er hetzelfde uitzien, alleen de inhoud wisselt per tab.
+
+Eén bestand, ~20 regels gewijzigd.
 
