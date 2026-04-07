@@ -1,35 +1,17 @@
 
 
-## Logo centreren, "← Terug" links
+## Introductietekst op landingspagina aanpassen
 
-De huidige layout toont logo en "← Terug" naast elkaar links. De nieuwe layout wordt:
+### Wat verandert
 
-```text
-← Terug         [SPOA Logo]
-```
+De huidige tekst op regel 753-755:
+> "Met deze tool berekent u eenvoudig uw pensioengevend inkomen, pensioengrondslag en premie voor 2026. Kies hieronder uw situatie om te starten."
 
-### Aanpak — `src/components/Calculator.tsx`
+Wordt vervangen door een tekst die de nadruk legt op het invullen van het pensioengevend inkomen via de Mijn-omgeving, in de strekking van de calculator-pagina tekst maar herschreven voor de landingspagina context. Bijvoorbeeld:
 
-Op twee plekken (regel ~825-831 en ~840-846): vervang de enkele flex-div door:
+> "Met deze tool kunt u uw pensioengevend inkomen en parttimepercentage berekenen. Na inloggen op Mijn Apothekerspensioen kunt u deze gegevens direct invullen via de tegel 'Pensioengevend inkomen en parttimepercentage'. Kies hieronder uw situatie om te starten."
 
-```tsx
-<div className="relative flex items-center justify-center mb-4">
-  <span
-    className="absolute left-0 text-sm text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
-    onClick={() => setShowIntro(true)}
-  >
-    ← Terug
-  </span>
-  <img
-    src={spoaLogo}
-    alt="SPOA logo"
-    className="h-8 cursor-pointer"
-    onClick={() => setShowIntro(true)}
-  />
-</div>
-```
+### Technische aanpak
 
-- `relative` + `absolute left-0` plaatst "Terug" links zonder het gecentreerde logo te beïnvloeden
-- Logo blijft klikbaar naar de landingspagina
-- Eén bestand, twee locaties, ~6 regels per locatie
+Eén wijziging in `src/components/Calculator.tsx`, regels 753-756: de `<p>` tag met nieuwe tekst.
 
