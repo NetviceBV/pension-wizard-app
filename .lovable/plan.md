@@ -1,53 +1,50 @@
 
 
-## Categorie-specifieke Q&A voor Loondienst, DGA en Zelfstandig
+## Voorpagina met introductie en categoriekeuze
 
-### Huidige situatie
-Er is één globale `faqItems`-lijst met 14 vragen die voor alle tabs wordt getoond. De FAQ-sectie filtert alleen op zoektekst, niet op categorie.
+### Wat wordt er gebouwd
 
-### Voorgestelde verdeling
+Een landingspagina die als eerste scherm wordt getoond vóór de calculator. De pagina bevat:
 
-De huidige vragen worden verdeeld over drie categorieën, plus een "algemeen" set die bij alle tabs zichtbaar is. Logische verdeling:
+1. **SPOA logo** bovenaan
+2. **Titel**: bijv. "Premierekentool"
+3. **Introductietekst**: korte uitleg over wat de tool doet (pensioengevend inkomen berekenen, premie inzien, etc.)
+4. **Drie keuzekaarten** naast elkaar (of gestapeld op mobiel):
+   - **In Loondienst** — met korte beschrijving
+   - **DGA** — met korte beschrijving
+   - **Zelfstandig** — met korte beschrijving
+5. **"Start berekening" knop** die pas actief wordt na een keuze
 
-**Algemeen (alle tabs)**
-- Waarom vul ik een voltijdssalaris in, terwijl ik parttime werk?
-- Hoe houdt SPOA rekening met mijn parttimepercentage als ik een fulltime inkomen moet invullen?
-- Hoe houdt SPOA rekening met tussentijds starten of stoppen?
-- Waarom moet ik een jaarsalaris op basis van een volledig jaar opgeven als ik tussentijds ben gestart of gestopt?
-- Wat vul ik in bij arbeidsongeschiktheid? (beide vragen)
-- Wat doe ik als ik wijzigingen uit het verleden wil doorgeven?
-- Waarom moet ik als deelnemer zelf wijzigingen in mijn PGI of PT% doorgeven?
-- Mijn vraag staat niet in de Q&A, wat kan ik doen? (contactformulier)
+Na klikken op de knop wordt de huidige Calculator getoond met de juiste tab geselecteerd.
 
-**Loondienst-specifiek**
-- Wat vul ik in bij onbetaald verlof?
-- Wat vul ik in bij gedeeltelijk betaald verlof?
-- Wat doe ik als in mijn werkgever heb gemachtigd voor het doorgeven van het PGI en PT%?
+### Technische aanpak
 
-**DGA-specifiek**
-- Wat als ik zowel loondienst als dga of zelfstandig ben?
-- Wat vul ik in als ik zowel dga als zelfstandig ben?
+**Bestand: `src/components/Calculator.tsx`**
 
-**Zelfstandig-specifiek**
-- Wat als ik zowel loondienst als dga of zelfstandig ben?
-- Wat vul ik in als ik zowel dga als zelfstandig ben?
+- Voeg een `showIntro` state toe (default `true`) en een `selectedCategory` state
+- Als `showIntro === true`: toon de voorpagina met logo, tekst en drie klikbare kaarten
+- Bij klik op "Start berekening": zet `showIntro` op `false` en stel de `tab` state in op de gekozen categorie
+- De bestaande calculator-code blijft ongewijzigd; het wordt alleen conditioneel getoond
 
-### Technische aanpak — `src/components/Calculator.tsx`
+```text
+┌──────────────────────────────────┐
+│          SPOA Logo               │
+│                                  │
+│       Premierekentool            │
+│                                  │
+│   Introductietekst over de       │
+│   tool en het doel ervan...      │
+│                                  │
+│  ┌──────┐ ┌──────┐ ┌──────┐    │
+│  │Loon- │ │ DGA  │ │Zelf- │    │
+│  │dienst│ │      │ │standig│   │
+│  └──────┘ └──────┘ └──────┘    │
+│                                  │
+│      [ Start berekening ]        │
+└──────────────────────────────────┘
+```
 
-1. **Datastructuur**: Voeg een `categories` veld toe aan elk FAQ-item:
-   ```ts
-   type FaqCategory = "algemeen" | "loondienst" | "dga" | "zelfstandig";
-   const faqItems: { q: string; a: string | React.ReactNode; categories: FaqCategory[] }[]
-   ```
+**Styling**: SPOA blue (`rgb(76, 180, 212)`) accenten, dezelfde kaart-styling als de rest van de app. Geselecteerde kaart krijgt een blauwe border/achtergrond.
 
-2. **Filtering**: Pas `filteredFaq` aan om zowel op zoektekst als op de actieve tab te filteren. Items met categorie `"algemeen"` worden altijd getoond:
-   ```ts
-   const filteredFaq = faqItems
-     .filter(item => item.categories.includes("algemeen") || item.categories.includes(tab as FaqCategory))
-     .filter(item => item.q.toLowerCase().includes(faqSearch.toLowerCase()));
-   ```
-
-3. **Geen UI-wijzigingen verder** — de FAQ-sectie blijft er hetzelfde uitzien, alleen de inhoud wisselt per tab.
-
-Eén bestand, ~20 regels gewijzigd.
+Eén bestand gewijzigd, ~60 regels toegevoegd.
 
