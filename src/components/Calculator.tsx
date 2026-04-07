@@ -765,7 +765,7 @@ export default function Calculator({ embedded = false }: { embedded?: boolean })
       <div className="space-y-8">
         <div className="text-center space-y-2">
           <img src={spoaLogo} alt="SPOA logo" className="mx-auto h-10 mb-4" />
-          <h1 className="text-2xl font-bold text-foreground">Premierekentool</h1>
+          <h1 className="text-2xl font-bold text-foreground">Pensioengevend Inkomen Tool</h1>
           <p className="text-muted-foreground max-w-lg mx-auto">
             Met deze tool berekent u eenvoudig uw pensioengevend inkomen, pensioengrondslag en premie voor 2026.
             Kies hieronder uw situatie om te starten.
