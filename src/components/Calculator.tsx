@@ -334,7 +334,7 @@ const InfoLoondienst = () => (
           <ul className="list-inside list-disc space-y-0.5">
             <li>Incidentele bonussen of gratificaties</li>
             <li>Overwerkvergoedingen of onregelmatigheidstoeslagen</li>
-            <li>Onkostenvergoedingen (ook niet als ze bruto worden uitgekeerd)</li>
+            <li>Reis- en onkostenvergoedingen (ook niet als ze bruto worden uitgekeerd)</li>
             <li>Vergoedingen in natura (auto, telefoon, huisvesting)</li>
             <li>Resultaatafhankelijke beloningen die niet structureel zijn</li>
             <li>Nabetalingen of correcties over eerdere jaren</li>
@@ -383,7 +383,7 @@ const InfoDGA = () => (
           <ul className="list-inside list-disc space-y-0.5">
             <li>Dividend of winstuitkeringen</li>
             <li>Incidentele of resultaatafhankelijke bonussen</li>
-            <li>Onkostenvergoedingen</li>
+            <li>Reis- en onkostenvergoedingen</li>
             <li>Correcties of nabetalingen over eerdere jaren</li>
             <li>Inkomen dat niet via de loonadministratie loopt</li>
           </ul>
