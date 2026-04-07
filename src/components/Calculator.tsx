@@ -12,7 +12,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
-import { ChevronDown, Info, Calculator as CalcIcon, Search, HelpCircle, Send, Download } from "lucide-react";
+import { ChevronDown, Info, Calculator as CalcIcon, Search, HelpCircle, Send, Download, Briefcase, Building2, User } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import jsPDF from "jspdf";
@@ -334,7 +334,7 @@ const InfoLoondienst = () => (
           <ul className="list-inside list-disc space-y-0.5">
             <li>Incidentele bonussen of gratificaties</li>
             <li>Overwerkvergoedingen of onregelmatigheidstoeslagen</li>
-            <li>Onkostenvergoedingen (ook niet als ze bruto worden uitgekeerd)</li>
+            <li>Reis- en onkostenvergoedingen (ook niet als ze bruto worden uitgekeerd)</li>
             <li>Vergoedingen in natura (auto, telefoon, huisvesting)</li>
             <li>Resultaatafhankelijke beloningen die niet structureel zijn</li>
             <li>Nabetalingen of correcties over eerdere jaren</li>
@@ -383,7 +383,7 @@ const InfoDGA = () => (
           <ul className="list-inside list-disc space-y-0.5">
             <li>Dividend of winstuitkeringen</li>
             <li>Incidentele of resultaatafhankelijke bonussen</li>
-            <li>Onkostenvergoedingen</li>
+            <li>Reis- en onkostenvergoedingen</li>
             <li>Correcties of nabetalingen over eerdere jaren</li>
             <li>Inkomen dat niet via de loonadministratie loopt</li>
           </ul>
@@ -674,6 +674,8 @@ function calcResult(fulltimeIncome: number, parttimePct: number) {
    ═══════════════════════════════════════════ */
 
 export default function Calculator({ embedded = false }: { embedded?: boolean }) {
+  const [showIntro, setShowIntro] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [tab, setTab] = useState("loondienst");
   const [faqSearch, setFaqSearch] = useState("");
 
@@ -681,30 +683,14 @@ export default function Calculator({ embedded = false }: { embedded?: boolean })
     .filter((item) => item.categories.includes("algemeen") || item.categories.includes(tab as FaqCategory))
     .filter((item) => item.q.toLowerCase().includes(faqSearch.toLowerCase()));
 
-  const tabs = (
-    <Tabs value={tab} onValueChange={setTab}>
-      <TabsList className="mb-6 grid w-full grid-cols-3">
-        <TabsTrigger value="loondienst" className="text-xs sm:text-sm">
-          In loondienst
-        </TabsTrigger>
-        <TabsTrigger value="dga" className="text-xs sm:text-sm">
-          DGA
-        </TabsTrigger>
-        <TabsTrigger value="zelfstandig" className="text-xs sm:text-sm">
-          Zelfstandig
-        </TabsTrigger>
-      </TabsList>
+  const categoryLabel = tab === "loondienst" ? "In loondienst" : tab === "dga" ? "DGA" : "Zelfstandig";
 
-      <TabsContent value="loondienst">
-        <LoondienstForm />
-      </TabsContent>
-      <TabsContent value="dga">
-        <DGAForm />
-      </TabsContent>
-      <TabsContent value="zelfstandig">
-        <ZelfstandigForm />
-      </TabsContent>
-    </Tabs>
+  const activeForm = (
+    <div>
+      {tab === "loondienst" && <LoondienstForm />}
+      {tab === "dga" && <DGAForm />}
+      {tab === "zelfstandig" && <ZelfstandigForm />}
+    </div>
   );
 
   const faqSection = (
@@ -737,43 +723,166 @@ export default function Calculator({ embedded = false }: { embedded?: boolean })
     </div>
   );
 
-  if (embedded) {
+  const categories = [
+    {
+      id: "loondienst",
+      label: "In Loondienst",
+      description: "U bent in dienst bij een apotheek of organisatie en ontvangt maandelijks een salaris.",
+      icon: Briefcase,
+    },
+    {
+      id: "dga",
+      label: "DGA",
+      description: "U bent directeur-grootaandeelhouder van een BV waarin u als apotheker werkzaam bent.",
+      icon: Building2,
+    },
+    {
+      id: "zelfstandig",
+      label: "Zelfstandig",
+      description: "U bent zelfstandig gevestigd apotheker en uw inkomen komt uit winst uit onderneming.",
+      icon: User,
+    },
+  ];
+
+  if (showIntro) {
+    const introContent = (
+      <div className="space-y-8">
+        <div className="text-center space-y-2">
+          <img src={spoaLogo} alt="SPOA logo" className="mx-auto h-10 mb-4" />
+          <h1 className="text-2xl font-bold text-foreground">Pensioengevend Inkomen Tool</h1>
+          <p className="text-muted-foreground max-w-lg mx-auto">
+            Met deze tool kunt u uw pensioengevend inkomen en parttimepercentage berekenen.
+            Na inloggen op Mijn Apothekerspensioen kunt u deze gegevens direct invullen via de tegel
+            'Pensioengevend inkomen en parttimepercentage'. Kies hieronder uw situatie om te starten.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {categories.map((cat) => {
+            const Icon = cat.icon;
+            const isSelected = selectedCategory === cat.id;
+            return (
+              <button
+                key={cat.id}
+                type="button"
+                onClick={() => setSelectedCategory(cat.id)}
+                className={`flex flex-col items-center gap-3 rounded-lg border-2 p-6 text-center transition-all cursor-pointer hover:shadow-md ${
+                  isSelected
+                    ? "border-primary bg-primary/5 shadow-md"
+                    : "border-border hover:border-primary/40"
+                }`}
+                style={isSelected ? { borderColor: "rgb(76, 180, 212)" } : undefined}
+              >
+                <div
+                  className="flex h-12 w-12 items-center justify-center rounded-full"
+                  style={{
+                    backgroundColor: isSelected ? "rgb(76, 180, 212)" : undefined,
+                    color: isSelected ? "white" : undefined,
+                  }}
+                >
+                  <Icon className={`h-6 w-6 ${!isSelected ? "text-muted-foreground" : ""}`} />
+                </div>
+                <div>
+                  <p className="font-semibold text-foreground">{cat.label}</p>
+                  <p className="text-xs text-muted-foreground mt-1">{cat.description}</p>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="text-center">
+          <Button
+            disabled={!selectedCategory}
+            onClick={() => {
+              if (selectedCategory) {
+                setTab(selectedCategory);
+                setShowIntro(false);
+              }
+            }}
+            className="px-8 text-white hover:opacity-90"
+            style={{ backgroundColor: "rgb(76, 180, 212)" }}
+          >
+            Start berekening
+          </Button>
+        </div>
+      </div>
+    );
+
+    if (embedded) {
+      return <div className="mx-auto w-full max-w-2xl">{introContent}</div>;
+    }
+
+    return (
+      <Card className="mx-auto w-full max-w-2xl shadow-lg">
+        <CardContent className="p-8">{introContent}</CardContent>
+      </Card>
+    );
+  }
+
+   if (embedded) {
     return (
       <div className="mx-auto w-full max-w-2xl">
-        {tabs}
+        <div className="relative flex items-center justify-center mb-4">
+          <span
+            className="absolute left-0 text-sm text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
+            onClick={() => setShowIntro(true)}
+          >
+            ← Terug
+          </span>
+          <img src={spoaLogo} alt="SPOA logo" className="h-8 cursor-pointer" onClick={() => setShowIntro(true)} />
+        </div>
+        {activeForm}
         {faqSection}
       </div>
     );
   }
 
   return (
-    <Card className="mx-auto w-full max-w-2xl shadow-lg">
-      <CardHeader className="pb-4">
-        <div className="flex items-start justify-between gap-2">
-          <div>
-            <CardTitle className="text-xl font-bold text-foreground">
-              Pensioengevend Inkomen Tool
-            </CardTitle>
-            <p className="text-sm text-muted-foreground mt-1.5">
-              Bereken uw pensioengevend inkomen, pensioengrondslag en premie voor
-              2026.
-            </p>
+    <div className="mx-auto w-full max-w-2xl">
+      <div className="relative flex items-center justify-center mb-4">
+        <span
+          className="absolute left-0 text-sm text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
+          onClick={() => setShowIntro(true)}
+        >
+          ← Terug
+        </span>
+        <img src={spoaLogo} alt="SPOA logo" className="h-8 cursor-pointer" onClick={() => setShowIntro(true)} />
+      </div>
+      <Card className="shadow-lg">
+        <CardHeader className="pb-4">
+          <div className="flex items-start justify-between gap-2">
+            <div>
+              <span
+                className="inline-block px-3 py-1 rounded-full text-white text-xs font-bold mb-2"
+                style={{ backgroundColor: "rgb(76, 180, 212)" }}
+              >
+                {categoryLabel}
+              </span>
+              <CardTitle className="text-xl font-bold text-foreground">
+                Pensioengevend Inkomen Tool
+              </CardTitle>
+              <p className="text-sm text-muted-foreground mt-1.5">
+                Bereken uw pensioengevend inkomen, pensioengrondslag en premie voor
+                2026.
+              </p>
+            </div>
+            <button
+              type="button"
+              title="Veelgestelde vragen"
+              onClick={() => document.getElementById("faq")?.scrollIntoView({ behavior: "smooth" })}
+              className="shrink-0 mt-1 px-2.5 py-1 rounded-md bg-primary/10 text-primary hover:bg-primary/20 font-semibold text-sm transition-colors cursor-pointer"
+            >
+              Q&A
+            </button>
           </div>
-          <button
-            type="button"
-            title="Veelgestelde vragen"
-            onClick={() => document.getElementById("faq")?.scrollIntoView({ behavior: "smooth" })}
-            className="shrink-0 mt-1 px-2.5 py-1 rounded-md bg-primary/10 text-primary hover:bg-primary/20 font-semibold text-sm transition-colors cursor-pointer"
-          >
-            Q&A
-          </button>
-        </div>
-      </CardHeader>
-      <CardContent>
-        {tabs}
-        {faqSection}
-      </CardContent>
-    </Card>
+        </CardHeader>
+        <CardContent>
+          {activeForm}
+          {faqSection}
+        </CardContent>
+      </Card>
+    </div>
   );
 }
 
