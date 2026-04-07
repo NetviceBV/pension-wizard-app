@@ -1,50 +1,36 @@
 
 
-## Voorpagina met introductie en categoriekeuze
+## SPOA logo, terug-navigatie en tab-verwijdering op de berekeningspagina
 
-### Wat wordt er gebouwd
+### Wat verandert
 
-Een landingspagina die als eerste scherm wordt getoond vóór de calculator. De pagina bevat:
+1. **Logo als terug-knop**: Op de berekeningspagina wordt het SPOA logo bovenaan getoond (boven de card header). Klikken op het logo brengt de gebruiker terug naar de landingspagina. Dit is een bekende UX-conventie (logo = home). Een subtiele "← Terug" link wordt ernaast geplaatst voor duidelijkheid.
 
-1. **SPOA logo** bovenaan
-2. **Titel**: bijv. "Premierekentool"
-3. **Introductietekst**: korte uitleg over wat de tool doet (pensioengevend inkomen berekenen, premie inzien, etc.)
-4. **Drie keuzekaarten** naast elkaar (of gestapeld op mobiel):
-   - **In Loondienst** — met korte beschrijving
-   - **DGA** — met korte beschrijving
-   - **Zelfstandig** — met korte beschrijving
-5. **"Start berekening" knop** die pas actief wordt na een keuze
+2. **Tabs verwijderen**: De `TabsList` (de drie knoppen "In loondienst / DGA / Zelfstandig") wordt niet meer getoond. In plaats daarvan wordt een badge/label getoond met de geselecteerde categorie (bijv. "In loondienst") zodat de gebruiker weet welke berekening actief is.
 
-Na klikken op de knop wordt de huidige Calculator getoond met de juiste tab geselecteerd.
-
-### Technische aanpak
-
-**Bestand: `src/components/Calculator.tsx`**
-
-- Voeg een `showIntro` state toe (default `true`) en een `selectedCategory` state
-- Als `showIntro === true`: toon de voorpagina met logo, tekst en drie klikbare kaarten
-- Bij klik op "Start berekening": zet `showIntro` op `false` en stel de `tab` state in op de gekozen categorie
-- De bestaande calculator-code blijft ongewijzigd; het wordt alleen conditioneel getoond
+3. **Alleen het juiste formulier tonen**: In plaats van `<Tabs>` met drie `TabsContent`, renderen we direct het juiste formulier op basis van de `tab` state.
 
 ```text
 ┌──────────────────────────────────┐
-│          SPOA Logo               │
-│                                  │
-│       Premierekentool            │
-│                                  │
-│   Introductietekst over de       │
-│   tool en het doel ervan...      │
-│                                  │
-│  ┌──────┐ ┌──────┐ ┌──────┐    │
-│  │Loon- │ │ DGA  │ │Zelf- │    │
-│  │dienst│ │      │ │standig│   │
-│  └──────┘ └──────┘ └──────┘    │
-│                                  │
-│      [ Start berekening ]        │
+│  [SPOA Logo]  ← Terug           │
+├──────────────────────────────────┤
+│  Pensioengevend Inkomen Tool     │
+│  ┌─────────────┐                 │
+│  │In loondienst│  (badge)        │
+│  └─────────────┘                 │
+│  Formulier...                    │
 └──────────────────────────────────┘
 ```
 
-**Styling**: SPOA blue (`rgb(76, 180, 212)`) accenten, dezelfde kaart-styling als de rest van de app. Geselecteerde kaart krijgt een blauwe border/achtergrond.
+### Technische aanpak — `src/components/Calculator.tsx`
 
-Eén bestand gewijzigd, ~60 regels toegevoegd.
+**Berekeningspagina (niet-embedded)**:
+- Boven de `<Card>`, voeg een klikbaar logo + "Terug" link toe die `setShowIntro(true)` aanroept
+- Vervang de `<Tabs>` component door directe conditionele rendering: `tab === "loondienst" ? <LoondienstForm /> : tab === "dga" ? <DGAForm /> : <ZelfstandigForm />`
+- Voeg een SPOA-blauwe badge toe in de CardHeader met de geselecteerde categorie-naam
+- Behoud de Q&A knop en FAQ-sectie (die al categorie-specifiek filtert)
+
+**Embedded variant**: Zelfde aanpak — logo + terug-link bovenaan, geen tabs, directe form rendering.
+
+Eén bestand, ~30 regels gewijzigd.
 
