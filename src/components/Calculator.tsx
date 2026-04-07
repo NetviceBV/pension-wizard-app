@@ -819,10 +819,17 @@ export default function Calculator({ embedded = false }: { embedded?: boolean })
     );
   }
 
-  if (embedded) {
+   if (embedded) {
     return (
       <div className="mx-auto w-full max-w-2xl">
-        {tabs}
+        <div
+          className="flex items-center gap-2 mb-4 cursor-pointer group"
+          onClick={() => setShowIntro(true)}
+        >
+          <img src={spoaLogo} alt="SPOA logo" className="h-8" />
+          <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">← Terug</span>
+        </div>
+        {activeForm}
         {faqSection}
       </div>
     );
