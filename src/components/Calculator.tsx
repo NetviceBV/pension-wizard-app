@@ -822,12 +822,14 @@ export default function Calculator({ embedded = false }: { embedded?: boolean })
    if (embedded) {
     return (
       <div className="mx-auto w-full max-w-2xl">
-        <div
-          className="flex items-center gap-2 mb-4 cursor-pointer group"
-          onClick={() => setShowIntro(true)}
-        >
-          <img src={spoaLogo} alt="SPOA logo" className="h-8" />
-          <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">← Terug</span>
+        <div className="relative flex items-center justify-center mb-4">
+          <span
+            className="absolute left-0 text-sm text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
+            onClick={() => setShowIntro(true)}
+          >
+            ← Terug
+          </span>
+          <img src={spoaLogo} alt="SPOA logo" className="h-8 cursor-pointer" onClick={() => setShowIntro(true)} />
         </div>
         {activeForm}
         {faqSection}
@@ -837,12 +839,14 @@ export default function Calculator({ embedded = false }: { embedded?: boolean })
 
   return (
     <div className="mx-auto w-full max-w-2xl">
-      <div
-        className="flex items-center gap-2 mb-4 cursor-pointer group"
-        onClick={() => setShowIntro(true)}
-      >
-        <img src={spoaLogo} alt="SPOA logo" className="h-8" />
-        <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">← Terug</span>
+      <div className="relative flex items-center justify-center mb-4">
+        <span
+          className="absolute left-0 text-sm text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
+          onClick={() => setShowIntro(true)}
+        >
+          ← Terug
+        </span>
+        <img src={spoaLogo} alt="SPOA logo" className="h-8 cursor-pointer" onClick={() => setShowIntro(true)} />
       </div>
       <Card className="shadow-lg">
         <CardHeader className="pb-4">
