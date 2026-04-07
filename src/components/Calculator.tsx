@@ -836,33 +836,48 @@ export default function Calculator({ embedded = false }: { embedded?: boolean })
   }
 
   return (
-    <Card className="mx-auto w-full max-w-2xl shadow-lg">
-      <CardHeader className="pb-4">
-        <div className="flex items-start justify-between gap-2">
-          <div>
-            <CardTitle className="text-xl font-bold text-foreground">
-              Pensioengevend Inkomen Tool
-            </CardTitle>
-            <p className="text-sm text-muted-foreground mt-1.5">
-              Bereken uw pensioengevend inkomen, pensioengrondslag en premie voor
-              2026.
-            </p>
+    <div className="mx-auto w-full max-w-2xl">
+      <div
+        className="flex items-center gap-2 mb-4 cursor-pointer group"
+        onClick={() => setShowIntro(true)}
+      >
+        <img src={spoaLogo} alt="SPOA logo" className="h-8" />
+        <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">← Terug</span>
+      </div>
+      <Card className="shadow-lg">
+        <CardHeader className="pb-4">
+          <div className="flex items-start justify-between gap-2">
+            <div>
+              <span
+                className="inline-block px-3 py-1 rounded-full text-white text-xs font-bold mb-2"
+                style={{ backgroundColor: "rgb(76, 180, 212)" }}
+              >
+                {categoryLabel}
+              </span>
+              <CardTitle className="text-xl font-bold text-foreground">
+                Pensioengevend Inkomen Tool
+              </CardTitle>
+              <p className="text-sm text-muted-foreground mt-1.5">
+                Bereken uw pensioengevend inkomen, pensioengrondslag en premie voor
+                2026.
+              </p>
+            </div>
+            <button
+              type="button"
+              title="Veelgestelde vragen"
+              onClick={() => document.getElementById("faq")?.scrollIntoView({ behavior: "smooth" })}
+              className="shrink-0 mt-1 px-2.5 py-1 rounded-md bg-primary/10 text-primary hover:bg-primary/20 font-semibold text-sm transition-colors cursor-pointer"
+            >
+              Q&A
+            </button>
           </div>
-          <button
-            type="button"
-            title="Veelgestelde vragen"
-            onClick={() => document.getElementById("faq")?.scrollIntoView({ behavior: "smooth" })}
-            className="shrink-0 mt-1 px-2.5 py-1 rounded-md bg-primary/10 text-primary hover:bg-primary/20 font-semibold text-sm transition-colors cursor-pointer"
-          >
-            Q&A
-          </button>
-        </div>
-      </CardHeader>
-      <CardContent>
-        {tabs}
-        {faqSection}
-      </CardContent>
-    </Card>
+        </CardHeader>
+        <CardContent>
+          {activeForm}
+          {faqSection}
+        </CardContent>
+      </Card>
+    </div>
   );
 }
 
