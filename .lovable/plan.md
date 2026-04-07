@@ -1,36 +1,35 @@
 
 
-## SPOA logo, terug-navigatie en tab-verwijdering op de berekeningspagina
+## Logo centreren, "← Terug" links
 
-### Wat verandert
-
-1. **Logo als terug-knop**: Op de berekeningspagina wordt het SPOA logo bovenaan getoond (boven de card header). Klikken op het logo brengt de gebruiker terug naar de landingspagina. Dit is een bekende UX-conventie (logo = home). Een subtiele "← Terug" link wordt ernaast geplaatst voor duidelijkheid.
-
-2. **Tabs verwijderen**: De `TabsList` (de drie knoppen "In loondienst / DGA / Zelfstandig") wordt niet meer getoond. In plaats daarvan wordt een badge/label getoond met de geselecteerde categorie (bijv. "In loondienst") zodat de gebruiker weet welke berekening actief is.
-
-3. **Alleen het juiste formulier tonen**: In plaats van `<Tabs>` met drie `TabsContent`, renderen we direct het juiste formulier op basis van de `tab` state.
+De huidige layout toont logo en "← Terug" naast elkaar links. De nieuwe layout wordt:
 
 ```text
-┌──────────────────────────────────┐
-│  [SPOA Logo]  ← Terug           │
-├──────────────────────────────────┤
-│  Pensioengevend Inkomen Tool     │
-│  ┌─────────────┐                 │
-│  │In loondienst│  (badge)        │
-│  └─────────────┘                 │
-│  Formulier...                    │
-└──────────────────────────────────┘
+← Terug         [SPOA Logo]
 ```
 
-### Technische aanpak — `src/components/Calculator.tsx`
+### Aanpak — `src/components/Calculator.tsx`
 
-**Berekeningspagina (niet-embedded)**:
-- Boven de `<Card>`, voeg een klikbaar logo + "Terug" link toe die `setShowIntro(true)` aanroept
-- Vervang de `<Tabs>` component door directe conditionele rendering: `tab === "loondienst" ? <LoondienstForm /> : tab === "dga" ? <DGAForm /> : <ZelfstandigForm />`
-- Voeg een SPOA-blauwe badge toe in de CardHeader met de geselecteerde categorie-naam
-- Behoud de Q&A knop en FAQ-sectie (die al categorie-specifiek filtert)
+Op twee plekken (regel ~825-831 en ~840-846): vervang de enkele flex-div door:
 
-**Embedded variant**: Zelfde aanpak — logo + terug-link bovenaan, geen tabs, directe form rendering.
+```tsx
+<div className="relative flex items-center justify-center mb-4">
+  <span
+    className="absolute left-0 text-sm text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
+    onClick={() => setShowIntro(true)}
+  >
+    ← Terug
+  </span>
+  <img
+    src={spoaLogo}
+    alt="SPOA logo"
+    className="h-8 cursor-pointer"
+    onClick={() => setShowIntro(true)}
+  />
+</div>
+```
 
-Eén bestand, ~30 regels gewijzigd.
+- `relative` + `absolute left-0` plaatst "Terug" links zonder het gecentreerde logo te beïnvloeden
+- Logo blijft klikbaar naar de landingspagina
+- Eén bestand, twee locaties, ~6 regels per locatie
 
