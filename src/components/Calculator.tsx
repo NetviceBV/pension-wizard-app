@@ -12,7 +12,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
-import { ChevronDown, Info, Calculator as CalcIcon, Search, HelpCircle, Send, Download } from "lucide-react";
+import { ChevronDown, Info, Calculator as CalcIcon, Search, HelpCircle, Send, Download, Briefcase, Building2, User } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import jsPDF from "jspdf";
@@ -674,6 +674,8 @@ function calcResult(fulltimeIncome: number, parttimePct: number) {
    ═══════════════════════════════════════════ */
 
 export default function Calculator({ embedded = false }: { embedded?: boolean }) {
+  const [showIntro, setShowIntro] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [tab, setTab] = useState("loondienst");
   const [faqSearch, setFaqSearch] = useState("");
 
