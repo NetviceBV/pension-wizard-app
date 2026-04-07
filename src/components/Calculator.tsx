@@ -12,7 +12,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
-import { ChevronDown, Info, Calculator as CalcIcon, Search, HelpCircle, Send, Download } from "lucide-react";
+import { ChevronDown, Info, Calculator as CalcIcon, Search, HelpCircle, Send, Download, Briefcase, Building2, User } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import jsPDF from "jspdf";
@@ -674,6 +674,8 @@ function calcResult(fulltimeIncome: number, parttimePct: number) {
    ═══════════════════════════════════════════ */
 
 export default function Calculator({ embedded = false }: { embedded?: boolean }) {
+  const [showIntro, setShowIntro] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [tab, setTab] = useState("loondienst");
   const [faqSearch, setFaqSearch] = useState("");
 
@@ -736,6 +738,102 @@ export default function Calculator({ embedded = false }: { embedded?: boolean })
       )}
     </div>
   );
+
+  const categories = [
+    {
+      id: "loondienst",
+      label: "In Loondienst",
+      description: "U bent in dienst bij een apotheek of organisatie en ontvangt maandelijks een salaris.",
+      icon: Briefcase,
+    },
+    {
+      id: "dga",
+      label: "DGA",
+      description: "U bent directeur-grootaandeelhouder van een BV waarin u als apotheker werkzaam bent.",
+      icon: Building2,
+    },
+    {
+      id: "zelfstandig",
+      label: "Zelfstandig",
+      description: "U bent zelfstandig gevestigd apotheker en uw inkomen komt uit winst uit onderneming.",
+      icon: User,
+    },
+  ];
+
+  if (showIntro) {
+    const introContent = (
+      <div className="space-y-8">
+        <div className="text-center space-y-2">
+          <img src={spoaLogo} alt="SPOA logo" className="mx-auto h-10 mb-4" />
+          <h1 className="text-2xl font-bold text-foreground">Premierekentool</h1>
+          <p className="text-muted-foreground max-w-lg mx-auto">
+            Met deze tool berekent u eenvoudig uw pensioengevend inkomen, pensioengrondslag en premie voor 2026.
+            Kies hieronder uw situatie om te starten.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {categories.map((cat) => {
+            const Icon = cat.icon;
+            const isSelected = selectedCategory === cat.id;
+            return (
+              <button
+                key={cat.id}
+                type="button"
+                onClick={() => setSelectedCategory(cat.id)}
+                className={`flex flex-col items-center gap-3 rounded-lg border-2 p-6 text-center transition-all cursor-pointer hover:shadow-md ${
+                  isSelected
+                    ? "border-primary bg-primary/5 shadow-md"
+                    : "border-border hover:border-primary/40"
+                }`}
+                style={isSelected ? { borderColor: "rgb(76, 180, 212)" } : undefined}
+              >
+                <div
+                  className="flex h-12 w-12 items-center justify-center rounded-full"
+                  style={{
+                    backgroundColor: isSelected ? "rgb(76, 180, 212)" : undefined,
+                    color: isSelected ? "white" : undefined,
+                  }}
+                >
+                  <Icon className={`h-6 w-6 ${!isSelected ? "text-muted-foreground" : ""}`} />
+                </div>
+                <div>
+                  <p className="font-semibold text-foreground">{cat.label}</p>
+                  <p className="text-xs text-muted-foreground mt-1">{cat.description}</p>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="text-center">
+          <Button
+            disabled={!selectedCategory}
+            onClick={() => {
+              if (selectedCategory) {
+                setTab(selectedCategory);
+                setShowIntro(false);
+              }
+            }}
+            className="px-8 text-white hover:opacity-90"
+            style={{ backgroundColor: "rgb(76, 180, 212)" }}
+          >
+            Start berekening
+          </Button>
+        </div>
+      </div>
+    );
+
+    if (embedded) {
+      return <div className="mx-auto w-full max-w-2xl">{introContent}</div>;
+    }
+
+    return (
+      <Card className="mx-auto w-full max-w-2xl shadow-lg">
+        <CardContent className="p-8">{introContent}</CardContent>
+      </Card>
+    );
+  }
 
   if (embedded) {
     return (
