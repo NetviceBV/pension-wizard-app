@@ -683,30 +683,14 @@ export default function Calculator({ embedded = false }: { embedded?: boolean })
     .filter((item) => item.categories.includes("algemeen") || item.categories.includes(tab as FaqCategory))
     .filter((item) => item.q.toLowerCase().includes(faqSearch.toLowerCase()));
 
-  const tabs = (
-    <Tabs value={tab} onValueChange={setTab}>
-      <TabsList className="mb-6 grid w-full grid-cols-3">
-        <TabsTrigger value="loondienst" className="text-xs sm:text-sm">
-          In loondienst
-        </TabsTrigger>
-        <TabsTrigger value="dga" className="text-xs sm:text-sm">
-          DGA
-        </TabsTrigger>
-        <TabsTrigger value="zelfstandig" className="text-xs sm:text-sm">
-          Zelfstandig
-        </TabsTrigger>
-      </TabsList>
+  const categoryLabel = tab === "loondienst" ? "In loondienst" : tab === "dga" ? "DGA" : "Zelfstandig";
 
-      <TabsContent value="loondienst">
-        <LoondienstForm />
-      </TabsContent>
-      <TabsContent value="dga">
-        <DGAForm />
-      </TabsContent>
-      <TabsContent value="zelfstandig">
-        <ZelfstandigForm />
-      </TabsContent>
-    </Tabs>
+  const activeForm = (
+    <div>
+      {tab === "loondienst" && <LoondienstForm />}
+      {tab === "dga" && <DGAForm />}
+      {tab === "zelfstandig" && <ZelfstandigForm />}
+    </div>
   );
 
   const faqSection = (
