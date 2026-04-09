@@ -55,7 +55,7 @@ function DownloadButton({
     doc.setFontSize(18);
     doc.setFont("helvetica", "bold");
     doc.text("Pensioengevend Inkomen Tool", 20, 18);
-    const badgeText = `Resultaat — ${tabLabel}`;
+    const badgeText = `Resultaat ${selectedYear} — ${tabLabel}`;
     doc.setFontSize(10);
     doc.setFont("helvetica", "bold");
     const badgeWidth = doc.getTextWidth(badgeText) + 10;
