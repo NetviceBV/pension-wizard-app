@@ -296,9 +296,13 @@ const faqItems: { q: string; a: string | React.ReactNode; categories: FaqCategor
   { q: "Mijn vraag staat niet in de Q&A, wat kan ik doen?", a: <ContactForm />, categories: ["algemeen"] },
 ];
 
-const MAX_PENSIOENGEVEND = 113738;
-const FRANCHISE_2026 = 19172;
-const PREMIE_PERCENTAGE = 0.307;
+const YEAR_PARAMS: Record<number, { maxPensioengevend: number; franchise: number; premiePercentage: number }> = {
+  2026: { maxPensioengevend: 113738, franchise: 19172, premiePercentage: 0.307 },
+  2025: { maxPensioengevend: 0, franchise: 0, premiePercentage: 0 }, // placeholder — waarden later aanleveren
+  2024: { maxPensioengevend: 0, franchise: 0, premiePercentage: 0 }, // placeholder — waarden later aanleveren
+};
+const AVAILABLE_YEARS = Object.keys(YEAR_PARAMS).map(Number).sort((a, b) => b - a);
+const DEFAULT_YEAR = 2026;
 
 function euro(value: number): string {
   return new Intl.NumberFormat("nl-NL", {
