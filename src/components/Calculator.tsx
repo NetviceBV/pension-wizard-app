@@ -26,6 +26,8 @@ function DownloadButton({
   grondslag,
   premie,
   parttime,
+  selectedYear,
+  params,
 }: {
   tabLabel: string;
   inputs: { label: string; value: string }[];
@@ -33,6 +35,8 @@ function DownloadButton({
   grondslag: number;
   premie: number;
   parttime: number;
+  selectedYear: number;
+  params: { maxPensioengevend: number; franchise: number; premiePercentage: number };
 }) {
   const hasData = pensioengevend > 0 || grondslag > 0 || premie > 0;
 
@@ -149,15 +153,16 @@ function DownloadButton({
     // Secondary attributes (normal)
     y += 6;
     doc.setFont("helvetica", "normal");
-    doc.text("•  Franchise 2026", boxX + 8, y);
-    doc.text(euro(FRANCHISE_2026), amountX, y, { align: "right" });
+    doc.text(`•  Franchise ${selectedYear}`, boxX + 8, y);
+    doc.text(euro(params.franchise), amountX, y, { align: "right" });
 
     y += 7;
     doc.text(`•  Pensioengrondslag (×${parttime}%)`, boxX + 8, y);
     doc.text(euro(grondslag), amountX, y, { align: "right" });
 
     y += 7;
-    doc.text("•  Uw premie in 2026 (30,7%)", boxX + 8, y);
+    const premieLabel = `${(params.premiePercentage * 100).toFixed(1).replace(".", ",")}%`;
+    doc.text(`•  Uw premie in ${selectedYear} (${premieLabel})`, boxX + 8, y);
     doc.text(euro(premie), amountX, y, { align: "right" });
 
     // Disclaimer
@@ -296,9 +301,13 @@ const faqItems: { q: string; a: string | React.ReactNode; categories: FaqCategor
   { q: "Mijn vraag staat niet in de Q&A, wat kan ik doen?", a: <ContactForm />, categories: ["algemeen"] },
 ];
 
-const MAX_PENSIOENGEVEND = 113738;
-const FRANCHISE_2026 = 19172;
-const PREMIE_PERCENTAGE = 0.307;
+const YEAR_PARAMS: Record<number, { maxPensioengevend: number; franchise: number; premiePercentage: number }> = {
+  2026: { maxPensioengevend: 113738, franchise: 19172, premiePercentage: 0.307 },
+  2025: { maxPensioengevend: 0, franchise: 0, premiePercentage: 0 }, // placeholder — waarden later aanleveren
+  2024: { maxPensioengevend: 0, franchise: 0, premiePercentage: 0 }, // placeholder — waarden later aanleveren
+};
+const AVAILABLE_YEARS = Object.keys(YEAR_PARAMS).map(Number).sort((a, b) => b - a);
+const DEFAULT_YEAR = 2026;
 
 function euro(value: number): string {
   return new Intl.NumberFormat("nl-NL", {
@@ -445,11 +454,15 @@ function ResultBlock({
   grondslag,
   premie,
   parttime,
+  selectedYear,
+  params,
 }: {
   pensioengevend: number;
   grondslag: number;
   premie: number;
   parttime: number;
+  selectedYear: number;
+  params: { maxPensioengevend: number; franchise: number; premiePercentage: number };
 }) {
   return (
     <div className="mt-6 space-y-3 rounded-lg border-2 border-primary/20 bg-primary/5 p-5">
@@ -473,18 +486,18 @@ function ResultBlock({
         <Row
           label="Pensioengevend inkomen per jaar (op fulltime basis)"
           value={euro(pensioengevend)}
-          hint={pensioengevend >= MAX_PENSIOENGEVEND ? `(max. ${euro(MAX_PENSIOENGEVEND)})` : undefined}
+          hint={pensioengevend >= params.maxPensioengevend ? `(max. ${euro(params.maxPensioengevend)})` : undefined}
           bold
         />
         <Row label="Uw parttimepercentage" value={`${parttime}%`} bold />
         <div className="mt-3 pt-3 border-t">
           <div className="grid gap-2">
-            <Row label="Franchise 2026" value={euro(FRANCHISE_2026)} />
+            <Row label={`Franchise ${selectedYear}`} value={euro(params.franchise)} />
             <Row
               label={`Pensioengrondslag (×${parttime}%)`}
               value={euro(grondslag)}
             />
-            <Row label="Uw premie in 2026 (30,7%)" value={euro(premie)} />
+            <Row label={`Uw premie in ${selectedYear} (${(params.premiePercentage * 100).toFixed(1).replace(".", ",")}%)`} value={euro(premie)} />
           </div>
         </div>
       </div>
@@ -667,11 +680,11 @@ function Subtotaal({ label, value }: { label: string; value: number }) {
 }
 
 /* ───── Calculation helper ───── */
-function calcResult(fulltimeIncome: number, parttimePct: number) {
-  const pensioengevend = Math.min(fulltimeIncome, MAX_PENSIOENGEVEND);
-  const grondslagFull = Math.max(pensioengevend - FRANCHISE_2026, 0);
+function calcResult(fulltimeIncome: number, parttimePct: number, params: { maxPensioengevend: number; franchise: number; premiePercentage: number }) {
+  const pensioengevend = Math.min(fulltimeIncome, params.maxPensioengevend);
+  const grondslagFull = Math.max(pensioengevend - params.franchise, 0);
   const grondslag = grondslagFull * (parttimePct / 100);
-  const premie = grondslag * PREMIE_PERCENTAGE;
+  const premie = grondslag * params.premiePercentage;
   return { pensioengevend, grondslag, premie };
 }
 
@@ -684,6 +697,9 @@ export default function Calculator({ embedded = false }: { embedded?: boolean })
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [tab, setTab] = useState("loondienst");
   const [faqSearch, setFaqSearch] = useState("");
+  const [selectedYear, setSelectedYear] = useState(DEFAULT_YEAR);
+
+  const params = YEAR_PARAMS[selectedYear];
 
   const filteredFaq = faqItems
     .filter((item) => item.categories.includes("algemeen") || item.categories.includes(tab as FaqCategory))
@@ -693,9 +709,9 @@ export default function Calculator({ embedded = false }: { embedded?: boolean })
 
   const activeForm = (
     <div>
-      {tab === "loondienst" && <LoondienstForm />}
-      {tab === "dga" && <DGAForm />}
-      {tab === "zelfstandig" && <ZelfstandigForm />}
+      {tab === "loondienst" && <LoondienstForm selectedYear={selectedYear} params={params} />}
+      {tab === "dga" && <DGAForm selectedYear={selectedYear} params={params} />}
+      {tab === "zelfstandig" && <ZelfstandigForm selectedYear={selectedYear} params={params} />}
     </div>
   );
 
@@ -838,6 +854,26 @@ export default function Calculator({ embedded = false }: { embedded?: boolean })
           </span>
           <img src={spoaLogo} alt="SPOA logo" className="h-8 cursor-pointer" onClick={() => setShowIntro(true)} />
         </div>
+        <div className="flex items-center gap-2 mb-4">
+          <span
+            className="inline-block px-3 py-1 rounded-full text-white text-xs font-bold"
+            style={{ backgroundColor: "rgb(76, 180, 212)" }}
+          >
+            {categoryLabel}
+          </span>
+          <Select value={String(selectedYear)} onValueChange={(v) => setSelectedYear(Number(v))}>
+            <SelectTrigger className="w-[90px] h-7 text-xs">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {AVAILABLE_YEARS.map((y) => (
+                <SelectItem key={y} value={String(y)} disabled={YEAR_PARAMS[y].maxPensioengevend === 0}>
+                  {y}{YEAR_PARAMS[y].maxPensioengevend === 0 ? " (soon)" : ""}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
         {activeForm}
         {faqSection}
       </div>
@@ -859,18 +895,32 @@ export default function Calculator({ embedded = false }: { embedded?: boolean })
         <CardHeader className="pb-4">
           <div className="flex items-start justify-between gap-2">
             <div>
-              <span
-                className="inline-block px-3 py-1 rounded-full text-white text-xs font-bold mb-2"
-                style={{ backgroundColor: "rgb(76, 180, 212)" }}
-              >
-                {categoryLabel}
-              </span>
+              <div className="flex items-center gap-2 mb-2">
+                <span
+                  className="inline-block px-3 py-1 rounded-full text-white text-xs font-bold"
+                  style={{ backgroundColor: "rgb(76, 180, 212)" }}
+                >
+                  {categoryLabel}
+                </span>
+                <Select value={String(selectedYear)} onValueChange={(v) => setSelectedYear(Number(v))}>
+                  <SelectTrigger className="w-[90px] h-7 text-xs">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {AVAILABLE_YEARS.map((y) => (
+                      <SelectItem key={y} value={String(y)} disabled={YEAR_PARAMS[y].maxPensioengevend === 0}>
+                        {y}{YEAR_PARAMS[y].maxPensioengevend === 0 ? " (soon)" : ""}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
               <CardTitle className="text-xl font-bold text-foreground">
                 Pensioengevend Inkomen Tool
               </CardTitle>
               <p className="text-sm text-muted-foreground mt-1.5">
                 Bereken uw pensioengevend inkomen, pensioengrondslag en premie voor
-                2026.
+                {selectedYear}.
               </p>
             </div>
             <button
@@ -897,7 +947,9 @@ export default function Calculator({ embedded = false }: { embedded?: boolean })
 }
 
 /* ───── LOONDIENST FORM ───── */
-function LoondienstForm() {
+type YearParams = { maxPensioengevend: number; franchise: number; premiePercentage: number };
+
+function LoondienstForm({ selectedYear, params }: { selectedYear: number; params: YearParams }) {
   const [bruto, setBruto] = useState("");
   const [eindejaars, setEindejaars] = useState("");
   const [bonus, setBonus] = useState("");
@@ -993,7 +1045,7 @@ function LoondienstForm() {
   // Herleid naar fulltime
   const fulltimeIncome = parttimeVal > 0 ? subtotaal2 / (parttimeVal / 100) : subtotaal2;
 
-  const { pensioengevend, grondslag, premie } = calcResult(fulltimeIncome, parttimeVal);
+  const { pensioengevend, grondslag, premie } = calcResult(fulltimeIncome, parttimeVal, params);
 
   return (
     <div className="space-y-4">
@@ -1074,6 +1126,8 @@ function LoondienstForm() {
         grondslag={grondslag}
         premie={premie}
         parttime={parttimeVal}
+        selectedYear={selectedYear}
+        params={params}
       />
       <DownloadButton
         tabLabel="In loondienst"
@@ -1090,13 +1144,15 @@ function LoondienstForm() {
         grondslag={grondslag}
         premie={premie}
         parttime={parttimeVal}
+        selectedYear={selectedYear}
+        params={params}
       />
     </div>
   );
 }
 
 /* ───── DGA FORM ───── */
-function DGAForm() {
+function DGAForm({ selectedYear, params }: { selectedYear: number; params: YearParams }) {
   const [bruto, setBruto] = useState("");
   const [eindejaars, setEindejaars] = useState("");
   const [waarneming, setWaarneming] = useState("");
@@ -1127,7 +1183,7 @@ function DGAForm() {
   const subtotaal2 = subtotaal1 + vakantiegeldVal * m(vakantiegeldPeriod);
 
   const fulltimeIncome = parttimeVal > 0 ? subtotaal2 / (parttimeVal / 100) : subtotaal2;
-  const { pensioengevend, grondslag, premie } = calcResult(fulltimeIncome, parttimeVal);
+  const { pensioengevend, grondslag, premie } = calcResult(fulltimeIncome, parttimeVal, params);
 
   return (
     <div className="space-y-4">
@@ -1191,6 +1247,8 @@ function DGAForm() {
         grondslag={grondslag}
         premie={premie}
         parttime={parttimeVal}
+        selectedYear={selectedYear}
+        params={params}
       />
       <DownloadButton
         tabLabel="DGA"
@@ -1206,13 +1264,15 @@ function DGAForm() {
         grondslag={grondslag}
         premie={premie}
         parttime={parttimeVal}
+        selectedYear={selectedYear}
+        params={params}
       />
     </div>
   );
 }
 
 /* ───── ZELFSTANDIG FORM ───── */
-function ZelfstandigForm() {
+function ZelfstandigForm({ selectedYear, params }: { selectedYear: number; params: YearParams }) {
   const [winst, setWinst] = useState("");
   const [parttime, setParttime] = useState("100");
 
@@ -1220,7 +1280,7 @@ function ZelfstandigForm() {
   const parttimeVal = Math.min(Math.max(parseNum(parttime) || 100, 1), 100);
 
   const fulltimeIncome = parttimeVal > 0 ? winstVal / (parttimeVal / 100) : winstVal;
-  const { pensioengevend, grondslag, premie } = calcResult(fulltimeIncome, parttimeVal);
+  const { pensioengevend, grondslag, premie } = calcResult(fulltimeIncome, parttimeVal, params);
 
   return (
     <div className="space-y-4">
@@ -1245,6 +1305,8 @@ function ZelfstandigForm() {
         grondslag={grondslag}
         premie={premie}
         parttime={parttimeVal}
+        selectedYear={selectedYear}
+        params={params}
       />
       <DownloadButton
         tabLabel="Zelfstandig"
@@ -1256,6 +1318,8 @@ function ZelfstandigForm() {
         grondslag={grondslag}
         premie={premie}
         parttime={parttimeVal}
+        selectedYear={selectedYear}
+        params={params}
       />
     </div>
   );
