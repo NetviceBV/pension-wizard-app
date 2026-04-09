@@ -697,6 +697,9 @@ export default function Calculator({ embedded = false }: { embedded?: boolean })
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [tab, setTab] = useState("loondienst");
   const [faqSearch, setFaqSearch] = useState("");
+  const [selectedYear, setSelectedYear] = useState(DEFAULT_YEAR);
+
+  const params = YEAR_PARAMS[selectedYear];
 
   const filteredFaq = faqItems
     .filter((item) => item.categories.includes("algemeen") || item.categories.includes(tab as FaqCategory))
@@ -706,9 +709,9 @@ export default function Calculator({ embedded = false }: { embedded?: boolean })
 
   const activeForm = (
     <div>
-      {tab === "loondienst" && <LoondienstForm />}
-      {tab === "dga" && <DGAForm />}
-      {tab === "zelfstandig" && <ZelfstandigForm />}
+      {tab === "loondienst" && <LoondienstForm selectedYear={selectedYear} params={params} />}
+      {tab === "dga" && <DGAForm selectedYear={selectedYear} params={params} />}
+      {tab === "zelfstandig" && <ZelfstandigForm selectedYear={selectedYear} params={params} />}
     </div>
   );
 
