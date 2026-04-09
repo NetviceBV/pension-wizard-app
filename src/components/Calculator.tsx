@@ -913,7 +913,9 @@ export default function Calculator({ embedded = false }: { embedded?: boolean })
 }
 
 /* ───── LOONDIENST FORM ───── */
-function LoondienstForm() {
+type YearParams = { maxPensioengevend: number; franchise: number; premiePercentage: number };
+
+function LoondienstForm({ selectedYear, params }: { selectedYear: number; params: YearParams }) {
   const [bruto, setBruto] = useState("");
   const [eindejaars, setEindejaars] = useState("");
   const [bonus, setBonus] = useState("");
@@ -1009,7 +1011,7 @@ function LoondienstForm() {
   // Herleid naar fulltime
   const fulltimeIncome = parttimeVal > 0 ? subtotaal2 / (parttimeVal / 100) : subtotaal2;
 
-  const { pensioengevend, grondslag, premie } = calcResult(fulltimeIncome, parttimeVal);
+  const { pensioengevend, grondslag, premie } = calcResult(fulltimeIncome, parttimeVal, params);
 
   return (
     <div className="space-y-4">
@@ -1090,6 +1092,8 @@ function LoondienstForm() {
         grondslag={grondslag}
         premie={premie}
         parttime={parttimeVal}
+        selectedYear={selectedYear}
+        params={params}
       />
       <DownloadButton
         tabLabel="In loondienst"
@@ -1106,13 +1110,15 @@ function LoondienstForm() {
         grondslag={grondslag}
         premie={premie}
         parttime={parttimeVal}
+        selectedYear={selectedYear}
+        params={params}
       />
     </div>
   );
 }
 
 /* ───── DGA FORM ───── */
-function DGAForm() {
+function DGAForm({ selectedYear, params }: { selectedYear: number; params: YearParams }) {
   const [bruto, setBruto] = useState("");
   const [eindejaars, setEindejaars] = useState("");
   const [waarneming, setWaarneming] = useState("");
@@ -1143,7 +1149,7 @@ function DGAForm() {
   const subtotaal2 = subtotaal1 + vakantiegeldVal * m(vakantiegeldPeriod);
 
   const fulltimeIncome = parttimeVal > 0 ? subtotaal2 / (parttimeVal / 100) : subtotaal2;
-  const { pensioengevend, grondslag, premie } = calcResult(fulltimeIncome, parttimeVal);
+  const { pensioengevend, grondslag, premie } = calcResult(fulltimeIncome, parttimeVal, params);
 
   return (
     <div className="space-y-4">
@@ -1207,6 +1213,8 @@ function DGAForm() {
         grondslag={grondslag}
         premie={premie}
         parttime={parttimeVal}
+        selectedYear={selectedYear}
+        params={params}
       />
       <DownloadButton
         tabLabel="DGA"
@@ -1222,13 +1230,15 @@ function DGAForm() {
         grondslag={grondslag}
         premie={premie}
         parttime={parttimeVal}
+        selectedYear={selectedYear}
+        params={params}
       />
     </div>
   );
 }
 
 /* ───── ZELFSTANDIG FORM ───── */
-function ZelfstandigForm() {
+function ZelfstandigForm({ selectedYear, params }: { selectedYear: number; params: YearParams }) {
   const [winst, setWinst] = useState("");
   const [parttime, setParttime] = useState("100");
 
@@ -1236,7 +1246,7 @@ function ZelfstandigForm() {
   const parttimeVal = Math.min(Math.max(parseNum(parttime) || 100, 1), 100);
 
   const fulltimeIncome = parttimeVal > 0 ? winstVal / (parttimeVal / 100) : winstVal;
-  const { pensioengevend, grondslag, premie } = calcResult(fulltimeIncome, parttimeVal);
+  const { pensioengevend, grondslag, premie } = calcResult(fulltimeIncome, parttimeVal, params);
 
   return (
     <div className="space-y-4">
@@ -1261,6 +1271,8 @@ function ZelfstandigForm() {
         grondslag={grondslag}
         premie={premie}
         parttime={parttimeVal}
+        selectedYear={selectedYear}
+        params={params}
       />
       <DownloadButton
         tabLabel="Zelfstandig"
@@ -1272,6 +1284,8 @@ function ZelfstandigForm() {
         grondslag={grondslag}
         premie={premie}
         parttime={parttimeVal}
+        selectedYear={selectedYear}
+        params={params}
       />
     </div>
   );
