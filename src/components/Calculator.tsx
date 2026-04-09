@@ -26,6 +26,8 @@ function DownloadButton({
   grondslag,
   premie,
   parttime,
+  selectedYear,
+  params,
 }: {
   tabLabel: string;
   inputs: { label: string; value: string }[];
@@ -33,6 +35,8 @@ function DownloadButton({
   grondslag: number;
   premie: number;
   parttime: number;
+  selectedYear: number;
+  params: { maxPensioengevend: number; franchise: number; premiePercentage: number };
 }) {
   const hasData = pensioengevend > 0 || grondslag > 0 || premie > 0;
 
@@ -149,15 +153,16 @@ function DownloadButton({
     // Secondary attributes (normal)
     y += 6;
     doc.setFont("helvetica", "normal");
-    doc.text("•  Franchise 2026", boxX + 8, y);
-    doc.text(euro(FRANCHISE_2026), amountX, y, { align: "right" });
+    doc.text(`•  Franchise ${selectedYear}`, boxX + 8, y);
+    doc.text(euro(params.franchise), amountX, y, { align: "right" });
 
     y += 7;
     doc.text(`•  Pensioengrondslag (×${parttime}%)`, boxX + 8, y);
     doc.text(euro(grondslag), amountX, y, { align: "right" });
 
     y += 7;
-    doc.text("•  Uw premie in 2026 (30,7%)", boxX + 8, y);
+    const premieLabel = `${(params.premiePercentage * 100).toFixed(1).replace(".", ",")}%`;
+    doc.text(`•  Uw premie in ${selectedYear} (${premieLabel})`, boxX + 8, y);
     doc.text(euro(premie), amountX, y, { align: "right" });
 
     // Disclaimer
@@ -449,11 +454,15 @@ function ResultBlock({
   grondslag,
   premie,
   parttime,
+  selectedYear,
+  params,
 }: {
   pensioengevend: number;
   grondslag: number;
   premie: number;
   parttime: number;
+  selectedYear: number;
+  params: { maxPensioengevend: number; franchise: number; premiePercentage: number };
 }) {
   return (
     <div className="mt-6 space-y-3 rounded-lg border-2 border-primary/20 bg-primary/5 p-5">
@@ -477,18 +486,18 @@ function ResultBlock({
         <Row
           label="Pensioengevend inkomen per jaar (op fulltime basis)"
           value={euro(pensioengevend)}
-          hint={pensioengevend >= MAX_PENSIOENGEVEND ? `(max. ${euro(MAX_PENSIOENGEVEND)})` : undefined}
+          hint={pensioengevend >= params.maxPensioengevend ? `(max. ${euro(params.maxPensioengevend)})` : undefined}
           bold
         />
         <Row label="Uw parttimepercentage" value={`${parttime}%`} bold />
         <div className="mt-3 pt-3 border-t">
           <div className="grid gap-2">
-            <Row label="Franchise 2026" value={euro(FRANCHISE_2026)} />
+            <Row label={`Franchise ${selectedYear}`} value={euro(params.franchise)} />
             <Row
               label={`Pensioengrondslag (×${parttime}%)`}
               value={euro(grondslag)}
             />
-            <Row label="Uw premie in 2026 (30,7%)" value={euro(premie)} />
+            <Row label={`Uw premie in ${selectedYear} (${(params.premiePercentage * 100).toFixed(1).replace(".", ",")}%)`} value={euro(premie)} />
           </div>
         </div>
       </div>
@@ -671,11 +680,11 @@ function Subtotaal({ label, value }: { label: string; value: number }) {
 }
 
 /* ───── Calculation helper ───── */
-function calcResult(fulltimeIncome: number, parttimePct: number) {
-  const pensioengevend = Math.min(fulltimeIncome, MAX_PENSIOENGEVEND);
-  const grondslagFull = Math.max(pensioengevend - FRANCHISE_2026, 0);
+function calcResult(fulltimeIncome: number, parttimePct: number, params: { maxPensioengevend: number; franchise: number; premiePercentage: number }) {
+  const pensioengevend = Math.min(fulltimeIncome, params.maxPensioengevend);
+  const grondslagFull = Math.max(pensioengevend - params.franchise, 0);
   const grondslag = grondslagFull * (parttimePct / 100);
-  const premie = grondslag * PREMIE_PERCENTAGE;
+  const premie = grondslag * params.premiePercentage;
   return { pensioengevend, grondslag, premie };
 }
 
