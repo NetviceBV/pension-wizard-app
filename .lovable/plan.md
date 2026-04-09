@@ -1,17 +1,33 @@
 
 
-## Introductietekst op landingspagina aanpassen
+## Disclaimer toevoegen aan de tool en PDF
 
-### Wat verandert
+### Disclaimertekst
 
-De huidige tekst op regel 753-755:
-> "Met deze tool berekent u eenvoudig uw pensioengevend inkomen, pensioengrondslag en premie voor 2026. Kies hieronder uw situatie om te starten."
+> Deze rekentool is bedoeld als hulpmiddel om uw pensioengevend inkomen, pensioengrondslag en premie te berekenen. Vul deze tool daarom zo goed mogelijk in. Hoewel wij deze tool met veel zorg hebben ingericht, kunt u hieraan geen rechten ontlenen. U kunt alleen rechten ontlenen aan het geldende pensioenreglement. SPOA aanvaardt geen verantwoordelijkheid of aansprakelijkheid voor de werking, uitkomsten of gevolgen van het gebruik van deze tool.
+>
+> Op het gebruik van deze website is Nederlands recht toepasselijk.
 
-Wordt vervangen door een tekst die de nadruk legt op het invullen van het pensioengevend inkomen via de Mijn-omgeving, in de strekking van de calculator-pagina tekst maar herschreven voor de landingspagina context. Bijvoorbeeld:
+### Aanpak — `src/components/Calculator.tsx`
 
-> "Met deze tool kunt u uw pensioengevend inkomen en parttimepercentage berekenen. Na inloggen op Mijn Apothekerspensioen kunt u deze gegevens direct invullen via de tegel 'Pensioengevend inkomen en parttimepercentage'. Kies hieronder uw situatie om te starten."
+**1. In de UI — onder de berekeningsresultaten**
 
-### Technische aanpak
+Een subtiele maar duidelijke disclaimer toevoegen onderaan de Card, na de FAQ-sectie (rond regel 882). Vormgeving: klein lettertype (`text-xs`), gedempte kleur (`text-muted-foreground`), lichte bovenrand als scheiding. Altijd zichtbaar, niet wegklikbaar.
 
-Eén wijziging in `src/components/Calculator.tsx`, regels 753-756: de `<p>` tag met nieuwe tekst.
+```tsx
+<div className="mt-6 pt-4 border-t text-xs text-muted-foreground space-y-2">
+  <p>Deze rekentool is bedoeld als hulpmiddel om uw pensioengevend inkomen, pensioengrondslag en premie te berekenen. ...</p>
+  <p>Op het gebruik van deze website is Nederlands recht toepasselijk.</p>
+</div>
+```
+
+**2. In de PDF — boven de tijdstempel-footer**
+
+De huidige footer (regel 163-171) toont alleen een tijdstempel. De volledige disclaimertekst wordt erboven geplaatst in klein grijs lettertype (8pt), met automatische regelafbreking via `doc.splitTextToSize()`. De tijdstempel blijft onderaan staan.
+
+### Samenvatting
+
+- Twee locaties: UI (onder FAQ) en PDF (boven footer)
+- Subtiel maar altijd zichtbaar — geen toggle of collapse
+- Eén bestand, ~15 regels toegevoegd
 
