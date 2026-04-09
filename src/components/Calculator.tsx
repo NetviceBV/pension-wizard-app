@@ -160,15 +160,21 @@ function DownloadButton({
     doc.text("•  Uw premie in 2026 (30,7%)", boxX + 8, y);
     doc.text(euro(premie), amountX, y, { align: "right" });
 
-    // Footer
-    const footerY = doc.internal.pageSize.getHeight() - 15;
-    doc.setFontSize(8);
+    // Disclaimer
+    const disclaimerText = "Deze rekentool is bedoeld als hulpmiddel om uw pensioengevend inkomen, pensioengrondslag en premie te berekenen. Vul deze tool daarom zo goed mogelijk in. Hoewel wij deze tool met veel zorg hebben ingericht, kunt u hieraan geen rechten ontlenen. U kunt alleen rechten ontlenen aan het geldende pensioenreglement. SPOA aanvaardt geen verantwoordelijkheid of aansprakelijkheid voor de werking, uitkomsten of gevolgen van het gebruik van deze tool.\n\nOp het gebruik van deze website is Nederlands recht toepasselijk.";
+    doc.setFontSize(7);
     doc.setFont("helvetica", "normal");
     doc.setTextColor(150, 150, 150);
+    const disclaimerLines = doc.splitTextToSize(disclaimerText, 175);
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const disclaimerY = pageHeight - 15 - (disclaimerLines.length * 3.5) - 5;
+    doc.text(disclaimerLines, 20, disclaimerY);
+
+    // Footer
     const now = new Date();
     const today = now.toLocaleDateString("nl-NL", { day: "2-digit", month: "long", year: "numeric" });
     const time = now.toLocaleTimeString("nl-NL", { hour: "2-digit", minute: "2-digit" });
-    doc.text(`Gegenereerd op ${today} om ${time} — Dit is een indicatieve berekening`, 20, footerY);
+    doc.text(`Gegenereerd op ${today} om ${time}`, 20, pageHeight - 12);
 
     doc.save(`PGI-Resultaat-${tabLabel.replace(/\s+/g, "-")}.pdf`);
   };
@@ -880,6 +886,10 @@ export default function Calculator({ embedded = false }: { embedded?: boolean })
         <CardContent>
           {activeForm}
           {faqSection}
+          <div className="mt-6 pt-4 border-t text-xs text-muted-foreground space-y-2">
+            <p>Deze rekentool is bedoeld als hulpmiddel om uw pensioengevend inkomen, pensioengrondslag en premie te berekenen. Vul deze tool daarom zo goed mogelijk in. Hoewel wij deze tool met veel zorg hebben ingericht, kunt u hieraan geen rechten ontlenen. U kunt alleen rechten ontlenen aan het geldende pensioenreglement. SPOA aanvaardt geen verantwoordelijkheid of aansprakelijkheid voor de werking, uitkomsten of gevolgen van het gebruik van deze tool.</p>
+            <p>Op het gebruik van deze website is Nederlands recht toepasselijk.</p>
+          </div>
         </CardContent>
       </Card>
     </div>
