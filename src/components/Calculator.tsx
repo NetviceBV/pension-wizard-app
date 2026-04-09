@@ -854,6 +854,26 @@ export default function Calculator({ embedded = false }: { embedded?: boolean })
           </span>
           <img src={spoaLogo} alt="SPOA logo" className="h-8 cursor-pointer" onClick={() => setShowIntro(true)} />
         </div>
+        <div className="flex items-center gap-2 mb-4">
+          <span
+            className="inline-block px-3 py-1 rounded-full text-white text-xs font-bold"
+            style={{ backgroundColor: "rgb(76, 180, 212)" }}
+          >
+            {categoryLabel}
+          </span>
+          <Select value={String(selectedYear)} onValueChange={(v) => setSelectedYear(Number(v))}>
+            <SelectTrigger className="w-[90px] h-7 text-xs">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {AVAILABLE_YEARS.map((y) => (
+                <SelectItem key={y} value={String(y)} disabled={YEAR_PARAMS[y].maxPensioengevend === 0}>
+                  {y}{YEAR_PARAMS[y].maxPensioengevend === 0 ? " (soon)" : ""}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
         {activeForm}
         {faqSection}
       </div>
