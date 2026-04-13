@@ -54,7 +54,7 @@ function DownloadButton({
     doc.setTextColor(76, 180, 212);
     doc.setFontSize(18);
     doc.setFont("helvetica", "bold");
-    doc.text("Pensioengevend Inkomen Tool", 20, 18);
+    doc.text("Bereken uw pensioengevend inkomen", 20, 18);
     const badgeText = `Resultaat ${selectedYear} — ${tabLabel}`;
     doc.setFontSize(10);
     doc.setFont("helvetica", "bold");
@@ -771,7 +771,7 @@ export default function Calculator({ embedded = false }: { embedded?: boolean })
       <div className="space-y-8">
         <div className="text-center space-y-2">
           <img src={spoaLogo} alt="SPOA logo" className="mx-auto h-10 mb-4" />
-          <h1 className="text-2xl font-bold text-foreground">Pensioengevend Inkomen Tool</h1>
+          <h1 className="text-2xl font-bold text-foreground">Bereken uw pensioengevend inkomen</h1>
           <p className="text-muted-foreground max-w-lg mx-auto">
             Met deze tool kunt u uw pensioengevend inkomen en parttimepercentage berekenen.
             Na inloggen op Mijn Apothekerspensioen kunt u deze gegevens direct invullen via de tegel
@@ -916,7 +916,7 @@ export default function Calculator({ embedded = false }: { embedded?: boolean })
                 </Select>
               </div>
               <CardTitle className="text-xl font-bold text-foreground">
-                Pensioengevend Inkomen Tool
+                Bereken uw pensioengevend inkomen
               </CardTitle>
               <p className="text-sm text-muted-foreground mt-1.5">
                 Bereken uw pensioengevend inkomen, pensioengrondslag en premie voor
