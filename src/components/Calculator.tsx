@@ -920,7 +920,7 @@ export default function Calculator({ embedded = false }: { embedded?: boolean })
                 Bereken uw pensioengevend inkomen
               </CardTitle>
               <p className="text-sm text-muted-foreground mt-1.5">
-                Bereken uw pensioengevend inkomen, pensioengrondslag en premie voor
+                Bereken uw pensioengevend inkomen, pensioengrondslag en premie voor{" "}
                 {selectedYear}.
               </p>
             </div>
