@@ -1224,6 +1224,14 @@ function DGAForm({ selectedYear, params }: { selectedYear: number; params: YearP
         onPeriodChange={setEindejaarsPeriod}
       />
       <EuroInputWithPeriod
+        id="dga-resultaat"
+        label="Resultaatafhankelijke beloning"
+        value={resultaat}
+        onChange={setResultaat}
+        period={resultaatPeriod}
+        onPeriodChange={setResultaatPeriod}
+      />
+      <EuroInputWithPeriod
         id="dga-waarneming"
         label="Vaste waarnemingstoeslag"
         value={waarneming}
@@ -1273,6 +1281,7 @@ function DGAForm({ selectedYear, params }: { selectedYear: number; params: YearP
         inputs={[
           { label: "Bruto loon", value: `${euro(brutoVal)} per ${brutoPeriod}` },
           { label: "Eindejaarsuitkering", value: `${euro(eindejaarsVal)} per ${eindejaarsPeriod}` },
+          { label: "Resultaatafhankelijke beloning", value: `${euro(resultaatVal)} per ${resultaatPeriod}` },
           { label: "Waarnemingstoeslag", value: `${euro(waarnemingVal)} per ${waarnemingPeriod}` },
           { label: "Managementvergoeding", value: `${euro(managementVal)} per ${managementPeriod}` },
           { label: "Vakantiegeld", value: `${euro(vakantiegeldVal)} per ${vakantiegeldPeriod}` },
