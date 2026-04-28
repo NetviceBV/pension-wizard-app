@@ -352,7 +352,6 @@ const InfoLoondienst = () => (
             <li>Overwerkvergoedingen of onregelmatigheidstoeslagen</li>
             <li>Reis- en onkostenvergoedingen (ook niet als ze bruto worden uitgekeerd)</li>
             <li>Vergoedingen in natura (auto, telefoon, huisvesting)</li>
-            <li>Resultaatafhankelijke beloningen die niet structureel zijn</li>
             <li>Nabetalingen of correcties over eerdere jaren</li>
           </ul>
         </div>
