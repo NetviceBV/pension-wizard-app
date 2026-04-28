@@ -953,6 +953,7 @@ function LoondienstForm({ selectedYear, params }: { selectedYear: number; params
   const [bruto, setBruto] = useState("");
   const [eindejaars, setEindejaars] = useState("");
   const [bonus, setBonus] = useState("");
+  const [resultaat, setResultaat] = useState("");
   const [waarneming, setWaarneming] = useState("");
   const [management, setManagement] = useState("");
   const [vakantiegeld, setVakantiegeld] = useState("");
@@ -961,6 +962,7 @@ function LoondienstForm({ selectedYear, params }: { selectedYear: number; params
 
   const [eindejaarsperiod, setEindejaarsperiod] = useState("jaar");
   const [bonusPeriod, setBonusPeriod] = useState("jaar");
+  const [resultaatPeriod, setResultaatPeriod] = useState("jaar");
   const [waarnemingPeriod, setWaarnemingPeriod] = useState("maand");
   const [managementPeriod, setManagementPeriod] = useState("maand");
   const [vakantiegeldPeriod, setVakantiegeldPeriod] = useState("jaar");
@@ -1026,6 +1028,7 @@ function LoondienstForm({ selectedYear, params }: { selectedYear: number; params
   const brutoVal = parseNum(bruto);
   const eindejaarsVal = parseNum(eindejaars);
   const bonusVal = parseNum(bonus);
+  const resultaatVal = parseNum(resultaat);
   const waarnemingVal = parseNum(waarneming);
   const managementVal = parseNum(management);
   const vakantiegeldVal = parseNum(vakantiegeld);
@@ -1037,6 +1040,7 @@ function LoondienstForm({ selectedYear, params }: { selectedYear: number; params
     brutoVal * m(brutoPeriod) +
     eindejaarsVal * m(eindejaarsperiod) +
     bonusVal * m(bonusPeriod) +
+    resultaatVal * m(resultaatPeriod) +
     waarnemingVal * m(waarnemingPeriod) +
     managementVal * m(managementPeriod);
 
@@ -1080,6 +1084,15 @@ function LoondienstForm({ selectedYear, params }: { selectedYear: number; params
         onChange={setBonus}
         period={bonusPeriod}
         onPeriodChange={setBonusPeriod}
+        placeholder="0"
+      />
+      <EuroInputWithPeriod
+        id="ld-resultaat"
+        label="Resultaatafhankelijke beloning"
+        value={resultaat}
+        onChange={setResultaat}
+        period={resultaatPeriod}
+        onPeriodChange={setResultaatPeriod}
         placeholder="0"
       />
       <EuroInputWithPeriod
@@ -1135,6 +1148,7 @@ function LoondienstForm({ selectedYear, params }: { selectedYear: number; params
           { label: brutoPeriod === "maand" ? "Bruto maandinkomen" : "Bruto jaarinkomen", value: `${euro(brutoVal)} per ${brutoPeriod}` },
           { label: "Eindejaarsuitkering", value: `${euro(eindejaarsVal)} per ${eindejaarsperiod}` },
           { label: "Vaste bonus", value: `${euro(bonusVal)} per ${bonusPeriod}` },
+          { label: "Resultaatafhankelijke beloning", value: `${euro(resultaatVal)} per ${resultaatPeriod}` },
           { label: "Waarnemingstoeslag", value: `${euro(waarnemingVal)} per ${waarnemingPeriod}` },
           { label: "Managementvergoeding", value: `${euro(managementVal)} per ${managementPeriod}` },
           { label: "Vakantiegeld", value: `${euro(vakantiegeldVal)} per ${vakantiegeldPeriod}` },
