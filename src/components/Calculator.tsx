@@ -953,6 +953,7 @@ function LoondienstForm({ selectedYear, params }: { selectedYear: number; params
   const [bruto, setBruto] = useState("");
   const [eindejaars, setEindejaars] = useState("");
   const [bonus, setBonus] = useState("");
+  const [resultaat, setResultaat] = useState("");
   const [waarneming, setWaarneming] = useState("");
   const [management, setManagement] = useState("");
   const [vakantiegeld, setVakantiegeld] = useState("");
@@ -961,6 +962,7 @@ function LoondienstForm({ selectedYear, params }: { selectedYear: number; params
 
   const [eindejaarsperiod, setEindejaarsperiod] = useState("jaar");
   const [bonusPeriod, setBonusPeriod] = useState("jaar");
+  const [resultaatPeriod, setResultaatPeriod] = useState("jaar");
   const [waarnemingPeriod, setWaarnemingPeriod] = useState("maand");
   const [managementPeriod, setManagementPeriod] = useState("maand");
   const [vakantiegeldPeriod, setVakantiegeldPeriod] = useState("jaar");
@@ -1026,6 +1028,7 @@ function LoondienstForm({ selectedYear, params }: { selectedYear: number; params
   const brutoVal = parseNum(bruto);
   const eindejaarsVal = parseNum(eindejaars);
   const bonusVal = parseNum(bonus);
+  const resultaatVal = parseNum(resultaat);
   const waarnemingVal = parseNum(waarneming);
   const managementVal = parseNum(management);
   const vakantiegeldVal = parseNum(vakantiegeld);
@@ -1037,6 +1040,7 @@ function LoondienstForm({ selectedYear, params }: { selectedYear: number; params
     brutoVal * m(brutoPeriod) +
     eindejaarsVal * m(eindejaarsperiod) +
     bonusVal * m(bonusPeriod) +
+    resultaatVal * m(resultaatPeriod) +
     waarnemingVal * m(waarnemingPeriod) +
     managementVal * m(managementPeriod);
 
@@ -1080,6 +1084,15 @@ function LoondienstForm({ selectedYear, params }: { selectedYear: number; params
         onChange={setBonus}
         period={bonusPeriod}
         onPeriodChange={setBonusPeriod}
+        placeholder="0"
+      />
+      <EuroInputWithPeriod
+        id="ld-resultaat"
+        label="Resultaatafhankelijke beloning"
+        value={resultaat}
+        onChange={setResultaat}
+        period={resultaatPeriod}
+        onPeriodChange={setResultaatPeriod}
         placeholder="0"
       />
       <EuroInputWithPeriod
@@ -1135,6 +1148,7 @@ function LoondienstForm({ selectedYear, params }: { selectedYear: number; params
           { label: brutoPeriod === "maand" ? "Bruto maandinkomen" : "Bruto jaarinkomen", value: `${euro(brutoVal)} per ${brutoPeriod}` },
           { label: "Eindejaarsuitkering", value: `${euro(eindejaarsVal)} per ${eindejaarsperiod}` },
           { label: "Vaste bonus", value: `${euro(bonusVal)} per ${bonusPeriod}` },
+          { label: "Resultaatafhankelijke beloning", value: `${euro(resultaatVal)} per ${resultaatPeriod}` },
           { label: "Waarnemingstoeslag", value: `${euro(waarnemingVal)} per ${waarnemingPeriod}` },
           { label: "Managementvergoeding", value: `${euro(managementVal)} per ${managementPeriod}` },
           { label: "Vakantiegeld", value: `${euro(vakantiegeldVal)} per ${vakantiegeldPeriod}` },
@@ -1155,6 +1169,7 @@ function LoondienstForm({ selectedYear, params }: { selectedYear: number; params
 function DGAForm({ selectedYear, params }: { selectedYear: number; params: YearParams }) {
   const [bruto, setBruto] = useState("");
   const [eindejaars, setEindejaars] = useState("");
+  const [resultaat, setResultaat] = useState("");
   const [waarneming, setWaarneming] = useState("");
   const [management, setManagement] = useState("");
   const [vakantiegeld, setVakantiegeld] = useState("");
@@ -1162,12 +1177,14 @@ function DGAForm({ selectedYear, params }: { selectedYear: number; params: YearP
 
   const [brutoPeriod, setBrutoPeriod] = useState("jaar");
   const [eindejaarsPeriod, setEindejaarsPeriod] = useState("jaar");
+  const [resultaatPeriod, setResultaatPeriod] = useState("jaar");
   const [waarnemingPeriod, setWaarnemingPeriod] = useState("jaar");
   const [managementPeriod, setManagementPeriod] = useState("jaar");
   const [vakantiegeldPeriod, setVakantiegeldPeriod] = useState("jaar");
 
   const brutoVal = parseNum(bruto);
   const eindejaarsVal = parseNum(eindejaars);
+  const resultaatVal = parseNum(resultaat);
   const waarnemingVal = parseNum(waarneming);
   const managementVal = parseNum(management);
   const vakantiegeldVal = parseNum(vakantiegeld);
@@ -1178,6 +1195,7 @@ function DGAForm({ selectedYear, params }: { selectedYear: number; params: YearP
   const subtotaal1 =
     brutoVal * m(brutoPeriod) +
     eindejaarsVal * m(eindejaarsPeriod) +
+    resultaatVal * m(resultaatPeriod) +
     waarnemingVal * m(waarnemingPeriod) +
     managementVal * m(managementPeriod);
   const subtotaal2 = subtotaal1 + vakantiegeldVal * m(vakantiegeldPeriod);
@@ -1204,6 +1222,14 @@ function DGAForm({ selectedYear, params }: { selectedYear: number; params: YearP
         onChange={setEindejaars}
         period={eindejaarsPeriod}
         onPeriodChange={setEindejaarsPeriod}
+      />
+      <EuroInputWithPeriod
+        id="dga-resultaat"
+        label="Resultaatafhankelijke beloning"
+        value={resultaat}
+        onChange={setResultaat}
+        period={resultaatPeriod}
+        onPeriodChange={setResultaatPeriod}
       />
       <EuroInputWithPeriod
         id="dga-waarneming"
@@ -1255,6 +1281,7 @@ function DGAForm({ selectedYear, params }: { selectedYear: number; params: YearP
         inputs={[
           { label: "Bruto loon", value: `${euro(brutoVal)} per ${brutoPeriod}` },
           { label: "Eindejaarsuitkering", value: `${euro(eindejaarsVal)} per ${eindejaarsPeriod}` },
+          { label: "Resultaatafhankelijke beloning", value: `${euro(resultaatVal)} per ${resultaatPeriod}` },
           { label: "Waarnemingstoeslag", value: `${euro(waarnemingVal)} per ${waarnemingPeriod}` },
           { label: "Managementvergoeding", value: `${euro(managementVal)} per ${managementPeriod}` },
           { label: "Vakantiegeld", value: `${euro(vakantiegeldVal)} per ${vakantiegeldPeriod}` },
@@ -1274,12 +1301,15 @@ function DGAForm({ selectedYear, params }: { selectedYear: number; params: YearP
 /* ───── ZELFSTANDIG FORM ───── */
 function ZelfstandigForm({ selectedYear, params }: { selectedYear: number; params: YearParams }) {
   const [winst, setWinst] = useState("");
+  const [resultaat, setResultaat] = useState("");
   const [parttime, setParttime] = useState("100");
 
   const winstVal = parseNum(winst);
+  const resultaatVal = parseNum(resultaat);
   const parttimeVal = Math.min(Math.max(parseNum(parttime) || 100, 1), 100);
 
-  const fulltimeIncome = parttimeVal > 0 ? winstVal / (parttimeVal / 100) : winstVal;
+  const totaalInkomen = winstVal + resultaatVal;
+  const fulltimeIncome = parttimeVal > 0 ? totaalInkomen / (parttimeVal / 100) : totaalInkomen;
   const { pensioengevend, grondslag, premie } = calcResult(fulltimeIncome, parttimeVal, params);
 
   return (
@@ -1291,6 +1321,13 @@ function ZelfstandigForm({ selectedYear, params }: { selectedYear: number; param
         label="Winst uit onderneming van drie jaar geleden, vóór toepassing van de oudedagsreserve en de ondernemersaftrek"
         value={winst}
         onChange={setWinst}
+      />
+
+      <EuroInput
+        id="za-resultaat"
+        label="Resultaatafhankelijke beloning"
+        value={resultaat}
+        onChange={setResultaat}
       />
 
       <PercentInput
@@ -1312,6 +1349,7 @@ function ZelfstandigForm({ selectedYear, params }: { selectedYear: number; param
         tabLabel="Zelfstandig"
         inputs={[
           { label: "Winst uit onderneming", value: euro(winstVal) },
+          { label: "Resultaatafhankelijke beloning", value: euro(resultaatVal) },
           { label: "Parttimepercentage", value: `${parttimeVal}%` },
         ]}
         pensioengevend={pensioengevend}
