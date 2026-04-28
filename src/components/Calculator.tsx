@@ -1169,6 +1169,7 @@ function LoondienstForm({ selectedYear, params }: { selectedYear: number; params
 function DGAForm({ selectedYear, params }: { selectedYear: number; params: YearParams }) {
   const [bruto, setBruto] = useState("");
   const [eindejaars, setEindejaars] = useState("");
+  const [resultaat, setResultaat] = useState("");
   const [waarneming, setWaarneming] = useState("");
   const [management, setManagement] = useState("");
   const [vakantiegeld, setVakantiegeld] = useState("");
@@ -1176,12 +1177,14 @@ function DGAForm({ selectedYear, params }: { selectedYear: number; params: YearP
 
   const [brutoPeriod, setBrutoPeriod] = useState("jaar");
   const [eindejaarsPeriod, setEindejaarsPeriod] = useState("jaar");
+  const [resultaatPeriod, setResultaatPeriod] = useState("jaar");
   const [waarnemingPeriod, setWaarnemingPeriod] = useState("jaar");
   const [managementPeriod, setManagementPeriod] = useState("jaar");
   const [vakantiegeldPeriod, setVakantiegeldPeriod] = useState("jaar");
 
   const brutoVal = parseNum(bruto);
   const eindejaarsVal = parseNum(eindejaars);
+  const resultaatVal = parseNum(resultaat);
   const waarnemingVal = parseNum(waarneming);
   const managementVal = parseNum(management);
   const vakantiegeldVal = parseNum(vakantiegeld);
@@ -1192,6 +1195,7 @@ function DGAForm({ selectedYear, params }: { selectedYear: number; params: YearP
   const subtotaal1 =
     brutoVal * m(brutoPeriod) +
     eindejaarsVal * m(eindejaarsPeriod) +
+    resultaatVal * m(resultaatPeriod) +
     waarnemingVal * m(waarnemingPeriod) +
     managementVal * m(managementPeriod);
   const subtotaal2 = subtotaal1 + vakantiegeldVal * m(vakantiegeldPeriod);
