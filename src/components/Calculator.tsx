@@ -397,7 +397,6 @@ const InfoDGA = () => (
           <p className="mb-1 font-semibold text-destructive">Wat telt niet mee:</p>
           <ul className="list-inside list-disc space-y-0.5">
             <li>Dividend of winstuitkeringen</li>
-            <li>Incidentele of resultaatafhankelijke bonussen</li>
             <li>Reis- en onkostenvergoedingen</li>
             <li>Correcties of nabetalingen over eerdere jaren</li>
             <li>Inkomen dat niet via de loonadministratie loopt</li>
