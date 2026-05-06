@@ -432,6 +432,7 @@ const InfoZelfstandig = () => (
             <li>Vermogensinkomsten</li>
             <li>Privé-onttrekkingen</li>
             <li>Fiscale correcties die geen structureel inkomen vormen</li>
+            <li>Transitievergoeding (zie ook pensioenreglement)</li>
           </ul>
         </div>
         <div>
