@@ -1078,7 +1078,7 @@ function LoondienstForm({ selectedYear, params }: { selectedYear: number; params
 
       <EuroInputWithPeriod
         id="ld-bonus"
-        label="Vaste bonus (indien onderdeel loonafspraak)"
+        label="Bonus (indien onderdeel loonafspraak)"
         value={bonus}
         onChange={setBonus}
         period={bonusPeriod}
