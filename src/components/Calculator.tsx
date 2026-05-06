@@ -401,6 +401,8 @@ const InfoDGA = () => (
             <li>Reis- en onkostenvergoedingen</li>
             <li>Correcties of nabetalingen over eerdere jaren</li>
             <li>Inkomen dat niet via de loonadministratie loopt</li>
+            <li>Auto van de zaak</li>
+            <li>Transitievergoeding (zie ook pensioenreglement)</li>
           </ul>
         </div>
       </div>
