@@ -353,6 +353,7 @@ const InfoLoondienst = () => (
             <li>Reis- en onkostenvergoedingen (ook niet als ze bruto worden uitgekeerd)</li>
             <li>Vergoedingen in natura (auto, telefoon, huisvesting)</li>
             <li>Nabetalingen of correcties over eerdere jaren</li>
+            <li>Transitievergoeding (zie ook pensioenreglement)</li>
           </ul>
         </div>
         <div>
@@ -432,7 +433,6 @@ const InfoZelfstandig = () => (
             <li>Vermogensinkomsten</li>
             <li>Privé-onttrekkingen</li>
             <li>Fiscale correcties die geen structureel inkomen vormen</li>
-            <li>Transitievergoeding (zie ook pensioenreglement)</li>
           </ul>
         </div>
         <div>
