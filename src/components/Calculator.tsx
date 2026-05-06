@@ -346,7 +346,7 @@ const InfoLoondienst = () => (
         </p>
         <div>
           <p className="mb-1 font-semibold text-foreground">De volgende onderdelen tellen mee:</p>
-          <ul className="list-inside list-disc space-y-0.5">
+          <ul className="list-disc space-y-0.5 pl-5">
             <li>Uw bruto maandsalaris</li>
             <li>Eventuele salarisverhogingen en periodieken</li>
             <li>Toelagen op uw salaris</li>
@@ -361,7 +361,7 @@ const InfoLoondienst = () => (
         </div>
         <div>
           <p className="mb-1 font-semibold text-destructive">De volgende onderdelen tellen niet mee:</p>
-          <ul className="list-inside list-disc space-y-0.5">
+          <ul className="list-disc space-y-0.5 pl-5">
             <li>De waarde van een auto van de zaak</li>
             <li>Een transitievergoeding bij ontslag</li>
             <li>Reiskostenvergoedingen</li>
@@ -405,7 +405,7 @@ const InfoDGA = () => (
         </p>
         <div>
           <p className="mb-1 font-semibold text-foreground">Wat telt mee:</p>
-          <ul className="list-inside list-disc space-y-0.5">
+          <ul className="list-disc space-y-0.5 pl-5">
             <li>Het gebruikelijk loon (of hoger feitelijk loon)</li>
             <li>Vakantiegeld (indien onderdeel van de loonafspraak)</li>
             <li>Eindejaarsuitkering</li>
@@ -414,7 +414,7 @@ const InfoDGA = () => (
         </div>
         <div>
           <p className="mb-1 font-semibold text-destructive">Wat telt niet mee:</p>
-          <ul className="list-inside list-disc space-y-0.5">
+          <ul className="list-disc space-y-0.5 pl-5">
             <li>Dividend of winstuitkeringen</li>
             <li>Reis- en onkostenvergoedingen</li>
             <li>Correcties of nabetalingen over eerdere jaren</li>
@@ -447,7 +447,7 @@ const InfoZelfstandig = () => (
         </div>
         <div>
           <p className="mb-1 font-semibold text-destructive">Wat telt niet mee:</p>
-          <ul className="list-inside list-disc space-y-0.5">
+          <ul className="list-disc space-y-0.5 pl-5">
             <li>Inkomsten buiten het apothekersberoep</li>
             <li>Incidentele baten of boekwinsten</li>
             <li>Vermogensinkomsten</li>
