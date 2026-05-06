@@ -342,18 +342,37 @@ const InfoLoondienst = () => (
     <CollapsibleContent>
       <div className="mt-2 space-y-3 rounded-md border bg-card p-4 text-sm text-muted-foreground">
         <p className="font-medium text-foreground">
-          Alle onderdelen van het pensioengevend inkomen staan op uw loonstrook.
-          Maar niet alles telt mee.
+          Fiscaal loon uit tegenwoordige arbeid betekent: alles wat je verdient door je werk uit te voeren. Hieronder lees je wat wel en niet meetelt.
         </p>
         <div>
-          <p className="mb-1 font-semibold text-destructive">Wat niet meetelt:</p>
-          <ul className="list-inside list-disc space-y-0.5">
-            <li>Incidentele bonussen of gratificaties</li>
-            <li>Overwerkvergoedingen of onregelmatigheidstoeslagen</li>
-            <li>Reis- en onkostenvergoedingen (ook niet als ze bruto worden uitgekeerd)</li>
-            <li>Vergoedingen in natura (auto, telefoon, huisvesting)</li>
-            <li>Nabetalingen of correcties over eerdere jaren</li>
+          <p className="mb-1 font-semibold text-foreground">De volgende onderdelen tellen mee:</p>
+          <ul className="list-disc space-y-0.5 pl-5">
+            <li>Uw bruto maandsalaris</li>
+            <li>Eventuele salarisverhogingen en periodieken</li>
+            <li>Toelagen op uw salaris</li>
+            <li>Vakantietoeslag</li>
+            <li>Eindejaarsuitkering</li>
+            <li>Vergoeding voor bijzondere diensten (zoals avond-, nacht- en weekenddiensten)</li>
+            <li>Overwerkvergoeding</li>
+            <li>Uitbetaling van niet-opgenomen vakantie-uren</li>
+            <li>Eenmalige uitkeringen die worden gezien als loon, bijvoorbeeld een eenmalige uitkering vanuit de cao</li>
           </ul>
+          <p className="mt-2">Deze onderdelen worden gezien als loon voor uw werk en tellen daarom mee voor uw pensioenopbouw.</p>
+        </div>
+        <div>
+          <p className="mb-1 font-semibold text-destructive">De volgende onderdelen tellen niet mee:</p>
+          <ul className="list-disc space-y-0.5 pl-5">
+            <li>De waarde van een auto van de zaak</li>
+            <li>Een transitievergoeding bij ontslag</li>
+            <li>Reiskostenvergoedingen</li>
+            <li>Vergoedingen voor scholing, lidmaatschappen of andere kosten</li>
+            <li>Duurzaam inzetbaarheidsbudget</li>
+            <li>Verhuiskostenvergoeding</li>
+            <li>Vergoedingen voor opleidingen</li>
+            <li>Declaraties van kosten (bijvoorbeeld verblijfskosten)</li>
+            <li>Uitkeringen bij arbeidsongeschiktheid</li>
+          </ul>
+          <p className="mt-2">Dit zijn geen beloningen voor uw werk, maar vergoedingen of uitkeringen. Daarom tellen ze niet mee voor uw pensioen.</p>
         </div>
         <div>
           <p className="mb-1 font-semibold text-foreground">Parttime</p>
@@ -386,20 +405,22 @@ const InfoDGA = () => (
         </p>
         <div>
           <p className="mb-1 font-semibold text-foreground">Wat telt mee:</p>
-          <ul className="list-inside list-disc space-y-0.5">
+          <ul className="list-disc space-y-0.5 pl-5">
             <li>Het gebruikelijk loon (of hoger feitelijk loon)</li>
             <li>Vakantiegeld (indien onderdeel van de loonafspraak)</li>
-            <li>Structurele eindejaarsuitkering</li>
+            <li>Eindejaarsuitkering</li>
             <li>Vaste structurele toeslagen (management, bereikbaarheid)</li>
           </ul>
         </div>
         <div>
           <p className="mb-1 font-semibold text-destructive">Wat telt niet mee:</p>
-          <ul className="list-inside list-disc space-y-0.5">
+          <ul className="list-disc space-y-0.5 pl-5">
             <li>Dividend of winstuitkeringen</li>
             <li>Reis- en onkostenvergoedingen</li>
             <li>Correcties of nabetalingen over eerdere jaren</li>
             <li>Inkomen dat niet via de loonadministratie loopt</li>
+            <li>Auto van de zaak</li>
+            <li>Transitievergoeding (zie ook pensioenreglement)</li>
           </ul>
         </div>
       </div>
@@ -426,7 +447,7 @@ const InfoZelfstandig = () => (
         </div>
         <div>
           <p className="mb-1 font-semibold text-destructive">Wat telt niet mee:</p>
-          <ul className="list-inside list-disc space-y-0.5">
+          <ul className="list-disc space-y-0.5 pl-5">
             <li>Inkomsten buiten het apothekersberoep</li>
             <li>Incidentele baten of boekwinsten</li>
             <li>Vermogensinkomsten</li>
@@ -1078,7 +1099,7 @@ function LoondienstForm({ selectedYear, params }: { selectedYear: number; params
 
       <EuroInputWithPeriod
         id="ld-bonus"
-        label="Vaste bonus (indien onderdeel loonafspraak)"
+        label="Bonus (indien onderdeel loonafspraak)"
         value={bonus}
         onChange={setBonus}
         period={bonusPeriod}
@@ -1096,7 +1117,7 @@ function LoondienstForm({ selectedYear, params }: { selectedYear: number; params
       />
       <EuroInputWithPeriod
         id="ld-waarneming"
-        label="Vaste waarnemingstoeslag"
+        label="Waarnemingstoeslag"
         value={waarneming}
         onChange={setWaarneming}
         period={waarnemingPeriod}
@@ -1105,7 +1126,7 @@ function LoondienstForm({ selectedYear, params }: { selectedYear: number; params
       />
       <EuroInputWithPeriod
         id="ld-management"
-        label="Vaste management- of bereikbaarheidsvergoeding"
+        label="Management- of bereikbaarheidsvergoeding"
         value={management}
         onChange={setManagement}
         period={managementPeriod}
@@ -1146,7 +1167,7 @@ function LoondienstForm({ selectedYear, params }: { selectedYear: number; params
         inputs={[
           { label: brutoPeriod === "maand" ? "Bruto maandinkomen" : "Bruto jaarinkomen", value: `${euro(brutoVal)} per ${brutoPeriod}` },
           { label: "Eindejaarsuitkering", value: `${euro(eindejaarsVal)} per ${eindejaarsperiod}` },
-          { label: "Vaste bonus", value: `${euro(bonusVal)} per ${bonusPeriod}` },
+          { label: "Bonus", value: `${euro(bonusVal)} per ${bonusPeriod}` },
           { label: "Resultaatafhankelijke beloning", value: `${euro(resultaatVal)} per ${resultaatPeriod}` },
           { label: "Waarnemingstoeslag", value: `${euro(waarnemingVal)} per ${waarnemingPeriod}` },
           { label: "Managementvergoeding", value: `${euro(managementVal)} per ${managementPeriod}` },
@@ -1216,7 +1237,7 @@ function DGAForm({ selectedYear, params }: { selectedYear: number; params: YearP
       />
       <EuroInputWithPeriod
         id="dga-eindejaars"
-        label="Structurele eindejaarsuitkering"
+        label="Eindejaarsuitkering"
         value={eindejaars}
         onChange={setEindejaars}
         period={eindejaarsPeriod}
@@ -1232,7 +1253,7 @@ function DGAForm({ selectedYear, params }: { selectedYear: number; params: YearP
       />
       <EuroInputWithPeriod
         id="dga-waarneming"
-        label="Vaste waarnemingstoeslag"
+        label="Waarnemingstoeslag"
         value={waarneming}
         onChange={setWaarneming}
         period={waarnemingPeriod}
@@ -1240,7 +1261,7 @@ function DGAForm({ selectedYear, params }: { selectedYear: number; params: YearP
       />
       <EuroInputWithPeriod
         id="dga-management"
-        label="Vaste management- of bereikbaarheidsvergoeding"
+        label="Management- of bereikbaarheidsvergoeding"
         value={management}
         onChange={setManagement}
         period={managementPeriod}

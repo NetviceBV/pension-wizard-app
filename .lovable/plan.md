@@ -1,27 +1,29 @@
-## Veld toevoegen: Resultaatafhankelijke beloning (alle 3 formulieren)
+In `src/components/Calculator.tsx` (Loondienst collapsible, lines 347–357), replace the current "Wat niet meetelt" block with two new sections:
 
-Een nieuw invoerveld **"Resultaatafhankelijke beloning"** wordt toegevoegd aan elk van de drie formulieren in `src/components/Calculator.tsx` en telt mee in de berekening van het pensioengevend inkomen.
+**1. "De volgende onderdelen tellen mee:"** (foreground color)
+- Uw bruto maandsalaris
+- Eventuele salarisverhogingen en periodieken
+- Toelagen op uw salaris
+- Vakantietoeslag
+- Eindejaarsuitkering
+- Vergoeding voor bijzondere diensten (zoals avond-, nacht- en weekenddiensten)
+- Overwerkvergoeding
+- Uitbetaling van niet-opgenomen vakantie-uren
+- Eenmalige uitkeringen die worden gezien als loon, bijvoorbeeld een eenmalige uitkering vanuit de cao
 
-### Loondienst-formulier
-- Positie: ná "Vaste bonus", vóór "Vaste waarnemingstoeslag".
-- Component: `EuroInputWithPeriod` met maand/jaar-toggle, **standaard "jaar"**, placeholder "0".
-- State: `resultaat` + `resultaatPeriod`.
-- Telt mee in `subtotaal1` (vóór vakantiegeld) — dezelfde behandeling als bonus/waarneming/management.
-- PDF-export (DownloadButton inputs): regel "Resultaatafhankelijke beloning — €x per maand/jaar" toevoegen op overeenkomstige positie.
+Footer: "Deze onderdelen worden gezien als loon voor uw werk en tellen daarom mee voor uw pensioenopbouw."
 
-### DGA-formulier
-- Positie: ná "Structurele eindejaarsuitkering", vóór "Vaste waarnemingstoeslag".
-- Component: `EuroInputWithPeriod`, standaard "jaar", placeholder "0".
-- State: `resultaat` + `resultaatPeriod`.
-- Telt mee in het subtotaal vóór vakantiegeld (zelfde plek als waar eindejaarsuitkering/waarneming/management worden opgeteld).
-- PDF-export: regel toevoegen op overeenkomstige positie.
+**2. "De volgende onderdelen tellen niet mee:"** (destructive color)
+- De waarde van een auto van de zaak
+- Een transitievergoeding bij ontslag
+- Reiskostenvergoedingen
+- Vergoedingen voor scholing, lidmaatschappen of andere kosten
+- Duurzaam inzetbaarheidsbudget
+- Verhuiskostenvergoeding
+- Vergoedingen voor opleidingen
+- Declaraties van kosten (bijvoorbeeld verblijfskosten)
+- Uitkeringen bij arbeidsongeschiktheid
 
-### Zelfstandig-formulier
-- Positie: ná "Winst uit onderneming van drie jaar geleden, vóór toepassing van de oudedagsreserve en de ondernemersaftrek", vóór het parttimepercentage.
-- Component: `EuroInput` (geen periode-toggle, consistent met de bestaande winst-input die per jaar is). Placeholder "0".
-- State: `resultaat`.
-- Telt mee in het inkomen dat naar fulltime wordt herleid: `(winstVal + resultaatVal) / parttime`.
-- PDF-export: regel "Resultaatafhankelijke beloning — €x" toevoegen direct ná de winst-regel.
+Footer: "Dit zijn geen beloningen voor uw werk, maar vergoedingen of uitkeringen. Daarom tellen ze niet mee voor uw pensioen."
 
-### Niet gewijzigd
-- FAQ-teksten, uitleg-collapsibles ("Wat telt mee / niet mee"), berekeningsparameters, branding, en validatieregels blijven ongewijzigd.
+No other changes.
