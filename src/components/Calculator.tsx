@@ -1146,7 +1146,7 @@ function LoondienstForm({ selectedYear, params }: { selectedYear: number; params
         inputs={[
           { label: brutoPeriod === "maand" ? "Bruto maandinkomen" : "Bruto jaarinkomen", value: `${euro(brutoVal)} per ${brutoPeriod}` },
           { label: "Eindejaarsuitkering", value: `${euro(eindejaarsVal)} per ${eindejaarsperiod}` },
-          { label: "Vaste bonus", value: `${euro(bonusVal)} per ${bonusPeriod}` },
+          { label: "Bonus", value: `${euro(bonusVal)} per ${bonusPeriod}` },
           { label: "Resultaatafhankelijke beloning", value: `${euro(resultaatVal)} per ${resultaatPeriod}` },
           { label: "Waarnemingstoeslag", value: `${euro(waarnemingVal)} per ${waarnemingPeriod}` },
           { label: "Managementvergoeding", value: `${euro(managementVal)} per ${managementPeriod}` },
