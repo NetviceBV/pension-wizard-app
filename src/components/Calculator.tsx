@@ -389,7 +389,7 @@ const InfoDGA = () => (
           <ul className="list-inside list-disc space-y-0.5">
             <li>Het gebruikelijk loon (of hoger feitelijk loon)</li>
             <li>Vakantiegeld (indien onderdeel van de loonafspraak)</li>
-            <li>Structurele eindejaarsuitkering</li>
+            <li>Eindejaarsuitkering</li>
             <li>Vaste structurele toeslagen (management, bereikbaarheid)</li>
           </ul>
         </div>
@@ -1216,7 +1216,7 @@ function DGAForm({ selectedYear, params }: { selectedYear: number; params: YearP
       />
       <EuroInputWithPeriod
         id="dga-eindejaars"
-        label="Structurele eindejaarsuitkering"
+        label="Eindejaarsuitkering"
         value={eindejaars}
         onChange={setEindejaars}
         period={eindejaarsPeriod}
