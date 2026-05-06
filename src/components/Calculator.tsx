@@ -1096,7 +1096,7 @@ function LoondienstForm({ selectedYear, params }: { selectedYear: number; params
       />
       <EuroInputWithPeriod
         id="ld-waarneming"
-        label="Vaste waarnemingstoeslag"
+        label="Waarnemingstoeslag"
         value={waarneming}
         onChange={setWaarneming}
         period={waarnemingPeriod}
@@ -1105,7 +1105,7 @@ function LoondienstForm({ selectedYear, params }: { selectedYear: number; params
       />
       <EuroInputWithPeriod
         id="ld-management"
-        label="Vaste management- of bereikbaarheidsvergoeding"
+        label="Management- of bereikbaarheidsvergoeding"
         value={management}
         onChange={setManagement}
         period={managementPeriod}
@@ -1232,7 +1232,7 @@ function DGAForm({ selectedYear, params }: { selectedYear: number; params: YearP
       />
       <EuroInputWithPeriod
         id="dga-waarneming"
-        label="Vaste waarnemingstoeslag"
+        label="Waarnemingstoeslag"
         value={waarneming}
         onChange={setWaarneming}
         period={waarnemingPeriod}
@@ -1240,7 +1240,7 @@ function DGAForm({ selectedYear, params }: { selectedYear: number; params: YearP
       />
       <EuroInputWithPeriod
         id="dga-management"
-        label="Vaste management- of bereikbaarheidsvergoeding"
+        label="Management- of bereikbaarheidsvergoeding"
         value={management}
         onChange={setManagement}
         period={managementPeriod}
