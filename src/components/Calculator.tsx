@@ -345,15 +345,34 @@ const InfoLoondienst = () => (
           Fiscaal loon uit tegenwoordige arbeid betekent: alles wat je verdient door je werk uit te voeren. Hieronder lees je wat wel en niet meetelt.
         </p>
         <div>
-          <p className="mb-1 font-semibold text-destructive">Wat niet meetelt:</p>
+          <p className="mb-1 font-semibold text-foreground">De volgende onderdelen tellen mee:</p>
           <ul className="list-inside list-disc space-y-0.5">
-            <li>Incidentele bonussen of gratificaties</li>
-            <li>Overwerkvergoedingen of onregelmatigheidstoeslagen</li>
-            <li>Reis- en onkostenvergoedingen (ook niet als ze bruto worden uitgekeerd)</li>
-            <li>Vergoedingen in natura (auto, telefoon, huisvesting)</li>
-            <li>Nabetalingen of correcties over eerdere jaren</li>
-            <li>Transitievergoeding (zie ook pensioenreglement)</li>
+            <li>Uw bruto maandsalaris</li>
+            <li>Eventuele salarisverhogingen en periodieken</li>
+            <li>Toelagen op uw salaris</li>
+            <li>Vakantietoeslag</li>
+            <li>Eindejaarsuitkering</li>
+            <li>Vergoeding voor bijzondere diensten (zoals avond-, nacht- en weekenddiensten)</li>
+            <li>Overwerkvergoeding</li>
+            <li>Uitbetaling van niet-opgenomen vakantie-uren</li>
+            <li>Eenmalige uitkeringen die worden gezien als loon, bijvoorbeeld een eenmalige uitkering vanuit de cao</li>
           </ul>
+          <p className="mt-2">Deze onderdelen worden gezien als loon voor uw werk en tellen daarom mee voor uw pensioenopbouw.</p>
+        </div>
+        <div>
+          <p className="mb-1 font-semibold text-destructive">De volgende onderdelen tellen niet mee:</p>
+          <ul className="list-inside list-disc space-y-0.5">
+            <li>De waarde van een auto van de zaak</li>
+            <li>Een transitievergoeding bij ontslag</li>
+            <li>Reiskostenvergoedingen</li>
+            <li>Vergoedingen voor scholing, lidmaatschappen of andere kosten</li>
+            <li>Duurzaam inzetbaarheidsbudget</li>
+            <li>Verhuiskostenvergoeding</li>
+            <li>Vergoedingen voor opleidingen</li>
+            <li>Declaraties van kosten (bijvoorbeeld verblijfskosten)</li>
+            <li>Uitkeringen bij arbeidsongeschiktheid</li>
+          </ul>
+          <p className="mt-2">Dit zijn geen beloningen voor uw werk, maar vergoedingen of uitkeringen. Daarom tellen ze niet mee voor uw pensioen.</p>
         </div>
         <div>
           <p className="mb-1 font-semibold text-foreground">Parttime</p>
