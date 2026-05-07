@@ -232,7 +232,7 @@ function ContactForm() {
   return (
     <div className="space-y-3 pt-2">
       <p className="text-sm text-muted-foreground">
-        Vul onderstaand formulier in en wij nemen zo snel mogelijk contact met u op.
+        Vul onderstaand contactformulier in en we nemen contact met je op. Je kan ook bellen (maandag tot en met vrijdag tussen 09.00 en 17.00 uur): <a href="tel:+31302077076" className="text-primary underline">030-207 7076</a>.
       </p>
       <div className="space-y-2">
         <div>
@@ -299,7 +299,7 @@ const faqItems: { q: string; a: string | React.ReactNode; categories: FaqCategor
   { q: "Wat doe ik als ik wijzigingen uit het verleden wil doorgeven?", a: "Wijzigingen uit het nabije verleden (vanaf 1 januari 2025) kunt u doorgeven door het juiste pensioengevend inkomen en parttimepercentage voor de juiste periode te vermelden bij SPOA via Mijn Apothekerspensioen.\n\nU kunt wijzigingen uit een verder verleden (voor 1 januari 2025) ook doorgeven aan SPOA. Het fonds beoordeelt of en in hoeverre deze met terugwerkende kracht worden verwerkt, afhankelijk van de situatie en eventueel onderliggende bewijsstukken.", categories: ["algemeen"] },
   { q: "Wat doe ik als ik mijn werkgever heb gemachtigd voor het doorgeven van het pensioengevend inkomen en parttimepercentage?", a: "Uw werkgever kan de gegevens aanleveren, maar u blijft verantwoordelijk voor de juistheid. Controleer daarom periodiek of de aangeleverde gegevens correct zijn verwerkt.", categories: ["loondienst"] },
   { q: "Wat doe ik als ik nog geen 3 jaar zelfstandig ben?", a: "Als u nog geen 3 jaar zelfstandig bent, kunt u nog geen gebruikmaken van het inkomen van 3 jaar geleden.\n\nIn dat geval geeft u een schatting van uw pensioengevend inkomen voor het lopende jaar door. Deze schatting baseert u op uw verwachte winst uit onderneming, omgerekend naar een fulltime jaarinkomen.\n\nZodra uw definitieve inkomensgegevens beschikbaar zijn, kan SPOA uw pensioengevend inkomen en premie achteraf corrigeren.", categories: ["zelfstandig"] },
-  { q: "Mijn vraag staat niet in de Q&A, wat kan ik doen?", a: <><p className="mb-4 text-sm text-muted-foreground">Geef uw vraag door via het invulveld. Wij zullen uw vraag dan voor u beantwoorden.</p><ContactForm /></>, categories: ["algemeen"] },
+  { q: "Mijn vraag staat niet in de Q&A, wat kan ik doen?", a: <ContactForm />, categories: ["algemeen"] },
 ];
 
 const YEAR_PARAMS: Record<number, { maxPensioengevend: number; franchise: number; premiePercentage: number }> = {
