@@ -374,6 +374,9 @@ const InfoLoondienst = () => (
           </ul>
           <p className="mt-2">Dit zijn geen beloningen voor uw werk, maar vergoedingen of uitkeringen. Daarom tellen ze niet mee voor uw pensioen.</p>
         </div>
+        <p>
+          Bij loondienstapothekers telt in beginsel al het belastbare fiscale loon mee voor uw pensioengevend inkomen, behalve onderdelen die volgens het pensioenreglement of fiscale wetgeving zijn uitgesloten.
+        </p>
         <div>
           <p className="mb-1 font-semibold text-foreground">Parttime</p>
           <p>
