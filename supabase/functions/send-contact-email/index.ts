@@ -54,7 +54,7 @@ serve(async (req: Request) => {
         subject: 'Nieuwe vraag via PGI Tool',
         from_email: 'klantenservice@prikkl.nl',
         from_name: 'PGI Tool',
-        to: [{ email: 'henk-jan@prikkl.nl', type: 'to' }],
+        to: [{ email: 'klantenservice@prikkl.nl', type: 'to' }],
         subaccount: 'PRK',
       },
     };
