@@ -1,5 +1,10 @@
-In `src/components/Calculator.tsx`, in de `InfoLoondienst` `CollapsibleContent` (rond regel 377), direct boven het `Parttime`-blok een nieuw `<p>` toevoegen met de tekst:
+## Aanpassing
+Het e-mailadres waar het contactformulier naartoe stuurt wordt gewijzigd van `henk-jan@prikkl.nl` naar `klantenservice@prikkl.nl`.
 
-"Bij loondienstapothekers telt in beginsel al het belastbare fiscale loon mee voor uw pensioengevend inkomen, behalve onderdelen die volgens het pensioenreglement of fiscale wetgeving zijn uitgesloten."
+## Details
+- Bestand: `supabase/functions/send-contact-email/index.ts` (regel 57)
+- Wijziging: `to: [{ email: 'henk-jan@prikkl.nl', type: 'to' }]` wordt `to: [{ email: 'klantenservice@prikkl.nl', type: 'to' }]`
+- Na de wijziging moet de edge function opnieuw worden geimplementeerd.
 
-Alleen in de Loondienst-info (niet in DGA/Zelfstandig). Geen verdere wijzigingen.
+## Technisch
+De `from_email` is al `klantenservice@prikkl.nl`. Alleen het `to`-adres (ontvanger) verandert.
