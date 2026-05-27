@@ -342,7 +342,7 @@ const InfoLoondienst = () => (
     <CollapsibleContent>
       <div className="mt-2 space-y-3 rounded-md border bg-card p-4 text-sm text-muted-foreground">
         <p className="font-medium text-foreground">
-          Fiscaal loon uit tegenwoordige arbeid betekent: alles wat je verdient door je werk uit te voeren. Hieronder lees je wat wel en niet meetelt.
+          Hieronder lees je wat wel en niet meetelt.
         </p>
         <div>
           <p className="mb-1 font-semibold text-foreground">De volgende onderdelen tellen mee:</p>
@@ -1084,7 +1084,7 @@ function LoondienstForm({ selectedYear, params }: { selectedYear: number; params
 
       <EuroInputWithPeriod
         id="ld-bruto"
-        label={brutoPeriod === "maand" ? "Bruto maandinkomen" : "Bruto jaarinkomen"}
+        label="Bruto inkomen"
         value={bruto}
         onChange={handleBrutoChange}
         period={brutoPeriod}
@@ -1168,7 +1168,7 @@ function LoondienstForm({ selectedYear, params }: { selectedYear: number; params
       <DownloadButton
         tabLabel="In loondienst"
         inputs={[
-          { label: brutoPeriod === "maand" ? "Bruto maandinkomen" : "Bruto jaarinkomen", value: `${euro(brutoVal)} per ${brutoPeriod}` },
+          { label: "Bruto inkomen", value: `${euro(brutoVal)} per ${brutoPeriod}` },
           { label: "Eindejaarsuitkering", value: `${euro(eindejaarsVal)} per ${eindejaarsperiod}` },
           { label: "Bonus", value: `${euro(bonusVal)} per ${bonusPeriod}` },
           { label: "Resultaatafhankelijke beloning", value: `${euro(resultaatVal)} per ${resultaatPeriod}` },
