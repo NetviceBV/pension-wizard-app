@@ -1084,7 +1084,7 @@ function LoondienstForm({ selectedYear, params }: { selectedYear: number; params
 
       <EuroInputWithPeriod
         id="ld-bruto"
-        label={brutoPeriod === "maand" ? "Bruto maandinkomen" : "Bruto jaarinkomen"}
+        label="Bruto inkomen"
         value={bruto}
         onChange={handleBrutoChange}
         period={brutoPeriod}
@@ -1168,7 +1168,7 @@ function LoondienstForm({ selectedYear, params }: { selectedYear: number; params
       <DownloadButton
         tabLabel="In loondienst"
         inputs={[
-          { label: brutoPeriod === "maand" ? "Bruto maandinkomen" : "Bruto jaarinkomen", value: `${euro(brutoVal)} per ${brutoPeriod}` },
+          { label: "Bruto inkomen", value: `${euro(brutoVal)} per ${brutoPeriod}` },
           { label: "Eindejaarsuitkering", value: `${euro(eindejaarsVal)} per ${eindejaarsperiod}` },
           { label: "Bonus", value: `${euro(bonusVal)} per ${bonusPeriod}` },
           { label: "Resultaatafhankelijke beloning", value: `${euro(resultaatVal)} per ${resultaatPeriod}` },
