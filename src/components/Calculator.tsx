@@ -342,7 +342,7 @@ const InfoLoondienst = () => (
     <CollapsibleContent>
       <div className="mt-2 space-y-3 rounded-md border bg-card p-4 text-sm text-muted-foreground">
         <p className="font-medium text-foreground">
-          Fiscaal loon uit tegenwoordige arbeid betekent: alles wat je verdient door je werk uit te voeren. Hieronder lees je wat wel en niet meetelt.
+          Hieronder lees je wat wel en niet meetelt.
         </p>
         <div>
           <p className="mb-1 font-semibold text-foreground">De volgende onderdelen tellen mee:</p>
