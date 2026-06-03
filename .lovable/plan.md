@@ -1,15 +1,34 @@
-## Doel
-Nieuwe veelgestelde vraag toevoegen aan de Q&A-sectie, zichtbaar onder het tabblad **Loondienst**.
+## Wijzigingen in `src/components/Calculator.tsx`
 
-## Te wijzigen
-Bestand: `src/components/Calculator.tsx`
+**1. YEAR_PARAMS bijwerken (regels 306–310)**
 
-## Wijziging
-In de array `faqItems` (regel ~287) een nieuw item toevoegen met:
-- **Vraag:** Wat moet ik doen bij een tussentijdse loonstijging?
-- **Antwoord:** Bereken pgi en pt% voor periode 1. Vul deze gegevens in Mijn Apothekerspensioen, inclusief de start van de periode. Doe daarna hetzelfde voor periode 2 en geef in Mijn Apothekerspensioen ook aan wanneer periode 2 van start gaat.\n\nHeb je dit al eerder gedaan? Vul dan alleen de nieuwe gegevens in voor periode 2.
-- **Categorie:** `["loondienst"]`
+- 2024 verwijderen
+- 2025 echte waarden: `{ maxPensioengevend: 109606, franchise: 18475, premiePercentage: 0.307 }`
+- 2026 blijft ongewijzigd
 
-Het antwoord plaatst het nieuwe item boven "Mijn vraag staat niet in de Q&A, wat kan ik doen?", zodat de contactoptie altijd als laatste item verschijnt.
+```ts
+const YEAR_PARAMS: Record<number, { maxPensioengevend: number; franchise: number; premiePercentage: number }> = {
+  2026: { maxPensioengevend: 113738, franchise: 19172, premiePercentage: 0.307 },
+  2025: { maxPensioengevend: 109606, franchise: 18475, premiePercentage: 0.307 },
+};
+```
 
-**NB:** De tekst "Mijn Apthkerespensioen" uit de gebruikersinput wordt gecorrigeerd naar "Mijn Apothekerspensioen".
+**2. Dropdowns (regels 893–895 en 934–936)**
+
+- "(soon)" / disabled-logica verwijderen, omdat beide jaren nu geldige waarden hebben.
+
+```tsx
+{AVAILABLE_YEARS.map((y) => (
+  <SelectItem key={y} value={String(y)}>{y}</SelectItem>
+))}
+```
+
+**3. Fallback voor onbekende jaren**
+
+- In de hook waar `params` wordt opgehaald (regel 726): als `YEAR_PARAMS[selectedYear]` niet bestaat, terugvallen op de 2026-waarden.
+
+```ts
+const params = YEAR_PARAMS[selectedYear] ?? YEAR_PARAMS[2026];
+```
+
+Geen andere logica wordt aangeraakt; PDF-export, premieberekening en UI gebruiken automatisch de nieuwe waarden.
