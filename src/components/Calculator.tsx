@@ -722,7 +722,7 @@ export default function Calculator({ embedded = false }: { embedded?: boolean })
   const [faqSearch, setFaqSearch] = useState("");
   const [selectedYear, setSelectedYear] = useState(DEFAULT_YEAR);
 
-  const params = YEAR_PARAMS[selectedYear];
+  const params = YEAR_PARAMS[selectedYear] ?? YEAR_PARAMS[2025];
 
   const filteredFaq = faqItems
     .filter((item) => item.categories.includes("algemeen") || item.categories.includes(tab as FaqCategory))
