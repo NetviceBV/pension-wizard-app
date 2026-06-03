@@ -305,8 +305,7 @@ const faqItems: { q: string; a: string | React.ReactNode; categories: FaqCategor
 
 const YEAR_PARAMS: Record<number, { maxPensioengevend: number; franchise: number; premiePercentage: number }> = {
   2026: { maxPensioengevend: 113738, franchise: 19172, premiePercentage: 0.307 },
-  2025: { maxPensioengevend: 0, franchise: 0, premiePercentage: 0 }, // placeholder — waarden later aanleveren
-  2024: { maxPensioengevend: 0, franchise: 0, premiePercentage: 0 }, // placeholder — waarden later aanleveren
+  2025: { maxPensioengevend: 109606, franchise: 18475, premiePercentage: 0.307 },
 };
 const AVAILABLE_YEARS = Object.keys(YEAR_PARAMS).map(Number).sort((a, b) => b - a);
 const DEFAULT_YEAR = 2026;
