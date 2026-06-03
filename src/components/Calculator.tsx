@@ -929,9 +929,7 @@ export default function Calculator({ embedded = false }: { embedded?: boolean })
                   </SelectTrigger>
                   <SelectContent>
                     {AVAILABLE_YEARS.map((y) => (
-                      <SelectItem key={y} value={String(y)} disabled={YEAR_PARAMS[y].maxPensioengevend === 0}>
-                        {y}{YEAR_PARAMS[y].maxPensioengevend === 0 ? " (soon)" : ""}
-                      </SelectItem>
+                      <SelectItem key={y} value={String(y)}>{y}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
