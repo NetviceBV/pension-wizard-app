@@ -232,7 +232,7 @@ function ContactForm() {
   return (
     <div className="space-y-3 pt-2">
       <p className="text-sm text-muted-foreground">
-        Vul onderstaand contactformulier in en we nemen contact met je op. Je kan ook bellen (maandag tot en met vrijdag tussen 09.00 en 17.00 uur): <a href="tel:+31881163021" className="text-primary underline">088-116 3021</a>.
+        Vul onderstaand contactformulier in en we nemen contact met je op.
       </p>
       <div className="space-y-2">
         <div>
