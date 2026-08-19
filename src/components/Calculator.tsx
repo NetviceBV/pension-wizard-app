@@ -179,7 +179,12 @@ function DownloadButton({
     const now = new Date();
     const today = now.toLocaleDateString("nl-NL", { day: "2-digit", month: "long", year: "numeric" });
     const time = now.toLocaleTimeString("nl-NL", { hour: "2-digit", minute: "2-digit" });
-    doc.text(`Gegenereerd op ${today} om ${time}`, 20, pageHeight - 12);
+    doc.text(`Gegenereerd op ${today} om ${time}`, 20, pageHeight - 16);
+
+    // Copyright
+    doc.setFontSize(7);
+    doc.setTextColor(150, 150, 150);
+    doc.text("© Stichting Pensioenfonds Openbare Apothekers", pageWidth / 2, pageHeight - 8, { align: "center" });
 
     doc.save(`PGI-Resultaat-${tabLabel.replace(/\s+/g, "-")}.pdf`);
   };
@@ -851,6 +856,10 @@ export default function Calculator({ embedded = false }: { embedded?: boolean })
             Start berekening
           </Button>
         </div>
+
+        <p className="text-center text-xs text-muted-foreground pt-4">
+          © Stichting Pensioenfonds Openbare Apothekers
+        </p>
       </div>
     );
 
@@ -958,6 +967,7 @@ export default function Calculator({ embedded = false }: { embedded?: boolean })
           <div className="mt-6 pt-4 border-t text-xs text-muted-foreground space-y-2">
             <p>Deze rekentool is bedoeld als hulpmiddel om uw pensioengevend inkomen, pensioengrondslag en premie te berekenen. Vul deze tool daarom zo goed mogelijk in. Hoewel wij deze tool met veel zorg hebben ingericht, kunt u hieraan geen rechten ontlenen. U kunt alleen rechten ontlenen aan het geldende pensioenreglement. SPOA aanvaardt geen verantwoordelijkheid of aansprakelijkheid voor de werking, uitkomsten of gevolgen van het gebruik van deze tool.</p>
             <p>Op het gebruik van deze website is Nederlands recht toepasselijk.</p>
+            <p className="text-center">© Stichting Pensioenfonds Openbare Apothekers</p>
           </div>
         </CardContent>
       </Card>
