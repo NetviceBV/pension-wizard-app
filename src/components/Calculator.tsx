@@ -179,7 +179,12 @@ function DownloadButton({
     const now = new Date();
     const today = now.toLocaleDateString("nl-NL", { day: "2-digit", month: "long", year: "numeric" });
     const time = now.toLocaleTimeString("nl-NL", { hour: "2-digit", minute: "2-digit" });
-    doc.text(`Gegenereerd op ${today} om ${time}`, 20, pageHeight - 12);
+    doc.text(`Gegenereerd op ${today} om ${time}`, 20, pageHeight - 16);
+
+    // Copyright
+    doc.setFontSize(7);
+    doc.setTextColor(150, 150, 150);
+    doc.text("© Stichting Pensioenfonds Openbare Apothekers", pageWidth / 2, pageHeight - 8, { align: "center" });
 
     doc.save(`PGI-Resultaat-${tabLabel.replace(/\s+/g, "-")}.pdf`);
   };
