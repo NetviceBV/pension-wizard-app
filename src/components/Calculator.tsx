@@ -856,6 +856,10 @@ export default function Calculator({ embedded = false }: { embedded?: boolean })
             Start berekening
           </Button>
         </div>
+
+        <p className="text-center text-xs text-muted-foreground pt-4">
+          © Stichting Pensioenfonds Openbare Apothekers
+        </p>
       </div>
     );
 
