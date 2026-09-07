@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -308,9 +308,9 @@ const faqItems: { q: string; a: string | React.ReactNode; categories: FaqCategor
   { q: "Mijn vraag staat niet in de Q&A, wat kan ik doen?", a: <ContactForm />, categories: ["algemeen"] },
 ];
 
-const YEAR_PARAMS: Record<number, { maxPensioengevend: number; franchise: number; premiePercentage: number }> = {
-  2026: { maxPensioengevend: 113738, franchise: 19172, premiePercentage: 0.307 },
-  2025: { maxPensioengevend: 109606, franchise: 18475, premiePercentage: 0.307 },
+const YEAR_PARAMS: Record<number, { maxPensioengevend: number; franchise: number; premiePercentage: number; eindejaarsPercentage: number }> = {
+  2026: { maxPensioengevend: 113738, franchise: 19172, premiePercentage: 0.307, eindejaarsPercentage: 0.05 },
+  2025: { maxPensioengevend: 109606, franchise: 18475, premiePercentage: 0.307, eindejaarsPercentage: 0.03 },
 };
 const AVAILABLE_YEARS = Object.keys(YEAR_PARAMS).map(Number).sort((a, b) => b - a);
 const DEFAULT_YEAR = 2026;
@@ -976,7 +976,7 @@ export default function Calculator({ embedded = false }: { embedded?: boolean })
 }
 
 /* ───── LOONDIENST FORM ───── */
-type YearParams = { maxPensioengevend: number; franchise: number; premiePercentage: number };
+type YearParams = { maxPensioengevend: number; franchise: number; premiePercentage: number; eindejaarsPercentage: number };
 
 function LoondienstForm({ selectedYear, params }: { selectedYear: number; params: YearParams }) {
   const [bruto, setBruto] = useState("");
