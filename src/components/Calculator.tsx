@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -308,9 +308,9 @@ const faqItems: { q: string; a: string | React.ReactNode; categories: FaqCategor
   { q: "Mijn vraag staat niet in de Q&A, wat kan ik doen?", a: <ContactForm />, categories: ["algemeen"] },
 ];
 
-const YEAR_PARAMS: Record<number, { maxPensioengevend: number; franchise: number; premiePercentage: number }> = {
-  2026: { maxPensioengevend: 113738, franchise: 19172, premiePercentage: 0.307 },
-  2025: { maxPensioengevend: 109606, franchise: 18475, premiePercentage: 0.307 },
+const YEAR_PARAMS: Record<number, { maxPensioengevend: number; franchise: number; premiePercentage: number; eindejaarsPercentage: number }> = {
+  2026: { maxPensioengevend: 113738, franchise: 19172, premiePercentage: 0.307, eindejaarsPercentage: 0.05 },
+  2025: { maxPensioengevend: 109606, franchise: 18475, premiePercentage: 0.307, eindejaarsPercentage: 0.03 },
 };
 const AVAILABLE_YEARS = Object.keys(YEAR_PARAMS).map(Number).sort((a, b) => b - a);
 const DEFAULT_YEAR = 2026;
@@ -976,7 +976,7 @@ export default function Calculator({ embedded = false }: { embedded?: boolean })
 }
 
 /* ───── LOONDIENST FORM ───── */
-type YearParams = { maxPensioengevend: number; franchise: number; premiePercentage: number };
+type YearParams = { maxPensioengevend: number; franchise: number; premiePercentage: number; eindejaarsPercentage: number };
 
 function LoondienstForm({ selectedYear, params }: { selectedYear: number; params: YearParams }) {
   const [bruto, setBruto] = useState("");
@@ -1004,13 +1004,22 @@ function LoondienstForm({ selectedYear, params }: { selectedYear: number; params
     return val === 0 ? "" : val.toFixed(2).replace(".", ",");
   };
 
+  // Herbereken eindejaarsuitkering bij jaarwissel (alleen als niet handmatig aangepast)
+  useEffect(() => {
+    if (!eindejaarsManual.current) {
+      const brutoYear = parseNum(bruto) * m(brutoPeriod);
+      setEindejaars(autoVal(brutoYear * params.eindejaarsPercentage, eindejaarsperiod));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedYear]);
+
   const handleBrutoChange = (val: string) => {
     setBruto(val);
     const b = parseNum(val);
     const brutoYear = b * m(brutoPeriod);
     eindejaarsManual.current = false;
     vakantiegeldManual.current = false;
-    setEindejaars(autoVal(brutoYear * 0.05, eindejaarsperiod));
+    setEindejaars(autoVal(brutoYear * params.eindejaarsPercentage, eindejaarsperiod));
     setVakantiegeld(autoVal(brutoYear * 0.08, vakantiegeldPeriod));
   };
 
@@ -1019,7 +1028,7 @@ function LoondienstForm({ selectedYear, params }: { selectedYear: number; params
     const b = parseNum(bruto);
     const brutoYear = b * (p === "maand" ? 12 : 1);
     if (!eindejaarsManual.current) {
-      setEindejaars(autoVal(brutoYear * 0.05, eindejaarsperiod));
+      setEindejaars(autoVal(brutoYear * params.eindejaarsPercentage, eindejaarsperiod));
     }
     if (!vakantiegeldManual.current) {
       setVakantiegeld(autoVal(brutoYear * 0.08, vakantiegeldPeriod));
@@ -1031,7 +1040,7 @@ function LoondienstForm({ selectedYear, params }: { selectedYear: number; params
     if (!eindejaarsManual.current) {
       const b = parseNum(bruto);
       const brutoYear = b * m(brutoPeriod);
-      setEindejaars(autoVal(brutoYear * 0.05, p));
+      setEindejaars(autoVal(brutoYear * params.eindejaarsPercentage, p));
     }
   };
 
@@ -1099,7 +1108,7 @@ function LoondienstForm({ selectedYear, params }: { selectedYear: number; params
 
       <EuroInputWithPeriod
         id="ld-eindejaars"
-        label="Uw eindejaarsuitkering conform CAO (5%)"
+        label={`Uw eindejaarsuitkering conform CAO (${(params.eindejaarsPercentage * 100).toFixed(0)}%)`}
         value={eindejaars}
         onChange={handleEindejaarsChange}
         period={eindejaarsperiod}
