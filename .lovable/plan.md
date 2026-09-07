@@ -1,34 +1,39 @@
-## Wijzigingen in `src/components/Calculator.tsx`
+# Eindejaarsuitkering-percentage per jaar
 
-**1. YEAR_PARAMS bijwerken (regels 306–310)**
+## Probleem
+Bij "In loondienst" wordt de eindejaarsuitkering automatisch voorgerekend als 5% van het bruto inkomen, ongeacht het gekozen jaar. Volgens de opdrachtgever moet dit voor 2025 3% zijn.
 
-- 2024 verwijderen
-- 2025 echte waarden: `{ maxPensioengevend: 109606, franchise: 18475, premiePercentage: 0.307 }`
-- 2026 blijft ongewijzigd
+## Oplossing: percentage toevoegen aan YEAR_PARAMS
 
+**1. `YEAR_PARAMS` uitbreiden (`src/components/Calculator.tsx`, regel 311-314)**
+
+Een nieuw veld `eindejaarsPercentage` toevoegen:
 ```ts
-const YEAR_PARAMS: Record<number, { maxPensioengevend: number; franchise: number; premiePercentage: number }> = {
-  2026: { maxPensioengevend: 113738, franchise: 19172, premiePercentage: 0.307 },
-  2025: { maxPensioengevend: 109606, franchise: 18475, premiePercentage: 0.307 },
+const YEAR_PARAMS: Record<number, { maxPensioengevend: number; franchise: number; premiePercentage: number; eindejaarsPercentage: number }> = {
+  2026: { maxPensioengevend: 113738, franchise: 19172, premiePercentage: 0.307, eindejaarsPercentage: 0.05 },
+  2025: { maxPensioengevend: 109606, franchise: 18475, premiePercentage: 0.307, eindejaarsPercentage: 0.03 },
 };
 ```
+- 2026 blijft 5%
+- 2025 wordt 3%
 
-**2. Dropdowns (regels 893–895 en 934–936)**
+**2. LoondienstForm gebruikt het jaarspecifieke percentage (regels 1005-1045)**
 
-- "(soon)" / disabled-logica verwijderen, omdat beide jaren nu geldige waarden hebben.
+De drie plekken waar nu hardcoded `brutoYear * 0.05` staat (in `handleBrutoChange`, `handleBrutoPeriodChange` en `handleEindejaarsPeriodChange`) vervangen door `brutoYear * params.eindejaarsPercentage`. De handmatige invoer blijft mogelijk — de gebruiker kan het voorgerekende bedrag nog altijd aanpassen.
 
-```tsx
-{AVAILABLE_YEARS.map((y) => (
-  <SelectItem key={y} value={String(y)}>{y}</SelectItem>
-))}
-```
+**3. Label dynamisch maken (regel 1102)**
 
-**3. Fallback voor onbekende jaren**
+Het label "Uw eindejaarsuitkering conform CAO (5%)" wordt dynamisch: bij 2025 toont het "(3%)", bij 2026 "(5%)". Het getal komt uit `params.eindejaarsPercentage`.
 
-- In de hook waar `params` wordt opgehaald (regel 726): als `YEAR_PARAMS[selectedYear]` niet bestaat, terugvallen op de 2026-waarden.
+**4. Herberekenen bij jaarwissel**
 
-```ts
-const params = YEAR_PARAMS[selectedYear] ?? YEAR_PARAMS[2026];
-```
+Wanneer de gebruiker van jaar wisselt in de dropdown en de eindejaarsuitkering niet handmatig is aangepast, wordt het bedrag automatisch opnieuw berekend met het percentage van het nieuw gekozen jaar. Wel handmatig aangepast? Dan blijft de eigen invoer staan (consistent met het bestaande gedrag).
 
-Geen andere logica wordt aangeraakt; PDF-export, premieberekening en UI gebruiken automatisch de nieuwe waarden.
+## Wat verandert er niet
+- Het vakantiegeld blijft 8% voor alle jaren.
+- DGA en Zelfstandig worden niet aangeraakt (daar is geen automatisch eindejaarsuitkering-percentage).
+- PDF-export gebruikt automatisch de ingevulde bedragen, dus die klopt vanzelf.
+
+## Controle na wijziging
+- Build check via build-errors.log.
+- Snelle visuele controle in de preview: 2025 geselecteerd → eindejaarsuitkering toont 3% van bruto inkomen; 2026 → 5%.
