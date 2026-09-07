@@ -1004,13 +1004,22 @@ function LoondienstForm({ selectedYear, params }: { selectedYear: number; params
     return val === 0 ? "" : val.toFixed(2).replace(".", ",");
   };
 
+  // Herbereken eindejaarsuitkering bij jaarwissel (alleen als niet handmatig aangepast)
+  useEffect(() => {
+    if (!eindejaarsManual.current) {
+      const brutoYear = parseNum(bruto) * m(brutoPeriod);
+      setEindejaars(autoVal(brutoYear * params.eindejaarsPercentage, eindejaarsperiod));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedYear]);
+
   const handleBrutoChange = (val: string) => {
     setBruto(val);
     const b = parseNum(val);
     const brutoYear = b * m(brutoPeriod);
     eindejaarsManual.current = false;
     vakantiegeldManual.current = false;
-    setEindejaars(autoVal(brutoYear * 0.05, eindejaarsperiod));
+    setEindejaars(autoVal(brutoYear * params.eindejaarsPercentage, eindejaarsperiod));
     setVakantiegeld(autoVal(brutoYear * 0.08, vakantiegeldPeriod));
   };
 
@@ -1019,7 +1028,7 @@ function LoondienstForm({ selectedYear, params }: { selectedYear: number; params
     const b = parseNum(bruto);
     const brutoYear = b * (p === "maand" ? 12 : 1);
     if (!eindejaarsManual.current) {
-      setEindejaars(autoVal(brutoYear * 0.05, eindejaarsperiod));
+      setEindejaars(autoVal(brutoYear * params.eindejaarsPercentage, eindejaarsperiod));
     }
     if (!vakantiegeldManual.current) {
       setVakantiegeld(autoVal(brutoYear * 0.08, vakantiegeldPeriod));
@@ -1031,7 +1040,7 @@ function LoondienstForm({ selectedYear, params }: { selectedYear: number; params
     if (!eindejaarsManual.current) {
       const b = parseNum(bruto);
       const brutoYear = b * m(brutoPeriod);
-      setEindejaars(autoVal(brutoYear * 0.05, p));
+      setEindejaars(autoVal(brutoYear * params.eindejaarsPercentage, p));
     }
   };
 
@@ -1099,7 +1108,7 @@ function LoondienstForm({ selectedYear, params }: { selectedYear: number; params
 
       <EuroInputWithPeriod
         id="ld-eindejaars"
-        label="Uw eindejaarsuitkering conform CAO (5%)"
+        label={`Uw eindejaarsuitkering conform CAO (${(params.eindejaarsPercentage * 100).toFixed(0)}%)`}
         value={eindejaars}
         onChange={handleEindejaarsChange}
         period={eindejaarsperiod}
