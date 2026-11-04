@@ -1339,14 +1339,12 @@ function DGAForm({ selectedYear, params }: { selectedYear: number; params: YearP
 /* ───── ZELFSTANDIG FORM ───── */
 function ZelfstandigForm({ selectedYear, params }: { selectedYear: number; params: YearParams }) {
   const [winst, setWinst] = useState("");
-  const [resultaat, setResultaat] = useState("");
   const [parttime, setParttime] = useState("100");
 
   const winstVal = parseNum(winst);
-  const resultaatVal = parseNum(resultaat);
   const parttimeVal = Math.min(Math.max(parseNum(parttime) || 100, 1), 100);
 
-  const totaalInkomen = winstVal + resultaatVal;
+  const totaalInkomen = winstVal;
   const fulltimeIncome = parttimeVal > 0 ? totaalInkomen / (parttimeVal / 100) : totaalInkomen;
   const { pensioengevend, grondslag, premie } = calcResult(fulltimeIncome, parttimeVal, params);
 
@@ -1361,12 +1359,6 @@ function ZelfstandigForm({ selectedYear, params }: { selectedYear: number; param
         onChange={setWinst}
       />
 
-      <EuroInput
-        id="za-resultaat"
-        label="Resultaatafhankelijke beloning"
-        value={resultaat}
-        onChange={setResultaat}
-      />
 
       <PercentInput
         id="za-parttime"
@@ -1387,7 +1379,6 @@ function ZelfstandigForm({ selectedYear, params }: { selectedYear: number; param
         tabLabel="Zelfstandig"
         inputs={[
           { label: "Winst uit onderneming", value: euro(winstVal) },
-          { label: "Resultaatafhankelijke beloning", value: euro(resultaatVal) },
           { label: "Parttimepercentage", value: `${parttimeVal}%` },
         ]}
         pensioengevend={pensioengevend}
